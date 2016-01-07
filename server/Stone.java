@@ -1,16 +1,30 @@
-package qwirkle;
+package server;
 
-public class Stone {
+public class Stone extends Space {
+    public enum Shape {ZERO, ONE, TWO, THREE, FOUR, FIVE};
+    public enum Color {ZERO, ONE, TWO, THREE, FOUR, FIVE};
 
-	int shape;
-	int color;
+    private Shape shape;
+    private Color color;
+    private boolean isOnBoard;
 
-
-	public Stone() {
-
+	public Stone(Shape shape, Color color) {
+        this.shape = shape;
+        this.color = color;
+        isOnBoard = false;
 	}
 
-	public getType() {
+    public boolean isOnBoard() {
+        return isOnBoard;
+    }
 
-	}
+    public Shape getShape() {
+       return shape;
+    }
+    public Color getColor() {
+        return color;
+    }
+    public void place() {
+        isOnBoard = true;
+    }
 }
