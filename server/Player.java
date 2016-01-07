@@ -1,4 +1,4 @@
-package qwirkle;
+package server;
 
 import java.util.List;
 
@@ -6,21 +6,21 @@ public class Player {
 
 	private String name;
 	private int points;
-	private List<Steen> stones;
+	private List<Stone> stones;
 
 	public Player() {
 
 	}
 
-	public makeMove(){
+	public void makeMove(){
 		
 	}
 
-	public takeStones(){
+	public void takeStones(){
 		
 	}
 
-	public swapStones(){
+	public void swapStones(){
 		
 	}
 
@@ -29,6 +29,6 @@ public class Player {
 	}
 
 	public int getPoints() {
-
+		return points;
 	}
 }

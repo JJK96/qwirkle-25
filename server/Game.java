@@ -1,10 +1,10 @@
-package qwirkle;
+package server;
 
 import java.util.List;
 
 public class Game {
 
-	private List<Steen> bag;
+	private List<Stone> bag;
 	private Player[] players;
 	private Player currentPlayer;
 
@@ -12,27 +12,27 @@ public class Game {
 
 	}
 
-	public start(){
+	public void start(){
 		
 	}
 
-	public play(){
+	public void play(){
 		
 	}
 
-	public reset(){
+	public void reset(){
 		
 	}
 
-	public stones(){
-		
+	public List<Stone> stones(){
+		return bag;
 	}
 
-	public currentPlayer(){
-		
+	public Player currentPlayer(){
+		return currentPlayer;
 	}
 
-	public showGUI(){
+	public void showGUI(){
 		
 	}
 
