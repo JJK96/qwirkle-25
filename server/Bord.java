@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Bord {
 
-	private List field;
+	private List stones;
 
 	public Bord() {
 
@@ -30,9 +30,15 @@ public class Bord {
 		
 	}
 
-	public isValidMove(){
-		
+	public boolean isValidMove(int row, int column){
+	    return false;
 	}
+	public makeMove(int row, int column) {
+        if (isValidMove(row,column)) {
+
+        }
+    }
+    public
 
 	public String toString() {
 
