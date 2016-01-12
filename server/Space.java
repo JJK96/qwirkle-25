@@ -9,7 +9,7 @@ import java.util.List;
  * and contains the position.
  */
 public class Space {
-    private int[] position = new int[2];
+    private Position position;
     private List<Space> column;
     private List<Space> row;
 
@@ -41,11 +41,11 @@ public class Space {
         return row;
     }
 
-    public int[] getPosition() {
+    public Position getPosition() {
         return position;
     }
     //@ requires position.length == 2;
-    public void setPosition(int[] position) {
+    public void setPosition(Position position) {
         this.position = position;
     }
 }

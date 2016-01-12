@@ -7,22 +7,22 @@ import java.util.Map;
 
 public class Board {
 
-	private Map<int[], Stone> stones;
-    private Map<int[], PossibleMove> possibleMoves;
+	private Map<Position, Stone> stones;
+    private Map<Position, PossibleMove> possibleMoves;
 
 	public Board() {
         reset();
 	}
 
 	public void reset(){
-        stones = new HashMap<int[], Stone>();
-        possibleMoves = new HashMap<int[], PossibleMove>();
+        stones = new HashMap<Position, Stone>();
+        possibleMoves = new HashMap<Position, PossibleMove>();
         PossibleMove init = new PossibleMove(Stone.Shape.values(), Stone.Color.values());
-        init.setPosition(new int[] {0,0});
+        init.setPosition(new Position(0,0));
         possibleMoves.put(init.getPosition(), init);
 	}
 	
-	public Map<int[], PossibleMove> getPossibleMoves() {
+	public Map<Position, PossibleMove> getPossibleMoves() {
 		return possibleMoves;
 	}
 
@@ -30,7 +30,7 @@ public class Board {
 		
 	}
 
-	public Map<int[], Stone> getStones(){
+	public Map<Position, Stone> getStones(){
 	    return this.stones;
 	}
 
@@ -56,22 +56,22 @@ public class Board {
         possibleMoves.remove(place);
     }
 
-	public void addPossibleMove(int[] pos) {
+	public void addPossibleMove(Position pos) {
 		PossibleMove newPM = new PossibleMove(Stone.Shape.values(), Stone.Color.values());
         Stone above;
         Stone below;
         Stone right;
         Stone left;
-		if (( above = stones.get(new int[] {pos[0], pos[1] -1})) != null) {
+		if (( above = stones.get(new Position (pos.getX(), pos.getY() -1))) != null) {
              newPM.addColumn(above.getColumn());
 		}
-        if (( below = stones.get(new int[] {pos[0], pos[1] +1}))!= null) {
+        if (( below = stones.get(new Position(pos.getX(), pos.getY() +1)))!= null) {
             newPM.addColumn(below.getColumn());
         }
-        if (( right = stones.get(new int[] {pos[0] + 1, pos[1]}))!= null) {
+        if (( right = stones.get(new Position(pos.getX() + 1, pos.getY())))!= null) {
             newPM.addRow(right.getRow());
         }
-        if (( left = stones.get(new int[] {pos[0] -1, pos[1]}))!= null) {
+        if (( left = stones.get(new Position(pos.getX() -1, pos.getY())))!= null) {
             newPM.addRow(left.getRow());
         }
         if (newPM.updatePossibilities() != 0) {
