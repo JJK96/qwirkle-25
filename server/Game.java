@@ -14,32 +14,36 @@ public class Game {
 
 	/**
 	 * Creates a game with the names of the players.
+	 * 
 	 * @param names
 	 */
 	public Game(String[] names) {
 		players = new Player[names.length];
 		this.board = new Board();
 		this.view = new View(this);
-		for (int i=0; i<names.length; i++) {
+		for (int i = 0; i < names.length; i++) {
 			players[i] = new Player(names[i], this);
 		}
 	}
+
 	/**
-	 * Starts the game and determines which players turn it is until the game has a winner
+	 * Starts the game and determines which players turn it is until the game
+	 * has a winner
 	 */
-	public void start(){
+	public void start() {
 		int i = players.length;
 		int j = ((int) Math.random() * (i + 1));
 		while (!hasWinner()) {
 			currentPlayer = players[j];
 			currentPlayer.makeMove();
 			j = (j + 1) % i;
-			
+
 		}
 	}
-	
+
 	/**
 	 * Get all the PossibleMoves
+	 * 
 	 * @return map of PossibleMoves
 	 */
 	public Map<Position, PossibleMove> getPossibleMoves() {
@@ -48,6 +52,7 @@ public class Game {
 
 	/**
 	 * Checks if the game has a winner
+	 * 
 	 * @return true if the game has a winner, otherwise false
 	 */
 	public Boolean hasWinner() {
@@ -57,20 +62,22 @@ public class Game {
 	/**
 	 * Resets the game
 	 */
-	public void reset(){
-		
+	public void reset() {
+
 	}
 
 	/**
 	 * Get all the stones in the bag
+	 * 
 	 * @return List off stones in the bag
 	 */
-	public List<Stone> stones(){
+	public List<Stone> stones() {
 		return bag;
 	}
-	
+
 	/**
 	 * Get the view which is currently used
+	 * 
 	 * @return view
 	 */
 	public View getView() {
@@ -79,24 +86,27 @@ public class Game {
 
 	/**
 	 * Get the board which is currently used
+	 * 
 	 * @return board
 	 */
 	public Board getBoard() {
 		return board;
 	}
-	
+
 	/**
-	 * Checks if the choice the humanplayer made is a valid possiblemove 
+	 * Checks if the choice the humanplayer made is a valid possiblemove
+	 * 
 	 * @param choice
 	 * @return true if choice is valid, false otherwise
 	 */
 	public boolean isValidInt(int choice) {
 		return (choice < getPossibleMoves().size() && choice >= 0);
 	}
-	
+
 	/**
-	 * Returns the amount of stones to the player out of the bag and
-	 * removes the stones the player gets from the bag
+	 * Returns the amount of stones to the player out of the bag and removes the
+	 * stones the player gets from the bag
+	 * 
 	 * @param player
 	 * @param amount
 	 */
@@ -112,18 +122,18 @@ public class Game {
 
 	/**
 	 * Get the player whose turn it is
+	 * 
 	 * @return currentplayer
 	 */
-	public Player currentPlayer(){
+	public Player currentPlayer() {
 		return currentPlayer;
 	}
 
 	/**
 	 * Shows the GUI/TUI for the game
 	 */
-	public void showGUI(){
-		
+	public void showGUI() {
+
 	}
-	
 
 }

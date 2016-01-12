@@ -8,10 +8,16 @@ public class Board {
 	private Map<Position, Stone> stones;
 	private Map<Position, PossibleMove> possibleMoves;
 
+	/**
+	 * Creates a new board for a game
+	 */
 	public Board() {
 		reset();
 	}
 
+	/**
+	 * Resets the board to the state at the start of the game
+	 */
 	public void reset() {
 		stones = new HashMap<Position, Stone>();
 		possibleMoves = new HashMap<Position, PossibleMove>();
@@ -20,32 +26,69 @@ public class Board {
 		possibleMoves.put(init.getPosition(), init);
 	}
 
+	/**
+	 * Get all the possiblemoves
+	 * 
+	 * @return map of positions and possiblemoves
+	 */
 	public Map<Position, PossibleMove> getPossibleMoves() {
 		return possibleMoves;
 	}
 
+	/**
+	 * Update the board??
+	 */
 	public void update() {
 
 	}
 
+	/**
+	 * Get the board with all its stones
+	 * 
+	 * @return stones
+	 */
 	public Map<Position, Stone> getStones() {
 		return this.stones;
 	}
 
+	/**
+	 * Creates a copy of the board with all its stones
+	 * 
+	 * @return copy of stones??
+	 */
 	public Board deepCopy() {
 		return null;
 	}
 
+	/**
+	 * Checks if the move is valid??
+	 * 
+	 * @param row
+	 * @param column
+	 * @return true if ??, false otherwise
+	 */
 	public boolean isValidMove(int row, int column) {
 		return false;
 	}
 
+	/**
+	 * Makes the move ??
+	 * 
+	 * @param row
+	 * @param column
+	 */
 	public void makeMove(int row, int column) {
 		if (isValidMove(row, column)) {
 
 		}
 	}
 
+	/**
+	 * Makes the specified move and updates the possiblemoves accordingly
+	 * 
+	 * @param stone
+	 * @param place
+	 */
 	//@ requires possibleMoves.contains(place) && place.acceptable(stone));
 	public void makeMove(Stone stone, PossibleMove place) {
 		stone = place.fill(stone);
@@ -56,6 +99,11 @@ public class Board {
 		possibleMoves.remove(place);
 	}
 
+	/**
+	 * Adds a possiblemove on the specified position to possiblemoves
+	 * 
+	 * @param pos
+	 */
 	public void addPossibleMove(Position pos) {
 		PossibleMove newPM = new PossibleMove(Stone.Shape.values(), Stone.Color.values());
 		Stone above;
@@ -79,6 +127,11 @@ public class Board {
 		}
 	}
 
+	/**
+	 * Sets the possiblemoves to a String-representation with each possiblemove
+	 * accompanied by a number, starting with 0, so the human player can choose
+	 * the move he wants to make by entering that number
+	 */
 	public String toString() {
 		return null;
 	}
