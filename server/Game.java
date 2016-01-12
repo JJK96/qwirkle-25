@@ -53,6 +53,10 @@ public class Game {
 		return view;
 	}
 	
+	public boolean isValidInt(int i) {
+		return (i < getPossibleMoves().size() && i >= 0);
+	}
+	
 	/* returns the amount of stones to the player
 	 * @param: player and amount
 	 */

@@ -14,15 +14,15 @@ public class View {
 
 	}
 
-	public void readInput() {
-	    String prompt = "->" + game.getPossibleMoves().toString()+ ", what is your choice? ";
+	public int determineMove() {
+	    String prompt = "-> " + game.getPossibleMoves().toString()+ ", what is your choice? ";
         int choice = readInt(prompt);
-        boolean valid = ;
+        boolean valid = game.isValidInt(choice);
         while (!valid) {
-            System.out.println("ERROR: field " + choice
+            System.out.println("ERROR: number " + choice
                     + " is no valid choice.");
             choice = readInt(prompt);
-            valid = ;
+            valid = game.isValidInt(choice);
         }
         return choice;
 	}
