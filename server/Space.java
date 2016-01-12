@@ -23,8 +23,14 @@ public class Space {
     public void addColumn(List<Space> column) {
         this.column.addAll(column);
     }
+    public void addColumn(Space s) {
+        this.column.add(s);
+    }
     public void addRow(List<Space> row) {
         this.row.addAll(row);
+    }
+    public void addRow(Space s) {
+        this.row.add(s);
     }
 
     public void setRow(List<Space> row) {
