@@ -1,4 +1,4 @@
-package qwirkle;
+package server;
 
 public class View {
 
@@ -6,7 +6,7 @@ public class View {
 
 	}
 
-	public showError(){
+	public void showError(){
 		
 	}
 

@@ -1,26 +1,30 @@
-package qwirkle;
+package server;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Player {
 
 	private String name;
 	private int points;
-	private List<Steen> stones;
+	private List<Stone> stones;
 
-	public Player() {
-
+	
+	public Player(String name) {
+		stones = new ArrayList<Stone>();
+		points = 0;
+		this.name = name;
 	}
 
-	public makeMove(){
+	public void makeMove(){
 		
 	}
 
-	public takeStones(){
+	public void takeStones(){
 		
 	}
 
-	public swapStones(){
+	public void swapStones(){
 		
 	}
 
@@ -29,6 +33,6 @@ public class Player {
 	}
 
 	public int getPoints() {
-
+		return points;
 	}
 }

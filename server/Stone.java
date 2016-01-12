@@ -1,25 +1,30 @@
 package server;
 
-public class Stone {
+public class Stone extends Space {
+    public enum Shape {ZERO, ONE, TWO, THREE, FOUR, FIVE};
+    public enum Color {ZERO, ONE, TWO, THREE, FOUR, FIVE};
 
-	private int shape;
-	private int color;
-	private int positionY;
-	private int positionX;
+    private Shape shape;
+    private Color color;
+    private boolean isOnBoard;
 
-	public Stone(int shape, int color, int Y, int X) {
-		this.shape = shape;
-		this.color = color;
-		this.positionX = X;
-		this.positionY = Y;
+	public Stone(Shape shape, Color color) {
+        this.shape = shape;
+        this.color = color;
+        isOnBoard = false;
 	}
 
-	public int getShape() {
-		return shape;
-	}
+    public boolean isOnBoard() {
+        return isOnBoard;
+    }
 
-	public int getColor() {
-		return color;
-	}
-
+    public Shape getShape() {
+       return shape;
+    }
+    public Color getColor() {
+        return color;
+    }
+    public void place() {
+        isOnBoard = true;
+    }
 }
