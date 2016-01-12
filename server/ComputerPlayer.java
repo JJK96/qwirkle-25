@@ -4,12 +4,9 @@ import java.util.List;
 import java.util.Map;
 
 public class ComputerPlayer extends Player {
-	
-	private Strategy strategy;
 
-	public ComputerPlayer(String name, Game game, Strategy strategy) {
+	public ComputerPlayer(String name, Game game) {
 		super(name, game);
-		this.strategy = strategy;
 
 	}
 
@@ -17,7 +14,7 @@ public class ComputerPlayer extends Player {
 	public void makeMove() {
 		Map<Position, PossibleMove> possibleMoves = getGame().getPossibleMoves();
 		List<Stone> stones = getStones();
-		PossibleMove place = possibleMoves.get(strategy.determineMove());
+		PossibleMove place = possibleMoves.get((int) Math.random() * (possibleMoves.size() + 1));
 		for (Stone s : stones) {
 			if (place.acceptable(s)) {
 				getGame().getBoard().makeMove(s, place);
