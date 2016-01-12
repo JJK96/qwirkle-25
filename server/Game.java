@@ -32,7 +32,7 @@ public class Game {
 		}
 	}
 	
-	public Map<int[], PossibleMove> getPossibleMoves() {
+	public Map<Position, PossibleMove> getPossibleMoves() {
 		return board.getPossibleMoves();
 	}
 

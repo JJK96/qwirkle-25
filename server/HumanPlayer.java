@@ -13,7 +13,6 @@ public class HumanPlayer extends Player {
 	public void makeMove() {
 		int i = getGame().getView().determineMove();
 		Map<int[], PossibleMove> possibleMoves = getGame().getBoard().getPossibleMoves();
-		
 		PossibleMove place = possibleMoves.get(i);
 		getGame().getBoard().makeMove(, place);
 	}
