@@ -9,7 +9,7 @@ public class HumanPlayer extends Player {
 
 	@Override
 	public void makeMove() {
-		
+		int i = getGame().getView().determineMove();
 	}
 
 }
