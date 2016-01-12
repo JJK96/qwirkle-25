@@ -40,6 +40,10 @@ public class PossibleMove extends Space {
         return stone;
     }
 
+    public int updatePossibilities() {
+        return 0;
+    }
+
     public void setPossibleShape(List<Stone.Shape> possibleShape) {
         this.possibleShape = possibleShape;
     }
