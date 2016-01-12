@@ -11,7 +11,7 @@ public class ComputerPlayer extends Player {
 
 	@Override
 	public void makeMove() {
-		Map<int[], PossibleMove> possibleMoves = getGame().getPossibleMoves();
+		Map<Position, PossibleMove> possibleMoves = getGame().getPossibleMoves();
 		
 	}
 }
