@@ -1,5 +1,7 @@
 package server;
 
+import java.util.Map;
+
 public class HumanPlayer extends Player {
 
 	public HumanPlayer(String name, Game game) {
@@ -10,7 +12,9 @@ public class HumanPlayer extends Player {
 	@Override
 	public void makeMove() {
 		int i = getGame().getView().determineMove();
-		getGame().getBoard()
+		Map<int[], PossibleMove> possibleMoves = getGame().getBoard().getPossibleMoves();
+		
+		PossibleMove place = possibleMoves.get(i);
+		getGame().getBoard().makeMove(, place);
 	}
-
 }

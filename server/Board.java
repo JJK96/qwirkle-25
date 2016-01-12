@@ -9,7 +9,7 @@ public class Board {
 
 	private Map<int[], Stone> stones;
     private Map<int[], PossibleMove> possibleMoves;
-
+    
 	public Board() {
         reset();
 	}
