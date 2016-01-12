@@ -12,8 +12,8 @@ public class HumanPlayer extends Player {
 	@Override
 	public void makeMove() {
 		int i = getGame().getView().determineMove();
-		Map<int[], PossibleMove> possibleMoves = getGame().getBoard().getPossibleMoves();
+		Map<Position, PossibleMove> possibleMoves = getGame().getBoard().getPossibleMoves();
 		PossibleMove place = possibleMoves.get(i);
-		getGame().getBoard().makeMove(, place);
+	//	getGame().getBoard().makeMove(, place);
 	}
 }
