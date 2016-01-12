@@ -25,7 +25,7 @@ public class Game {
 		}
 	}
 	/**
-	 * Starts the game
+	 * Starts the game and determines which players turn it is until the game has a winner
 	 */
 	public void start(){
 		int i = players.length;
@@ -95,7 +95,8 @@ public class Game {
 	}
 	
 	/**
-	 * Returns the amount of stones to the player out of the bag
+	 * Returns the amount of stones to the player out of the bag and
+	 * removes the stones the player gets from the bag
 	 * @param player
 	 * @param amount
 	 */
