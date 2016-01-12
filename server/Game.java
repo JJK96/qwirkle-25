@@ -17,6 +17,17 @@ public class Game {
 	}
 
 	public void start(){
+		int i = players.length;
+		int j = ((int) Math.random() * (i + 1));
+		while (!hasWinner()) {
+			currentPlayer = players[j];
+			currentPlayer.makeMove();
+			j = (j + 1) % i;
+			
+		}
+	}
+	
+	public Boolean hasWinner() {
 		
 	}
 
