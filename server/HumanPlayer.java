@@ -1,5 +1,6 @@
 package server;
 
+import java.util.List;
 import java.util.Map;
 
 public class HumanPlayer extends Player {
@@ -13,7 +14,14 @@ public class HumanPlayer extends Player {
 	public void makeMove() {
 		int i = getGame().getView().determineMove();
 		Map<Position, PossibleMove> possibleMoves = getGame().getBoard().getPossibleMoves();
+		List<Stone> stones = getStones();
 		PossibleMove place = possibleMoves.get(i);
-	//	getGame().getBoard().makeMove(, place);
+		for (Stone s : stones) {
+			if (place.acceptable(s)) {
+				getGame().getBoard().makeMove(s, place);
+				break;
+			}
+		}
+		
 	}
 }
