@@ -1,6 +1,8 @@
 package server;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Board {
@@ -133,6 +135,13 @@ public class Board {
 	 * the move he wants to make by entering that number
 	 */
 	public String toString() {
-		return null;
+		String movesList = "";
+		int i = 0;
+		for (Position p : possibleMoves.keySet()) {
+			String moveNumber = i + " = " + possibleMoves.get(p).toString();
+			i = i + 1;
+			movesList = movesList + moveNumber + ", ";
+		}
+		return movesList;
 	}
 }

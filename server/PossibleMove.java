@@ -6,8 +6,8 @@ import java.util.List;
 /**
  * Created by jjk on 1/7/16.
  *
- * The possibleMove class is used to store a place where a move can be made It
- * contains the possible Shapes and Colors that that place can contain It can
+ * The possibleMove class is used to store a place where a move can be made. It
+ * contains the possible Shapes and Colors that that place can contain. It can
  * hand the rows and columns over to the stone that is placed here.
  *
  */
@@ -15,6 +15,12 @@ public class PossibleMove extends Space {
 	private List<Stone.Shape> possibleShape;
 	private List<Stone.Color> possibleColor;
 
+	/**
+	 * Creates a possiblemove ??
+	 * 
+	 * @param possibleShape
+	 * @param possibleColor
+	 */
 	public PossibleMove(Stone.Shape[] possibleShape, Stone.Color[] possibleColor) {
 		this.possibleShape = new ArrayList<Stone.Shape>();
 		this.possibleColor = new ArrayList<Stone.Color>();
@@ -32,7 +38,7 @@ public class PossibleMove extends Space {
 	 * moves.
 	 * 
 	 * @param stone
-	 * @return
+	 * @return ??
 	 */
 	public Stone fill(Stone stone) {
 		stone.setColumn(getColumn());
@@ -48,6 +54,11 @@ public class PossibleMove extends Space {
 		return stone;
 	}
 
+	/**
+	 * Updates all the possibilities
+	 * 
+	 * @return ??
+	 */
 	public int updatePossibilities() {
 		for (Space s : getColumn()) {
 			if (s instanceof Stone) {
@@ -64,18 +75,38 @@ public class PossibleMove extends Space {
 		return possibleColor.size() * possibleShape.size();
 	}
 
+	/**
+	 * ??
+	 * 
+	 * @param possibleShape
+	 */
 	public void setPossibleShape(List<Stone.Shape> possibleShape) {
 		this.possibleShape = possibleShape;
 	}
 
+	/**
+	 * ??
+	 * 
+	 * @param shape
+	 */
 	public void removePossibleShape(Stone.Shape shape) {
 		possibleShape.remove(shape);
 	}
 
+	/**
+	 * ??
+	 * 
+	 * @param color
+	 */
 	public void removePossibleColor(Stone.Color color) {
 		possibleColor.remove(color);
 	}
 
+	/**
+	 * ??
+	 * 
+	 * @return
+	 */
 	public List<Stone.Shape> getPossibleShape() {
 		return possibleShape;
 	}
@@ -91,22 +122,46 @@ public class PossibleMove extends Space {
 		possibleShape.retainAll(possibleShape);
 	}
 
+	/**
+	 * ??
+	 * 
+	 * @param possibleColor
+	 */
 	public void setPossibleColor(List<Stone.Color> possibleColor) {
 		this.possibleColor = possibleColor;
 	}
 
+	/**
+	 * ??
+	 * 
+	 * @return
+	 */
 	public List<Stone.Color> getPossibleColor() {
 		return possibleColor;
 	}
 
+	/**
+	 * ??
+	 * 
+	 * @param possibleColor
+	 */
 	public void retainColors(List<Stone.Color> possibleColor) {
 		this.possibleColor.retainAll(possibleColor);
 	}
 
+	/**
+	 * ??
+	 * 
+	 * @param stone
+	 * @return
+	 */
 	public boolean acceptable(Stone stone) {
 		return false;
 	}
 
+	/**
+	 * Returns the Sring-representation of a possiblemove
+	 */
 	@Override
 	public String toString() {
 		return "[ " + getPosition().getX() + " , " + getPosition().getY() + " ]";
