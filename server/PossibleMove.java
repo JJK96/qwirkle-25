@@ -33,26 +33,10 @@ public class PossibleMove extends Space {
      * @return
      */
     public Stone fill (Stone stone) {
-        List<Space> column = new ArrayList();
-        List<Space> row = new ArrayList();
-        for (Space s : getColumn()) {
-            if (s instanceof Stone) {
-                column.add(s);
-            }
-        }
-        for (Space s : getRow()) {
-            if (s instanceof Stone) {
-                row.add(s);
-            }
-        }
-        stone.setColumn(column);
-        stone.setRow(row);
+        stone.setColumn(getColumn());
+        stone.setRow(getRow());
         stone.setPosition(getPosition());
         stone.place();
-        possibleShape.remove(stone.getShape());
-        possibleColor.remove(stone.getColor());
-        column.add(stone);
-        row.add(stone);
         return stone;
     }
 
@@ -89,5 +73,10 @@ public class PossibleMove extends Space {
 
     public boolean acceptable(Stone stone) {
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return "[ " + getPosition()[0] + " , " + getPosition()[1] + " ]";
     }
 }

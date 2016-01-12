@@ -28,7 +28,7 @@ public class Game {
 	}
 	
 	public Boolean hasWinner() {
-		
+		return false;
 	}
 
 	public void reset(){

@@ -47,27 +47,14 @@ public class Board {
     public void makeMove(Stone stone, PossibleMove place) {
         stone=place.fill(stone);
         stones.put(stone.getPosition(), stone);
-        int[] pos = place.getPosition();
-        //add the new possible moves to the array. update old ones if they exist.
-        int[] above = new int[] {pos[0], pos[1]-1};
-        int[] below = new int[] {pos[0], pos[1]+1};
-        int[] right = new int[] {pos[0]+1, pos[1]};
-        int[] left = new int[] {pos[0] -1, pos[1]};
-        PossibleMove newPossibleMove = null;
-        if (( newPossibleMove = possibleMoves.get(above)) != null ) {
-            newPossibleMove.retainColors(place.getPossibleColor());
-            newPossibleMove.retainShapes(place.getPossibleShape());
-            if (newPossibleMove.getPossibleColor().isEmpty()) {
-                possibleMoves.remove(newPossibleMove);
-            }
-            else {
-                newPossibleMove.addColumn(place.getColumn());
-                newPossibleMove.addRow(place.getRow());
-            }
-        }
-
-        possibleMoves.remove(place);
     }
+
+	public void addPossibleMove(int[] pos) {
+		newPM = new PossibleMove()
+		if (stones.get(new int[] {pos[0], pos[-1]}) != null) {
+
+		}
+	}
 
 	public String toString() {
         return null;
