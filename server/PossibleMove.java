@@ -51,11 +51,19 @@ public class PossibleMove extends Space {
         stone.place();
         possibleShape.remove(stone.getShape());
         possibleColor.remove(stone.getColor());
+        column.add(stone);
+        row.add(stone);
         return stone;
     }
 
     public void setPossibleShape(List<Stone.Shape> possibleShape) {
         this.possibleShape = possibleShape;
+    }
+    public void removePossibleShape(Stone.Shape shape) {
+        possibleShape.remove(shape);
+    }
+    public void removePossibleColor(Stone.Color color) {
+        possibleColor.remove(color);
     }
     public List<Stone.Shape> getPossibleShape() {
         return possibleShape;
