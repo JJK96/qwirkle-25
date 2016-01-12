@@ -96,7 +96,6 @@ public class Game {
 	/**
 	 * Checks if the choice the humanplayer made is a valid possiblemove
 	 * 
-	 * @param choice
 	 * @return true if choice is valid, false otherwise
 	 */
 	public boolean isValidInt(int choice) {
