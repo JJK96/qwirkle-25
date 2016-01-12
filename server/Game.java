@@ -12,6 +12,10 @@ public class Game {
 	private Board board;
 	private View view;
 
+	/**
+	 * Creates a game with the names of the players.
+	 * @param names
+	 */
 	public Game(String[] names) {
 		players = new Player[names.length];
 		this.board = new Board();
@@ -20,7 +24,9 @@ public class Game {
 			players[i] = new Player(names[i], this);
 		}
 	}
-
+	/**
+	 * Starts the game
+	 */
 	public void start(){
 		int i = players.length;
 		int j = ((int) Math.random() * (i + 1));
@@ -32,37 +38,66 @@ public class Game {
 		}
 	}
 	
+	/**
+	 * Get all the PossibleMoves
+	 * @return map of PossibleMoves
+	 */
 	public Map<Position, PossibleMove> getPossibleMoves() {
 		return board.getPossibleMoves();
 	}
 
-	
+	/**
+	 * Checks if the game has a winner
+	 * @return true if the game has a winner, otherwise false
+	 */
 	public Boolean hasWinner() {
 		return false;
 	}
 
+	/**
+	 * Resets the game
+	 */
 	public void reset(){
 		
 	}
 
+	/**
+	 * Get all the stones in the bag
+	 * @return List off stones in the bag
+	 */
 	public List<Stone> stones(){
 		return bag;
 	}
 	
+	/**
+	 * Get the view which is currently used
+	 * @return view
+	 */
 	public View getView() {
 		return view;
 	}
-	
+
+	/**
+	 * Get the board which is currently used
+	 * @return board
+	 */
 	public Board getBoard() {
 		return board;
 	}
 	
-	public boolean isValidInt(int i) {
-		return (i < getPossibleMoves().size() && i >= 0);
+	/**
+	 * Checks if the choice the humanplayer made is a valid possiblemove 
+	 * @param choice
+	 * @return true if choice is valid, false otherwise
+	 */
+	public boolean isValidInt(int choice) {
+		return (choice < getPossibleMoves().size() && choice >= 0);
 	}
 	
-	/* returns the amount of stones to the player
-	 * @param: player and amount
+	/**
+	 * Returns the amount of stones to the player out of the bag
+	 * @param player
+	 * @param amount
 	 */
 	public void giveStones(Player player, int amount) {
 		List<Stone> randomStones = new ArrayList<Stone>();
@@ -74,10 +109,17 @@ public class Game {
 		player.takeStones(randomStones);
 	}
 
+	/**
+	 * Get the player whose turn it is
+	 * @return currentplayer
+	 */
 	public Player currentPlayer(){
 		return currentPlayer;
 	}
 
+	/**
+	 * Shows the GUI/TUI for the game
+	 */
 	public void showGUI(){
 		
 	}
