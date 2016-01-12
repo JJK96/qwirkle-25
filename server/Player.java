@@ -21,7 +21,14 @@ public class Player {
 
 	public void makeMove(){
 		
-		
+	}
+	
+	public Game getGame() {
+		return game;
+	}
+	
+	public List<Stone> getStones() {
+		return stones;
 	}
 
 	public void takeStones(List<Stone> stones){

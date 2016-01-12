@@ -1,5 +1,7 @@
 package server;
 
+import java.util.Map;
+
 public class ComputerPlayer extends Player {
 
 	public ComputerPlayer(String name, Game game) {
@@ -9,6 +11,7 @@ public class ComputerPlayer extends Player {
 
 	@Override
 	public void makeMove() {
+		Map<int[], PossibleMove> possibleMoves = getGame().getPossibleMoves();
 		
 	}
 }

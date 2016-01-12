@@ -2,15 +2,20 @@ package server;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Game {
 
 	private List<Stone> bag;
 	private Player[] players;
 	private Player currentPlayer;
+	private Board board;
+	private View view;
 
 	public Game(String[] names) {
 		players = new Player[names.length];
+		this.board = new Board();
+		this.view = new View(this);
 		for (int i=0; i<names.length; i++) {
 			players[i] = new Player(names[i], this);
 		}
@@ -27,8 +32,13 @@ public class Game {
 		}
 	}
 	
+	public Map<int[], PossibleMove> getPossibleMoves() {
+		return board.getPossibleMoves();
+	}
+
+	
 	public Boolean hasWinner() {
-		
+		return false;
 	}
 
 	public void reset(){
@@ -37,6 +47,10 @@ public class Game {
 
 	public List<Stone> stones(){
 		return bag;
+	}
+	
+	public View getView() {
+		return view;
 	}
 	
 	/* returns the amount of stones to the player
@@ -59,5 +73,6 @@ public class Game {
 	public void showGUI(){
 		
 	}
+	
 
 }

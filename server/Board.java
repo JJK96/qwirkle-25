@@ -21,6 +21,10 @@ public class Board {
         init.setPosition(new int[] {0,0});
         possibleMoves.put(init.getPosition(), init);
 	}
+	
+	public Map<int[], PossibleMove> getPossibleMoves() {
+		return possibleMoves;
+	}
 
 	public void update(){
 		
