@@ -53,6 +53,10 @@ public class Game {
 		return view;
 	}
 	
+	public Board getBoard() {
+		return board;
+	}
+	
 	public boolean isValidInt(int i) {
 		return (i < getPossibleMoves().size() && i >= 0);
 	}
