@@ -14,6 +14,11 @@ import java.util.List;
 public class PossibleMove extends Space {
 	private List<Stone.Shape> possibleShape;
 	private List<Stone.Color> possibleColor;
+	private Stone.Color rowCommonColor = null;
+	private Stone.Color columnCommonColor = null;
+	private Stone.Shape rowCommonShape = null;
+	private Stone.Shape columnCommonShape = null;
+
 
 	/**
 	 * Creates a possiblemove
@@ -64,19 +69,7 @@ public class PossibleMove extends Space {
 	 * @return ??
 	 */
 	public int updatePossibilities() {
-		for (Space s : getColumn()) {
-			if (s instanceof Stone) {
-				removePossibleColor(((Stone) s).getColor());
-				removePossibleShape(((Stone) s).getShape());
-			}
-		}
-		for (Space s : getRow()) {
-			if (s instanceof Stone) {
-				removePossibleColor(((Stone) s).getColor());
-				removePossibleShape(((Stone) s).getShape());
-			}
-		}
-		return possibleColor.size() * possibleShape.size();
+
 	}
 
 	/**
@@ -87,6 +80,41 @@ public class PossibleMove extends Space {
 	public void setPossibleShape(List<Stone.Shape> possibleShape) {
 		this.possibleShape = possibleShape;
 	}
+
+	/**
+	 * returns the common shape or null if there is no common shape (or if the list only contains 1 stone);
+	 * @param list
+	 * @return
+     */
+	public Stone.Shape commonShape(List<Space> list) {
+		if (list.size() >= 2) {
+			Stone first = (Stone) list.get(0);
+			for (Space s : list) {
+				if (((Stone) s).getShape() != first.getShape() ) {
+					return null;
+				}
+			}
+			return first.getShape();
+		}
+		else {
+			return null;
+		}
+	}
+	public Stone.Color commonColor(List<Space> list) {
+		if (list.size() >= 2) {
+			Stone first = (Stone) list.get(0);
+			for (Space s : list) {
+				if (((Stone) s).getColor() != first.getColor() ) {
+					return null;
+				}
+			}
+			return first.getColor();
+		}
+		else {
+			return null;
+		}
+	}
+
 
 	/**
 	 * ??
@@ -160,7 +188,7 @@ public class PossibleMove extends Space {
 	 * @return
 	 */
 	public boolean acceptable(Stone stone) {
-        return possibleColor.contains(stone.getColor()) && possibleShape.contains(stone.getShape());
+
 	}
 
 	/**
