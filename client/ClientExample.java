@@ -1,4 +1,6 @@
-package server;
+package client;
+
+import server.Game;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -9,10 +11,10 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-public class Client extends Thread {
-	private static final String USAGE = "usage: java week7.cmdchat.Client <name> <address> <port>";
+public class ClientExample extends Thread {
+	private static final String USAGE = "usage: ClientExample <name> <address> <port>";
 
-	/** Start een Client-applicatie op. */
+	/** Start een ClientExample-applicatie op. */
 	public static void main(String[] args) {
 		if (args.length != 3) {
 			System.out.println(USAGE);
@@ -37,13 +39,13 @@ public class Client extends Thread {
 		}
 
 		try {
-			Client client = new Client(args[0], host, port);
-			client.sendMessage(args[0]);
-			client.start();
+			ClientExample clientExample = new ClientExample(args[0], host, port);
+			clientExample.sendMessage(args[0]);
+			clientExample.start();
 
 			do {
 				String input = readString("");
-				client.sendMessage(input);
+				clientExample.sendMessage(input);
 			} while (true);
 
 		} catch (IOException e) {
@@ -60,9 +62,9 @@ public class Client extends Thread {
 	private Game game;
 
 	/**
-	 * Constructs a Client-object and tries to make a socket connection
+	 * Constructs a ClientExample-object and tries to make a socket connection
 	 */
-	public Client(String name, InetAddress host, int port) throws IOException {
+	public ClientExample(String name, InetAddress host, int port) throws IOException {
 		this.clientName = name;
 		this.sock = new Socket(host, port);
 		this.in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
@@ -87,7 +89,7 @@ public class Client extends Thread {
 
 	}
 
-	/** send a message to a ClientHandler. */
+	/** send a message to a ClientHandlerExample. */
 	public void sendMessage(String msg) {
 		try {
 			out.write(msg);
