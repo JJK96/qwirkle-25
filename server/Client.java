@@ -9,15 +9,8 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-
-/**
- * Client class for a simple client-server application
- * @author  Theo Ruys
- * @version 2005.02.21
- */
-public class Client extends Thread{
-	private static final String USAGE
-        = "usage: java week7.cmdchat.Client <name> <address> <port>";
+public class Client extends Thread {
+	private static final String USAGE = "usage: java week7.cmdchat.Client <name> <address> <port>";
 
 	/** Start een Client-applicatie op. */
 	public static void main(String[] args) {
@@ -25,9 +18,9 @@ public class Client extends Thread{
 			System.out.println(USAGE);
 			System.exit(0);
 		}
-		
-		InetAddress host=null;
-		int port =0;
+
+		InetAddress host = null;
+		int port = 0;
 
 		try {
 			host = InetAddress.getByName(args[1]);
@@ -47,50 +40,52 @@ public class Client extends Thread{
 			Client client = new Client(args[0], host, port);
 			client.sendMessage(args[0]);
 			client.start();
-			
-			do{
+
+			do {
 				String input = readString("");
 				client.sendMessage(input);
-			}while(true);
-			
+			} while (true);
+
 		} catch (IOException e) {
 			print("ERROR: couldn't construct a client object!");
 			System.exit(0);
 		}
 
 	}
-	
+
 	private String clientName;
 	private Socket sock;
 	private BufferedReader in;
 	private BufferedWriter out;
+	private Game game;
 
 	/**
 	 * Constructs a Client-object and tries to make a socket connection
 	 */
-	public Client(String name, InetAddress host, int port)
-			throws IOException {
+	public Client(String name, InetAddress host, int port) throws IOException {
 		this.clientName = name;
-    	this.sock = new Socket(host, port);
-    	this.in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
-    	this.out = new BufferedWriter(new OutputStreamWriter(sock.getOutputStream()));
+		this.sock = new Socket(host, port);
+		this.in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
+		this.out = new BufferedWriter(new OutputStreamWriter(sock.getOutputStream()));
+		String[] names = null;
+		this.game = new Game(names);
 	}
 
 	/**
-	 * Reads the messages in the socket connection. Each message will
-	 * be forwarded to the MessageUI
+	 * Reads the messages in the socket connection. Each message will be
+	 * forwarded to the MessageUI
 	 */
 	public void run() {
 		String line = "";
-    	try {
+		try {
 			while ((line = in.readLine()) != null) {
 				System.out.println(line);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-    
-    }
+
+	}
 
 	/** send a message to a ClientHandler. */
 	public void sendMessage(String msg) {
@@ -113,24 +108,23 @@ public class Client extends Thread{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	/** returns the client name */
 	public String getClientName() {
 		return clientName;
 	}
-	
-	private static void print(String message){
+
+	private static void print(String message) {
 		System.out.println(message);
 	}
-	
+
 	public static String readString(String tekst) {
 		System.out.print(tekst);
 		String antw = null;
 		try {
-			BufferedReader in = new BufferedReader(new InputStreamReader(
-					System.in));
+			BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 			antw = in.readLine();
 		} catch (IOException e) {
 		}

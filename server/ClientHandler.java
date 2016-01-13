@@ -78,4 +78,8 @@ public class ClientHandler extends Thread {
 		server.removeHandler(this);
 		server.broadcast("[" + clientName + " has left]");
 	}
+	
+	public String getClientName() {
+		return clientName;
+	}
 }

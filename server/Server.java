@@ -5,7 +5,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 public class Server {
 	private static final String USAGE = "usage: " + Server.class.getName() + " <port>";
@@ -47,8 +46,9 @@ public class Server {
 				addHandler(ch);
 				ch.announce();
 				ch.start();
-				String[] names = null;
+				String[] names = new String[2];
 				Game game = new Game(names);
+				addGame(game);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -91,12 +91,57 @@ public class Server {
 	public void removeHandler(ClientHandler handler) {
 		threads.remove(handler);
 	}
-	
+
 	public void addGame(Game game) {
 		games.add(game);
 	}
-	
+
 	public void removeGame(Game game) {
 		games.remove(game);
 	}
+
+	public void sendErrorCode(int errorCode, Player player) {
+		for (ClientHandler ch : threads) {
+			if (ch.getClientName().equals(player.getName())) {
+				ch.sendMessage("error" + errorCode);
+				break;
+			}
+		}
+	}
+
+	public void notifyAllPlayerPointsPlacedMoves(Player player, int points, List<Stone> stones) {
+		String msg = "placed " + player.getName() + " " + points;
+		for (Stone s : stones) {
+			msg = msg + " " + s.getColor().ordinal() + "," + s.getShape().ordinal() + " " + s.getPosition();
+		}
+		broadcast(msg);
+	}
+
+	public void newStones(List<Stone> stones, Player player) {
+		String msg = "newstones";
+		for (Stone s : stones) {
+			msg = msg + " " + s.getColor().ordinal() + "," + s.getShape().ordinal();
+		}
+		for (ClientHandler ch : threads) {
+			if (ch.getClientName().equals(player.getName())) {
+				ch.sendMessage(msg);
+				break;
+			}
+		}
+	}
+
+	public void playerTraded(Player player, int amount) {
+		String msg = "traded " + player.getName() + " " + amount;
+		broadcast(msg);
+	}
+	
+	public void notifyAllCurrentPlayer(Player player) {
+		String msg = "turn " + player.getName();
+		broadcast(msg);
+	}
+	
+	public void endGame() {
+		broadcast("endgame");
+	}
+	
 }
