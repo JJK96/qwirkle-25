@@ -115,7 +115,7 @@ public class ServerExample {
 	public void notifyAllPlayerPointsPlacedMoves(Player player, int points, List<Stone> stones) {
 		String msg = "placed " + player.getName() + " " + points;
 		for (Stone s : stones) {
-			msg = msg + " " + s.getColor().ordinal() + "," + s.getShape().ordinal() + " " + s.getPosition();
+			msg = msg + " " + s.getShape().ordinal() + "," + s.getColor().ordinal() + " " + s.getPosition();
 		}
 		broadcast(msg);
 	}
@@ -123,7 +123,7 @@ public class ServerExample {
 	public void newStones(List<Stone> stones, Player player) {
 		String msg = "newstones";
 		for (Stone s : stones) {
-			msg = msg + " " + s.getColor().ordinal() + "," + s.getShape().ordinal();
+			msg = msg + " " + s.getShape().ordinal() + "," + s.getColor().ordinal();
 		}
 		for (ClientHandlerExample ch : threads) {
 			if (ch.getClientName().equals(player.getName())) {
