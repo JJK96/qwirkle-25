@@ -35,9 +35,10 @@ public class ServerExample {
 	}
 
 	/**
-	 * Listens to a port of this ServerExample if there are any Clients that would like
-	 * to connect. For every new socket connection a new ClientHandlerExample thread is
-	 * started that takes care of the further communication with the ClientExample.
+	 * Listens to a port of this ServerExample if there are any Clients that
+	 * would like to connect. For every new socket connection a new
+	 * ClientHandlerExample thread is started that takes care of the further
+	 * communication with the ClientExample.
 	 */
 	public void run() {
 		try {
@@ -136,14 +137,14 @@ public class ServerExample {
 		String msg = "traded " + player.getName() + " " + amount;
 		broadcast(msg);
 	}
-	
+
 	public void notifyAllCurrentPlayer(Player player) {
 		String msg = "turn " + player.getName();
 		broadcast(msg);
 	}
-	
+
 	public void endGame() {
 		broadcast("endgame");
 	}
-	
+
 }
