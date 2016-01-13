@@ -10,43 +10,43 @@ import java.util.List;
  */
 public class Space {
 	private Position position;
-	private List<Space> column;
-	private List<Space> row;
+	private List<Stone> column;
+	private List<Stone> row;
 
 	public Space() {
-		this.column = new ArrayList<Space>();
-		this.row = new ArrayList<Space>();
+		this.column = new ArrayList<Stone>();
+		this.row = new ArrayList<Stone>();
 	}
 
-	public List<Space> getColumn() {
+	public List<Stone> getColumn() {
 		return column;
 	}
 
-	public void setColumn(List<Space> column) {
+	public void setColumn(List<Stone> column) {
 		this.column = column;
 	}
 
-	public void addColumn(List<Space> column) {
+	public void addColumn(List<Stone> column) {
 		this.column.addAll(column);
 	}
 
-	public void addColumn(Space s) {
+	public void addColumn(Stone s) {
 		this.column.add(s);
 	}
 
-	public void addRow(List<Space> row) {
+	public void addRow(List<Stone> row) {
 		this.row.addAll(row);
 	}
 
-	public void addRow(Space s) {
+	public void addRow(Stone s) {
 		this.row.add(s);
 	}
 
-	public void setRow(List<Space> row) {
+	public void setRow(List<Stone> row) {
 		this.row = row;
 	}
 
-	public List<Space> getRow() {
+	public List<Stone> getRow() {
 		return row;
 	}
 

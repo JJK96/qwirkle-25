@@ -7,10 +7,10 @@ public class testBoard {
     public static void main(String[] args) {
         Board b = new Board();
         PossibleMove p = b.getPossibleMoves().get(new Position(0,0));
-        b.makeMove(new Stone(Stone.Shape.ONE, Stone.Color.ONE), p);
-        b.makeMove(1,0,new Stone(Stone.Shape.ONE, Stone.Color.TWO));
-        b.makeMove(2,0,new Stone(Stone.Shape.ONE, Stone.Color.THREE));
-        b.makeMove(0,-1, new Stone(Stone.Shape.THREE, Stone.Color.ONE));
+        b.makeMove(new Stone(Stone.Shape.o, Stone.Color.R), p);
+        b.makeMove(1,0,new Stone(Stone.Shape.o, Stone.Color.O));
+        b.makeMove(2,0,new Stone(Stone.Shape.o, Stone.Color.Y));
+        b.makeMove(0,-1, new Stone(Stone.Shape.v, Stone.Color.R));
         System.out.println(b);
 
     }

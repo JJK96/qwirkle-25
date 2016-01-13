@@ -12,8 +12,8 @@ import java.util.List;
  *
  */
 public class PossibleMove extends Space {
-	private List<Stone.Shape> possibleShape;
-	private List<Stone.Color> possibleColor;
+	//private List<Stone.Shape> possibleShape;
+	//private List<Stone.Color> possibleColor;
 	private Stone.Color rowCommonColor = null;
 	private Stone.Color columnCommonColor = null;
 	private Stone.Shape rowCommonShape = null;
@@ -29,8 +29,8 @@ public class PossibleMove extends Space {
 	public PossibleMove(Position p) {
 		super();
 		setPosition(p);
-		this.possibleShape = new ArrayList<Stone.Shape>();
-		this.possibleColor = new ArrayList<Stone.Color>();
+		//this.possibleShape = new ArrayList<Stone.Shape>();
+		//this.possibleColor = new ArrayList<Stone.Color>();
 	}
 
 	/**
@@ -74,116 +74,80 @@ public class PossibleMove extends Space {
 	 * 
 	 * @param possibleShape
 	 */
-	public void setPossibleShape(List<Stone.Shape> possibleShape) {
+	/*public void setPossibleShape(List<Stone.Shape> possibleShape) {
 		this.possibleShape = possibleShape;
-	}
+	}*/
 
 	/**
 	 * returns the common shape or null if there is no common shape (or if the list only contains 1 stone);
 	 * @param list
 	 * @return
      */
-	public boolean commonShape(List<Space> list, Stone stone) {
-		for (Space s : list) {
-			if (((Stone) s).getShape() != stone.getShape()) {
+	public boolean commonShape(List<Stone> list, Stone stone) {
+		for (Stone s : list) {
+			if ( s.getShape() != stone.getShape()) {
 				return false;
 			}
 		}
 		return true;
 	}
-	public boolean noCommonShape(List<Space> list, Stone stone) {
-		for (Space s : list) {
-			if (((Stone) s).getShape() == stone.getShape()) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	public boolean commonColor(List<Space> list, Stone stone) {
-		for (Space s : list) {
-			if (((Stone) s).getColor() != stone.getColor()) {
+	public boolean noCommonShape(List<Stone> list, Stone stone) {
+		for (Stone s : list) {
+			if (s.getShape() == stone.getShape()) {
 				return false;
 			}
 		}
 		return true;
 	}
 
-	public boolean noCommonColor(List<Space> list, Stone stone) {
-		for (Space s : list) {
-			if (((Stone) s).getColor() == stone.getColor()) {
+	public boolean commonColor(List<Stone> list, Stone stone) {
+		for (Stone s : list) {
+			if (s.getColor() != stone.getColor()) {
 				return false;
 			}
 		}
 		return true;
 	}
 
+	public boolean noCommonColor(List<Stone> list, Stone stone) {
+		for (Stone s : list) {
+			if (s.getColor() == stone.getColor()) {
+				return false;
+			}
+		}
+		return true;
+	}
 
-	/**
-	 * ??
-	 * 
-	 * @param shape
-	 */
+/*
+
 	public void removePossibleShape(Stone.Shape shape) {
 		possibleShape.remove(shape);
 	}
 
-	/**
-	 * ??
-	 * 
-	 * @param color
-	 */
 	public void removePossibleColor(Stone.Color color) {
 		possibleColor.remove(color);
 	}
 
-	/**
-	 * ??
-	 * 
-	 * @return
-	 */
 	public List<Stone.Shape> getPossibleShape() {
 		return possibleShape;
 	}
 
-	/**
-	 * removes all shapes that appear in the possibleShape list and not in the
-	 * argument. this is useful for updating the possiblemove after a stone has
-	 * been placed next to it.
-	 * 
-	 * @param possibleShape
-	 */
 	public void retainShapes(List<Stone.Shape> possibleShape) {
 		possibleShape.retainAll(possibleShape);
 	}
 
-	/**
-	 * ??
-	 * 
-	 * @param possibleColor
-	 */
 	public void setPossibleColor(List<Stone.Color> possibleColor) {
 		this.possibleColor = possibleColor;
 	}
 
-	/**
-	 * ??
-	 * 
-	 * @return
-	 */
 	public List<Stone.Color> getPossibleColor() {
 		return possibleColor;
 	}
 
-	/**
-	 * ??
-	 * 
-	 * @param possibleColor
-	 */
 	public void retainColors(List<Stone.Color> possibleColor) {
 		this.possibleColor.retainAll(possibleColor);
 	}
-
+*/
 	/**
 	 * ??
 	 * 

@@ -1,12 +1,12 @@
 package server;
 
 public class Stone extends Space {
-	public enum Shape {
-		ZERO, ONE, TWO, THREE, FOUR, FIVE
+	public enum Color {
+		R, O, B, Y, G, P
 	};
 
-	public enum Color {
-		ZERO, ONE, TWO, THREE, FOUR, FIVE
+	public enum Shape {
+        o, d, v, c, x, s
 	};
 
 	private Shape shape;
