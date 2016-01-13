@@ -20,6 +20,7 @@ public class Stone extends Space {
 	 * @param color
 	 */
 	public Stone(Shape shape, Color color) {
+        super();
 		this.shape = shape;
 		this.color = color;
 		isOnBoard = false;
@@ -57,5 +58,10 @@ public class Stone extends Space {
 	 */
 	public void place() {
 		isOnBoard = true;
+	}
+
+	@Override
+	public String toString() {
+		return "[" + shape.ordinal() + "," + color.ordinal() + "]";
 	}
 }

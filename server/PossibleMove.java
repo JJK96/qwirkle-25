@@ -16,12 +16,14 @@ public class PossibleMove extends Space {
 	private List<Stone.Color> possibleColor;
 
 	/**
-	 * Creates a possiblemove ??
+	 * Creates a possiblemove
 	 * 
 	 * @param possibleShape
 	 * @param possibleColor
 	 */
-	public PossibleMove(Stone.Shape[] possibleShape, Stone.Color[] possibleColor) {
+	public PossibleMove(Stone.Shape[] possibleShape, Stone.Color[] possibleColor, Position p) {
+		super();
+		setPosition(p);
 		this.possibleShape = new ArrayList<Stone.Shape>();
 		this.possibleColor = new ArrayList<Stone.Color>();
 		for (Stone.Shape s : possibleShape) {
@@ -46,16 +48,18 @@ public class PossibleMove extends Space {
 		stone.setPosition(getPosition());
 		stone.place();
 		for (Space s : stone.getColumn()) {
-			s.addColumn(s);
+			s.addColumn(stone);
 		}
 		for (Space s : stone.getRow()) {
-			s.addRow(s);
+			s.addRow(stone);
 		}
+		stone.addColumn(stone);
+		stone.addRow(stone);
 		return stone;
 	}
 
 	/**
-	 * Updates all the possibilities
+	 * Updates all the possibilities for this possibleMove
 	 * 
 	 * @return ??
 	 */
@@ -156,7 +160,7 @@ public class PossibleMove extends Space {
 	 * @return
 	 */
 	public boolean acceptable(Stone stone) {
-		return false;
+        return possibleColor.contains(stone.getColor()) && possibleShape.contains(stone.getShape());
 	}
 
 	/**

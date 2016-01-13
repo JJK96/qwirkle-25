@@ -1,5 +1,6 @@
 package server;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,6 +12,11 @@ public class Space {
 	private Position position;
 	private List<Space> column;
 	private List<Space> row;
+
+	public Space() {
+		this.column = new ArrayList<Space>();
+		this.row = new ArrayList<Space>();
+	}
 
 	public List<Space> getColumn() {
 		return column;
