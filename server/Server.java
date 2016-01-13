@@ -24,11 +24,13 @@ public class Server {
 
 	private int port;
 	private List<ClientHandler> threads;
+	private List<Game> games;
 
 	/** Constructs a new Server object */
 	public Server(int portArg) {
 		this.port = portArg;
 		threads = new ArrayList<ClientHandler>();
+		games = new ArrayList<Game>();
 	}
 
 	/**
@@ -41,11 +43,12 @@ public class Server {
 			ServerSocket sock = new ServerSocket(port);
 			while (true) {
 				Socket acceptedsocket = sock.accept();
-				ClientHandler rr = new ClientHandler(this, acceptedsocket);
-				addHandler(rr);
-				rr.announce();
-				rr.start();
-
+				ClientHandler ch = new ClientHandler(this, acceptedsocket);
+				addHandler(ch);
+				ch.announce();
+				ch.start();
+				String[] names = null;
+				Game game = new Game(names);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -87,5 +90,13 @@ public class Server {
 	 */
 	public void removeHandler(ClientHandler handler) {
 		threads.remove(handler);
+	}
+	
+	public void addGame(Game game) {
+		games.add(game);
+	}
+	
+	public void removeGame(Game game) {
+		games.remove(game);
 	}
 }
