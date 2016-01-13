@@ -29,7 +29,7 @@ public class View {
 	 * @return number of the chosen possiblemove
 	 */
 	public int determineMove() {
-		String prompt = "-> " + game.getPossibleMoves().toString() + "|| What is your choice? ";
+		String prompt = game.getPossibleMoves().toString() + "\n-> What is your choice? ";
 		int choice = readInt(prompt);
 		boolean valid = game.isValidInt(choice);
 		while (!valid) {
