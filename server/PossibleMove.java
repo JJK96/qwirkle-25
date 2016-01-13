@@ -23,20 +23,14 @@ public class PossibleMove extends Space {
 	/**
 	 * Creates a possiblemove
 	 * 
-	 * @param possibleShape
-	 * @param possibleColor
+	 * @param
+	 * @param
 	 */
-	public PossibleMove(Stone.Shape[] possibleShape, Stone.Color[] possibleColor, Position p) {
+	public PossibleMove(Position p) {
 		super();
 		setPosition(p);
 		this.possibleShape = new ArrayList<Stone.Shape>();
 		this.possibleColor = new ArrayList<Stone.Color>();
-		for (Stone.Shape s : possibleShape) {
-			this.possibleShape.add(s);
-		}
-		for (Stone.Color c : possibleColor) {
-			this.possibleColor.add(c);
-		}
 	}
 
 	/**
@@ -69,7 +63,10 @@ public class PossibleMove extends Space {
 	 * @return ??
 	 */
 	public int updatePossibilities() {
-
+		if (getColumn().size() ==6 || getRow().size() == 6) {
+			return 0;
+		}
+		return 1;
 	}
 
 	/**
@@ -86,33 +83,39 @@ public class PossibleMove extends Space {
 	 * @param list
 	 * @return
      */
-	public Stone.Shape commonShape(List<Space> list) {
-		if (list.size() >= 2) {
-			Stone first = (Stone) list.get(0);
-			for (Space s : list) {
-				if (((Stone) s).getShape() != first.getShape() ) {
-					return null;
-				}
+	public boolean commonShape(List<Space> list, Stone stone) {
+		for (Space s : list) {
+			if (((Stone) s).getShape() != stone.getShape()) {
+				return false;
 			}
-			return first.getShape();
 		}
-		else {
-			return null;
-		}
+		return true;
 	}
-	public Stone.Color commonColor(List<Space> list) {
-		if (list.size() >= 2) {
-			Stone first = (Stone) list.get(0);
-			for (Space s : list) {
-				if (((Stone) s).getColor() != first.getColor() ) {
-					return null;
-				}
+	public boolean noCommonShape(List<Space> list, Stone stone) {
+		for (Space s : list) {
+			if (((Stone) s).getShape() == stone.getShape()) {
+				return false;
 			}
-			return first.getColor();
 		}
-		else {
-			return null;
+		return true;
+	}
+
+	public boolean commonColor(List<Space> list, Stone stone) {
+		for (Space s : list) {
+			if (((Stone) s).getColor() != stone.getColor()) {
+				return false;
+			}
 		}
+		return true;
+	}
+
+	public boolean noCommonColor(List<Space> list, Stone stone) {
+		for (Space s : list) {
+			if (((Stone) s).getColor() == stone.getColor()) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 
@@ -188,7 +191,12 @@ public class PossibleMove extends Space {
 	 * @return
 	 */
 	public boolean acceptable(Stone stone) {
-
+		if ((commonColor(getRow(), stone) && noCommonShape(getRow(), stone)) || (commonShape(getRow(), stone) && noCommonColor(getRow(), stone))) {
+			if ((commonColor(getColumn(), stone) && noCommonShape(getColumn(), stone)) || (commonShape(getColumn(), stone) && noCommonColor(getColumn(), stone))) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**

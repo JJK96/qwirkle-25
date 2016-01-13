@@ -17,7 +17,7 @@ public class Board {
     public void reset() {
         stones = new HashMap<Position, Stone>();
         possibleMoves = new HashMap<Position, PossibleMove>();
-        PossibleMove init = new PossibleMove(Stone.Shape.values(), Stone.Color.values(), new Position(0,0));
+        PossibleMove init = new PossibleMove(new Position(0,0));
         possibleMoves.put(init.getPosition(), init);
     }
 
@@ -67,7 +67,7 @@ public class Board {
 
     public void addPossibleMove(Position pos) {
         if (!stones.keySet().contains(pos)) {
-            PossibleMove newPM = new PossibleMove(Stone.Shape.values(), Stone.Color.values(), pos);
+            PossibleMove newPM = new PossibleMove(pos);
             Stone above;
             Stone below;
             Stone right;
