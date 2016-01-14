@@ -40,10 +40,11 @@ public class Server {
             ServerSocket sock = new ServerSocket(port);
             while (true) {
                 Socket client = sock.accept();
-                ServerPlayer newplayer = new ServerPlayer(client);
+                ServerPlayer newplayer = new ServerPlayer(client, this);
                 if (newplayer.register() > 0) {
                     addPlayer(newplayer);
                     newplayer.start();
+                    joinLobby(newplayer);
                 }
                 else {
                     newplayer.error(0);
@@ -56,6 +57,31 @@ public class Server {
 
     public void addPlayer(ServerPlayer player) {
         players.add(player);
+    }
+
+    public void broadcast(String msg) {
+        for (ServerPlayer p : players) {
+            p.sendMessage(msg);
+        }
+    }
+
+    /**
+     * send the joinlobby command when the player joins.
+     * @param player
+     */
+    public void joinLobby(ServerPlayer player) {
+        broadcast(Protocol.JOINLOBBY + Protocol.SPLIT + player.getThisName() + Protocol.SPLIT + player.getOptions());
+    }
+
+    /**
+     * returns the list of player names
+     */
+    public String getPlayers() {
+        String out = "";
+        for (ServerPlayer p : players) {
+            out += p.getThisName() + Protocol.SPLIT;
+        }
+        return out;
     }
 
 }
