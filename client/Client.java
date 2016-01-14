@@ -65,6 +65,41 @@ public class Client extends Thread {
 
 	public void run() {
 		sendMessage(Protocol.REGISTER + Protocol.SPLIT + getClientName());
+		while (true) {
+			String input = readString();
+			if (input.startsWith(Protocol.ERROR)) {
+
+			} else if (input.startsWith(Protocol.PLACED)) {
+
+			} else if (input.startsWith(Protocol.NEWSTONES)) {
+
+			} else if (input.startsWith(Protocol.TRADED)) {
+
+			} else if (input.startsWith(Protocol.TURN)) {
+
+			} else if (input.startsWith(Protocol.ENDGAME)) {
+
+			} else if (input.startsWith(Protocol.ACKNOWLEDGE)) {
+
+			} else if (input.startsWith(Protocol.PLAYERS)) {
+
+			} else if (input.startsWith(Protocol.JOINLOBBY)) {
+
+			} else if (input.startsWith(Protocol.START)) {
+
+			} else if (input.startsWith(Protocol.MSG)) {
+
+			} else if (input.startsWith(Protocol.MSGPM)) {
+
+			} else if (input.startsWith(Protocol.NEWCHALLENGE)) {
+
+			} else if (input.startsWith(Protocol.ACCEPT)) {
+
+			} else if (input.startsWith(Protocol.DECLINE)) {
+
+			}
+		}
+
 	}
 
 	public void sendMessage(String msg) {
@@ -98,16 +133,14 @@ public class Client extends Thread {
 		System.out.println(message);
 	}
 
-	public static String readString(String tekst) {
-		System.out.print(tekst);
-		String antw = null;
+	public String readString() {
+		String line = null;
 		try {
-			BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-			antw = in.readLine();
+			line = in.readLine();
 		} catch (IOException e) {
 		}
 
-		return (antw == null) ? "" : antw;
+		return line;
 	}
 
 	public void place(List<Stone> stones) {
