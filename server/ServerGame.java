@@ -26,7 +26,11 @@ public class ServerGame extends Thread{
 
     @Override
     public void run() {
-
+        String playernames = "";
+        for (ServerPlayer p : players) {
+            playernames += p.getThisName() + Protocol.SPLIT;
+        }
+        System.out.println("game started with players: " + playernames);
     }
 
     public int addPlayer(ServerPlayer player) {

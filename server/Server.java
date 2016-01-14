@@ -84,16 +84,19 @@ public class Server {
         return out;
     }
     public synchronized void joinGame(ServerPlayer player, int size) {
-        boolean foundGame = false;
+        ServerGame game = null;
         for (ServerGame g : games) {
             if (g.getSize() == size) {
-                g.addPlayer(player);
-                foundGame = true;
+                game = g;
                 break;
             }
         }
-        if (!foundGame) {
-            newGame(size).addPlayer(player);
+        if (game == null) {
+            game = newGame(size);
+            addGame(game);
+        }
+        if (game.addPlayer(player) == 0) {
+            game.start();
         }
     }
 
@@ -101,6 +104,10 @@ public class Server {
         ServerGame newgame = new ServerGame(size);
         games.add(newgame);
         return newgame;
+    }
+
+    public synchronized void addGame(ServerGame game) {
+        games.add(game);
     }
 
 }
