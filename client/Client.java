@@ -112,7 +112,7 @@ public class Client extends Thread {
 	public void place(List<Stone> stones) {
 		String msg = Protocol.PLACE;
 		for (Stone s : stones) {
-			msg = msg + Protocol.SPLIT + s.getShape().ordinal() + "," + s.getColor().ordinal() + Protocol.SPLIT
+			msg = msg + Protocol.SPLIT + s.toUsableString() + Protocol.SPLIT
 					+ s.getPosition().toUsableString();
 		}
 	}
@@ -120,7 +120,7 @@ public class Client extends Thread {
 	public void trade(List<Stone> stones) {
 		String msg = Protocol.TRADE;
 		for (Stone s : stones) {
-			msg = msg + Protocol.SPLIT + s.getShape().ordinal() + "," + s.getColor().ordinal();
+			msg = msg + Protocol.SPLIT + s.toUsableString();
 		}
 	}
 

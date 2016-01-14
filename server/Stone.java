@@ -64,4 +64,8 @@ public class Stone extends Space {
 	public String toString() {
 		return "[" + shape.ordinal() + "," + color.ordinal() + "]";
 	}
+	
+	public String toUsableString() {
+		return shape.ordinal() + "," + color.ordinal();
+	}
 }
