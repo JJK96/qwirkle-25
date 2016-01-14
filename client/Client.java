@@ -55,6 +55,7 @@ public class Client extends Thread {
 	private BufferedReader in;
 	private BufferedWriter out;
 	private String[] options;
+	private Game game;
 
 	public Client(String name, InetAddress host, int port) throws IOException {
 		this.clientName = name;
@@ -79,13 +80,17 @@ public class Client extends Thread {
 					print("Speler disconnected: 3");
 				} else if (inputArray[1].equals("4")) {
 					print("Speler heeft functie niet: 4");
-				} else if (inputArray[1].equals(null)) {
+				} else if (inputArray.length == 1) {
 					print("Geen foutcode meegegeven foei foei foei");
 				}
 			} else if (inputArray[0].equals(Protocol.PLACED)) {
-				
-			} else if (inputArray[0].equals(Protocol.NEWSTONES)) {
 
+			} else if (inputArray[0].equals(Protocol.NEWSTONES)) {
+				for (int i = 1; i < inputArray.length; i++) {
+					if (inputArray[i].toString() instanceof String) {
+
+					}
+				}
 			} else if (inputArray[0].equals(Protocol.TRADED)) {
 
 			} else if (inputArray[0].equals(Protocol.TURN)) {
