@@ -29,14 +29,12 @@ public class ServerGame extends Thread{
 
     }
 
-    public void addPlayer(ServerPlayer player) {
+    public int addPlayer(ServerPlayer player) {
         if (playernum < size) {
             players[playernum] = player;
             playernum += 1;
         }
-        if (playernum == size) {
-            start();
-        }
+        return size-playernum;
     }
 
     public int getSize() {
@@ -50,4 +48,5 @@ public class ServerGame extends Thread{
     public boolean isStarted() {
         return started;
     }
+
 }
