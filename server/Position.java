@@ -51,4 +51,8 @@ public class Position {
     public String toString() {
         return "(" + getX() + "," + getY() +")";
     }
+    
+    public String toUsableString() {
+    	return getX() + "," + getY();
+    }
 }
