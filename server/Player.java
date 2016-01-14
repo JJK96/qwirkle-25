@@ -14,7 +14,6 @@ public class Player {
 	 * Create a player with specified name and game
 	 * 
 	 * @param name
-	 * @param game
 	 */
 	public Player(String name, Game game) {
 		stones = new ArrayList<Stone>();
@@ -38,6 +37,10 @@ public class Player {
 	 */
 	public Game getGame() {
 		return game;
+	}
+
+	public void setGame(Game game) {
+		this.game = game;
 	}
 
 	/**
