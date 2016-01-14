@@ -1,6 +1,7 @@
 package server;
 
 import java.util.List;
+import java.util.Observable;
 
 /**
  * Created by jjk on 1/14/16.
@@ -12,25 +13,23 @@ public class ServerGame extends Thread{
     private boolean started;
     private Board board;
     private List<Stone> bag;
+    private Server server;
     /**
      * Creates a game with the given size
      *
      * @param size
      */
-    public ServerGame(int size) {
+    public ServerGame(int size, Server server) {
         this.size = size;
         players = new ServerPlayer[size];
         playernum = 0;
         started = false;
+        this.server = server;
     }
 
     @Override
     public void run() {
-        String playernames = "";
-        for (ServerPlayer p : players) {
-            playernames += p.getThisName() + Protocol.SPLIT;
-        }
-        System.out.println("game started with players: " + playernames);
+        System.out.println("game started with players: " + getPlayerNames());
     }
 
     public int addPlayer(ServerPlayer player) {
@@ -53,4 +52,25 @@ public class ServerGame extends Thread{
         return started;
     }
 
+    public String getPlayerNames() {
+        String playernames = "";
+        for (ServerPlayer p : players) {
+            playernames += p.getThisName() + Protocol.SPLIT;
+        }
+        return playernames;
+    }
+
+    public void endgame() {
+        for (ServerPlayer p : players) {
+            p.setGame(null);
+        }
+        broadcast(Protocol.ENDGAME);
+        server.removeGame(this);
+    }
+
+    public void broadcast(String msg) {
+        for (ServerPlayer p : players) {
+            p.sendMessage(msg);
+        }
+    }
 }

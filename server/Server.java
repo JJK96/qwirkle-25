@@ -59,6 +59,17 @@ public class Server {
         players.add(player);
     }
 
+    public synchronized void removePlayer(ServerPlayer player) {
+        players.remove(player);
+        if (player.inGame()) {
+            player.getGame().endgame();
+        }
+    }
+
+    public synchronized void removeGame(ServerGame game) {
+        games.remove(game);
+    }
+
     public void broadcast(String msg) {
         for (ServerPlayer p : players) {
             p.sendMessage(msg);
@@ -96,18 +107,23 @@ public class Server {
             addGame(game);
         }
         if (game.addPlayer(player) == 0) {
-            game.start();
+            startGame(game);
         }
     }
 
     public synchronized ServerGame newGame(int size) {
-        ServerGame newgame = new ServerGame(size);
+        ServerGame newgame = new ServerGame(size, this);
         games.add(newgame);
         return newgame;
     }
 
     public synchronized void addGame(ServerGame game) {
         games.add(game);
+    }
+
+    public synchronized void startGame(ServerGame game) {
+        broadcast(Protocol.START + Protocol.SPLIT + game.getPlayerNames());
+        game.start();
     }
 
 }

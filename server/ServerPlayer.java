@@ -35,10 +35,13 @@ public class ServerPlayer extends Thread {
         try {
             while ((line = in.readLine()) != null) {
                 String[] words = line.split(Protocol.SPLIT);
-
+                if (words[0].equals(Protocol.JOINAANTAL)) {
+                    server.joinGame(this, Integer.parseInt(words[1]));
+                }
             }
+            shutdown();
         } catch (IOException e) {
-            error(2);
+            shutdown();
         }
     }
 
@@ -102,5 +105,15 @@ public class ServerPlayer extends Thread {
     }
     public boolean inGame() {
         return getGame() != null;
+    }
+
+    public void shutdown() {
+        try {
+            out.close();
+            in.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        server.removePlayer(this);
     }
 }
