@@ -67,37 +67,51 @@ public class Client extends Thread {
 		sendMessage(Protocol.REGISTER + Protocol.SPLIT + getClientName());
 		while (true) {
 			String input = readString();
-			if (input.startsWith(Protocol.ERROR)) {
+			String[] inputArray = input.split(Protocol.SPLIT);
+			if (inputArray[0].equals(Protocol.ERROR)) {
+				if (inputArray[1].equals("0")) {
+					print("Fout commando: 0");
+				} else if (inputArray[1].equals("1")) {
+					print("Foute beurt: 1");
+				} else if (inputArray[1].equals("2")) {
+					print("Niet unieke naam of onjuiste naam: 2");
+				} else if (inputArray[1].equals("3")) {
+					print("Speler disconnected: 3");
+				} else if (inputArray[1].equals("4")) {
+					print("Speler heeft functie niet: 4");
+				} else if (inputArray[1].equals(null)) {
+					print("Geen foutcode meegegeven foei foei foei");
+				}
+			} else if (inputArray[0].equals(Protocol.PLACED)) {
+				
+			} else if (inputArray[0].equals(Protocol.NEWSTONES)) {
 
-			} else if (input.startsWith(Protocol.PLACED)) {
+			} else if (inputArray[0].equals(Protocol.TRADED)) {
 
-			} else if (input.startsWith(Protocol.NEWSTONES)) {
+			} else if (inputArray[0].equals(Protocol.TURN)) {
 
-			} else if (input.startsWith(Protocol.TRADED)) {
+			} else if (inputArray[0].equals(Protocol.ENDGAME)) {
 
-			} else if (input.startsWith(Protocol.TURN)) {
+			} else if (inputArray[0].equals(Protocol.ACKNOWLEDGE)) {
 
-			} else if (input.startsWith(Protocol.ENDGAME)) {
+			} else if (inputArray[0].equals(Protocol.PLAYERS)) {
 
-			} else if (input.startsWith(Protocol.ACKNOWLEDGE)) {
+			} else if (inputArray[0].equals(Protocol.JOINLOBBY)) {
 
-			} else if (input.startsWith(Protocol.PLAYERS)) {
+			} else if (inputArray[0].equals(Protocol.START)) {
 
-			} else if (input.startsWith(Protocol.JOINLOBBY)) {
+			} else if (inputArray[0].equals(Protocol.MSG)) {
 
-			} else if (input.startsWith(Protocol.START)) {
+			} else if (inputArray[0].equals(Protocol.MSGPM)) {
 
-			} else if (input.startsWith(Protocol.MSG)) {
+			} else if (inputArray[0].equals(Protocol.NEWCHALLENGE)) {
 
-			} else if (input.startsWith(Protocol.MSGPM)) {
+			} else if (inputArray[0].equals(Protocol.ACCEPT)) {
 
-			} else if (input.startsWith(Protocol.NEWCHALLENGE)) {
+			} else if (inputArray[0].equals(Protocol.DECLINE)) {
 
-			} else if (input.startsWith(Protocol.ACCEPT)) {
-
-			} else if (input.startsWith(Protocol.DECLINE)) {
-
-			}
+			} else if (inputArray[0].equals(null))
+				;
 		}
 
 	}
