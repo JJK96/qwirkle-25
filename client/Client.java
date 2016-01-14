@@ -54,6 +54,7 @@ public class Client extends Thread {
 	private Socket sock;
 	private BufferedReader in;
 	private BufferedWriter out;
+	private String[] options;
 
 	public Client(String name, InetAddress host, int port) throws IOException {
 		this.clientName = name;
@@ -63,7 +64,7 @@ public class Client extends Thread {
 	}
 
 	public void run() {
-		sendMessage(getClientName());
+		sendMessage(Protocol.REGISTER + Protocol.SPLIT + getClientName());
 	}
 
 	public void sendMessage(String msg) {
@@ -112,9 +113,9 @@ public class Client extends Thread {
 	public void place(List<Stone> stones) {
 		String msg = Protocol.PLACE;
 		for (Stone s : stones) {
-			msg = msg + Protocol.SPLIT + s.toUsableString() + Protocol.SPLIT
-					+ s.getPosition().toUsableString();
+			msg = msg + Protocol.SPLIT + s.toUsableString() + Protocol.SPLIT + s.getPosition().toUsableString();
 		}
+		sendMessage(msg);
 	}
 
 	public void trade(List<Stone> stones) {
@@ -122,6 +123,23 @@ public class Client extends Thread {
 		for (Stone s : stones) {
 			msg = msg + Protocol.SPLIT + s.toUsableString();
 		}
+		sendMessage(msg);
+	}
+
+	public void register() {
+		sendMessage(Protocol.REGISTER + Protocol.SPLIT + options);
+	}
+
+	public void join(int amount) {
+		sendMessage(Protocol.JOINAANTAL + Protocol.SPLIT + amount);
+	}
+
+	public void chat(String msg) {
+		sendMessage(Protocol.CHAT + Protocol.SPLIT + msg);
+	}
+
+	public void chatPM(String msg, Player player) {
+		sendMessage(Protocol.CHATPM + Protocol.SPLIT + player.getName() + Protocol.SPLIT + msg);
 	}
 
 }
