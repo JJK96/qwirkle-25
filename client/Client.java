@@ -8,12 +8,15 @@ import java.io.OutputStreamWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.List;
 
-public class Client {
+import server.*;
+
+public class Client extends Thread {
 
 	private static final String USAGE = "usage: Client <name> <address> <port>";
 
-	/** Start een ClientExample-applicatie op. */
+	/** Start een Client-applicatie op. */
 	public static void main(String[] args) {
 		if (args.length != 3) {
 			System.out.println(USAGE);
@@ -39,14 +42,7 @@ public class Client {
 
 		try {
 			Client client = new Client(args[0], host, port);
-			client.sendMessage(args[0]);
 			client.start();
-
-			do {
-				String input = readString("");
-				client.sendMessage(input);
-			} while (true);
-
 		} catch (IOException e) {
 			print("ERROR: couldn't construct a client object!");
 			System.exit(0);
@@ -67,7 +63,7 @@ public class Client {
 	}
 
 	public void run() {
-
+		sendMessage(getClientName());
 	}
 
 	public void sendMessage(String msg) {
@@ -90,7 +86,6 @@ public class Client {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	/** returns the client name */
@@ -113,4 +108,9 @@ public class Client {
 
 		return (antw == null) ? "" : antw;
 	}
+
+	public void place(List<Stone> stones) {
+
+	}
+
 }
