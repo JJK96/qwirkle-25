@@ -15,15 +15,31 @@ public class ServerPlayer extends Thread {
     private String name;
     private int points;
 	private List<Stone> stones;
-	private Game game;
+	private ServerGame game;
     private String options;
+    private Server server;
 
-    public ServerPlayer(Socket sock) throws IOException{
+    public ServerPlayer(Socket sock, Server server) throws IOException{
         in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
         out = new BufferedWriter(new OutputStreamWriter(sock.getOutputStream()));
         points = 0;
         stones = new ArrayList<Stone>();
         options = "";
+        this.server = server;
+
+    }
+
+    @Override
+    public void run() {
+        String line = null;
+        try {
+            while ((line = in.readLine()) != null) {
+                String[] words = line.split(Protocol.SPLIT);
+
+            }
+        } catch (IOException e) {
+            error(2);
+        }
     }
 
     public int register() throws IOException{
@@ -36,12 +52,11 @@ public class ServerPlayer extends Thread {
                     options += words[i] + Protocol.SPLIT;
                 }
             }
-
+            acknowledge();
+            sendPlayers();
             return 1;
         }
         return 0;
-
-
     }
     public void acknowledge() {
         sendMessage(Protocol.ACKNOWLEDGE + Protocol.SPLIT + options);
@@ -58,5 +73,34 @@ public class ServerPlayer extends Thread {
 
     public void error(int code) {
         sendMessage(Protocol.ERROR + Protocol.SPLIT + code);
+    }
+
+    public String getThisName() {
+        return name;
+    }
+
+    public int getPoints() {
+        return points;
+    }
+
+    public List<Stone> getStones() {
+        return stones;
+    }
+
+    public ServerGame getGame() {
+        return game;
+    }
+    public void setGame(ServerGame game) {
+        this.game = game;
+    }
+
+    public String getOptions() {
+        return options;
+    }
+    public void sendPlayers() {
+        sendMessage(Protocol.PLAYERS + Protocol.SPLIT + server.getPlayers());
+    }
+    public boolean inGame() {
+        return getGame() != null;
     }
 }

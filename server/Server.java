@@ -55,7 +55,7 @@ public class Server {
         }
     }
 
-    public void addPlayer(ServerPlayer player) {
+    public synchronized void addPlayer(ServerPlayer player) {
         players.add(player);
     }
 
@@ -82,6 +82,25 @@ public class Server {
             out += p.getThisName() + Protocol.SPLIT;
         }
         return out;
+    }
+    public synchronized void joinGame(ServerPlayer player, int size) {
+        boolean foundGame = false;
+        for (ServerGame g : games) {
+            if (g.getSize() == size) {
+                g.addPlayer(player);
+                foundGame = true;
+                break;
+            }
+        }
+        if (!foundGame) {
+            newGame(size).addPlayer(player);
+        }
+    }
+
+    public synchronized ServerGame newGame(int size) {
+        ServerGame newgame = new ServerGame(size);
+        games.add(newgame);
+        return newgame;
     }
 
 }

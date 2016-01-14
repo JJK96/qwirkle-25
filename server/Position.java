@@ -49,7 +49,7 @@ public class Position {
 
     @Override
     public String toString() {
-        return "(" + getX() + "," + getY() +")";
+        return "(" + toUsableString() +")";
     }
     
     public String toUsableString() {

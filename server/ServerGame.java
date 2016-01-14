@@ -1,16 +1,53 @@
 package server;
 
+import java.util.List;
+
 /**
  * Created by jjk on 1/14/16.
  */
-public class ServerGame{
-    ServerPlayer[] players;
+public class ServerGame extends Thread{
+    private ServerPlayer[] players;
+    private int size;
+    private int playernum;
+    private boolean started;
+    private Board board;
+    private List<Stone> bag;
     /**
-     * Creates a game with the names of the players.
+     * Creates a game with the given size
      *
-     * @param players
+     * @param size
      */
-    public ServerGame(ServerPlayer[] players) {
-        this.players = players;
+    public ServerGame(int size) {
+        this.size = size;
+        players = new ServerPlayer[size];
+        playernum = 0;
+        started = false;
+    }
+
+    @Override
+    public void run() {
+
+    }
+
+    public void addPlayer(ServerPlayer player) {
+        if (playernum < size) {
+            players[playernum] = player;
+            playernum += 1;
+        }
+        if (playernum == size) {
+            start();
+        }
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public int getPlayernum() {
+        return playernum;
+    }
+
+    public boolean isStarted() {
+        return started;
     }
 }
