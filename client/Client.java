@@ -8,9 +8,12 @@ import java.io.OutputStreamWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.List;
 
 import server.*;
+import server.Stone.Color;
+import server.Stone.Shape;
 
 public class Client extends Thread {
 
@@ -69,53 +72,67 @@ public class Client extends Thread {
 		while (true) {
 			String input = readString();
 			String[] inputArray = input.split(Protocol.SPLIT);
-			if (inputArray[0].equals(Protocol.ERROR)) {
-				if (inputArray[1].equals("0")) {
-					print("Fout commando: 0");
-				} else if (inputArray[1].equals("1")) {
-					print("Foute beurt: 1");
-				} else if (inputArray[1].equals("2")) {
-					print("Niet unieke naam of onjuiste naam: 2");
-				} else if (inputArray[1].equals("3")) {
-					print("Speler disconnected: 3");
-				} else if (inputArray[1].equals("4")) {
-					print("Speler heeft functie niet: 4");
-				} else if (inputArray.length == 1) {
-					print("Geen foutcode meegegeven foei foei foei");
+			if (inputArray.length == 1) {
+				if (inputArray[0].equals(Protocol.ENDGAME)) {
+					// implement
 				}
-			} else if (inputArray[0].equals(Protocol.PLACED)) {
-
-			} else if (inputArray[0].equals(Protocol.NEWSTONES)) {
-				for (int i = 1; i < inputArray.length; i++) {
-					if (inputArray[i].toString() instanceof String) {
-
+			} else if (inputArray.length > 1) {
+				if (inputArray[0].equals(Protocol.ERROR)) {
+					if (inputArray[1].equals("0")) {
+						print("Fout commando: 0");
+					} else if (inputArray[1].equals("1")) {
+						print("Foute beurt: 1");
+					} else if (inputArray[1].equals("2")) {
+						print("Niet unieke naam of onjuiste naam: 2");
+					} else if (inputArray[1].equals("3")) {
+						print("Speler disconnected: 3");
+					} else if (inputArray[1].equals("4")) {
+						print("Speler heeft functie niet: 4");
+					} else if (inputArray.length == 1) {
+						print("Geen foutcode meegegeven foei foei foei");
 					}
+				} else if (inputArray[0].equals(Protocol.PLACED)) {
+
+				} else if (inputArray[0].equals(Protocol.NEWSTONES)) {
+					List<Stone> stones = new ArrayList<Stone>();
+					for (int i = 1; i < inputArray.length; i++) {
+						if (inputArray[i] != null) {
+							String[] array = inputArray[i].split(",");
+							int shape = Integer.parseInt(array[0]);
+							int color = Integer.parseInt(array[1]);
+							if (shape >= 0 && shape < 7 && color >= 0 && color < 7) {
+								Shape[] shapes = Shape.values();
+								Color[] colors = Color.values();
+								Stone stone = new Stone(shapes[shape], colors[color]);
+								stones.add(stone);
+							}
+						}
+					}
+					game.currentPlayer().takeStones(stones);
+				} else if (inputArray[0].equals(Protocol.TRADED)) {
+
+				} else if (inputArray[0].equals(Protocol.TURN)) {
+
+				} else if (inputArray[0].equals(Protocol.ACKNOWLEDGE)) {
+
+				} else if (inputArray[0].equals(Protocol.PLAYERS)) {
+
+				} else if (inputArray[0].equals(Protocol.JOINLOBBY)) {
+
+				} else if (inputArray[0].equals(Protocol.START)) {
+
+				} else if (inputArray[0].equals(Protocol.MSG)) {
+
+				} else if (inputArray[0].equals(Protocol.MSGPM)) {
+
+				} else if (inputArray[0].equals(Protocol.NEWCHALLENGE)) {
+
+				} else if (inputArray[0].equals(Protocol.ACCEPT)) {
+
+				} else if (inputArray[0].equals(Protocol.DECLINE)) {
+
 				}
-			} else if (inputArray[0].equals(Protocol.TRADED)) {
-
-			} else if (inputArray[0].equals(Protocol.TURN)) {
-
-			} else if (inputArray[0].equals(Protocol.ENDGAME)) {
-
-			} else if (inputArray[0].equals(Protocol.ACKNOWLEDGE)) {
-
-			} else if (inputArray[0].equals(Protocol.PLAYERS)) {
-
-			} else if (inputArray[0].equals(Protocol.JOINLOBBY)) {
-
-			} else if (inputArray[0].equals(Protocol.START)) {
-
-			} else if (inputArray[0].equals(Protocol.MSG)) {
-
-			} else if (inputArray[0].equals(Protocol.MSGPM)) {
-
-			} else if (inputArray[0].equals(Protocol.NEWCHALLENGE)) {
-
-			} else if (inputArray[0].equals(Protocol.ACCEPT)) {
-
-			} else if (inputArray[0].equals(Protocol.DECLINE)) {
-
-			} else if (inputArray[0].equals(null))
+			} else if (inputArray[0] == null)
 				;
 		}
 
