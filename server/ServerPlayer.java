@@ -106,6 +106,7 @@ public class ServerPlayer extends Thread {
         sendMessage(Protocol.PLAYERS + Protocol.SPLIT + server.getPlayers());
     }
     public boolean inGame() {
+
         return getGame() != null;
     }
 
