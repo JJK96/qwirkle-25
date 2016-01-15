@@ -71,60 +71,58 @@ public class Client extends Thread {
 
 	public void run() {
 		sendMessage(Protocol.REGISTER + Protocol.SPLIT + getClientName());
-		while (true) {
-			String input = readString();
+		String input = null;
+		while ((input = readString()) != null) {
 			String[] inputArray = input.split(Protocol.SPLIT);
 			if (inputArray[0].equals(Protocol.ENDGAME)) {
 				// implement
-			} else if (inputArray.length > 1) {
-				if (inputArray[0].equals(Protocol.ERROR)) {
-					if (inputArray[1].equals("0")) {
-						print("Fout commando: 0");
-					} else if (inputArray[1].equals("1")) {
-						print("Foute beurt: 1");
-					} else if (inputArray[1].equals("2")) {
-						print("Niet unieke naam of onjuiste naam: 2");
-					} else if (inputArray[1].equals("3")) {
-						print("Speler disconnected: 3");
-					} else if (inputArray[1].equals("4")) {
-						print("Speler heeft functie niet: 4");
-					} else if (inputArray.length == 1) {
-						print("Geen foutcode meegegeven foei foei foei");
-					}
-				} else if (inputArray[0].equals(Protocol.PLACED)) {
-					List<Stone> stones = Protocol.intsToStonesAndPositions(inputArray);
-					// implement
-				} else if (inputArray[0].equals(Protocol.NEWSTONES)) {
-					List<Stone> stones = Protocol.convertNewStones(inputArray);
-					game.currentPlayer().takeStones(stones);
-					// implement
-				} else if (inputArray[0].equals(Protocol.TRADED)) {
-
-				} else if (inputArray[0].equals(Protocol.TURN)) {
-
-				} else if (inputArray[0].equals(Protocol.ACKNOWLEDGE)) {
-
-				} else if (inputArray[0].equals(Protocol.PLAYERS)) {
-
-				} else if (inputArray[0].equals(Protocol.JOINLOBBY)) {
-
-				} else if (inputArray[0].equals(Protocol.START)) {
-
-				} else if (inputArray[0].equals(Protocol.MSG)) {
-
-				} else if (inputArray[0].equals(Protocol.MSGPM)) {
-
-				} else if (inputArray[0].equals(Protocol.NEWCHALLENGE)) {
-
-				} else if (inputArray[0].equals(Protocol.ACCEPT)) {
-
-				} else if (inputArray[0].equals(Protocol.DECLINE)) {
-
+			} else if (inputArray[0].equals(Protocol.ERROR)) {
+				if (inputArray[1].equals("0")) {
+					print("Fout commando: 0");
+				} else if (inputArray[1].equals("1")) {
+					print("Foute beurt: 1");
+				} else if (inputArray[1].equals("2")) {
+					print("Niet unieke naam of onjuiste naam: 2");
+				} else if (inputArray[1].equals("3")) {
+					print("Speler disconnected: 3");
+				} else if (inputArray[1].equals("4")) {
+					print("Speler heeft functie niet: 4");
+				} else if (inputArray.length == 1) {
+					print("Geen foutcode meegegeven foei foei foei");
 				}
-			} else if (inputArray[0] == null)
+			} else if (inputArray[0].equals(Protocol.PLACED)) {
+				List<Stone> stones = Protocol.convertPlacedStones(inputArray);
+				// implement
+			} else if (inputArray[0].equals(Protocol.NEWSTONES)) {
+				List<Stone> stones = Protocol.convertNewStones(inputArray);
+				game.currentPlayer().takeStones(stones);
+				// implement
+			} else if (inputArray[0].equals(Protocol.TRADED)) {
+
+			} else if (inputArray[0].equals(Protocol.TURN)) {
+
+			} else if (inputArray[0].equals(Protocol.ACKNOWLEDGE)) {
+
+			} else if (inputArray[0].equals(Protocol.PLAYERS)) {
+
+			} else if (inputArray[0].equals(Protocol.JOINLOBBY)) {
+
+			} else if (inputArray[0].equals(Protocol.START)) {
+
+			} else if (inputArray[0].equals(Protocol.MSG)) {
+
+			} else if (inputArray[0].equals(Protocol.MSGPM)) {
+
+			} else if (inputArray[0].equals(Protocol.NEWCHALLENGE)) {
+
+			} else if (inputArray[0].equals(Protocol.ACCEPT)) {
+
+			} else if (inputArray[0].equals(Protocol.DECLINE)) {
+
+			} else
 				;
 		}
-
+		shutdown();
 	}
 
 	public void sendMessage(String msg) {
@@ -144,6 +142,7 @@ public class Client extends Thread {
 			in.close();
 			out.close();
 			sock.close();
+			//implement dingen enzo
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -164,7 +163,6 @@ public class Client extends Thread {
 			line = in.readLine();
 		} catch (IOException e) {
 		}
-
 		return line;
 	}
 

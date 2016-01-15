@@ -3,6 +3,7 @@ package shared;
 import java.util.ArrayList;
 import java.util.List;
 
+import server.Position;
 import server.Stone;
 import server.Stone.Color;
 import server.Stone.Shape;
@@ -39,7 +40,7 @@ public class Protocol {
 		List<Stone> stones = new ArrayList<Stone>();
 		for (int i = 1; i < inputArray.length; i++) {
 			try {
-				Stone stone = intsToStones(inputArray[i]);
+				Stone stone = intsToStone(inputArray[i]);
 				stones.add(stone);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -48,7 +49,7 @@ public class Protocol {
 		return stones;
 	}
 
-	public static Stone intsToStones(String input) throws Exception {
+	public static Stone intsToStone(String input) throws Exception {
 		String[] array = input.split(",");
 		int shape = Integer.parseInt(array[0]);
 		int color = Integer.parseInt(array[1]);
@@ -62,8 +63,27 @@ public class Protocol {
 			throw new InvalidStoneException(input);
 	}
 
-	public static List<Stone> intsToStonesAndPositions(String[] inputArray) {
+	public static Position intsToPosition(String input) {
+		String[] array = input.split(",");
+		int x = Integer.parseInt(array[0]);
+		int y = Integer.parseInt(array[1]);
+		Position position = new Position(x,y);
+		return position;
+	}
+
+	public static List<Stone> convertPlacedStones(String[] inputArray) {
 		List<Stone> stones = new ArrayList<Stone>();
+		for (int i = 1; i < inputArray.length; i += 2) {
+			try {
+				Stone stone = intsToStone(inputArray[i]);
+				Position position = intsToPosition(inputArray[i+1]);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+		}
+
 		return stones;
 	}
+
 }
