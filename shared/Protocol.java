@@ -95,8 +95,4 @@ public class Protocol {
 		return positions;
 	}
 
-	public static Player convertPlayer(String[] inputArray) {
-		return null;
-	}
-
 }

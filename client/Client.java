@@ -100,7 +100,13 @@ public class Client extends Thread {
 			} else if (inputArray[0].equals(Protocol.TRADED)) {
 				List<Stone> stones = Protocol.convertStones(inputArray);
 			} else if (inputArray[0].equals(Protocol.TURN)) {
-				Player currentPlayer = Protocol.convertPlayer(inputArray);
+				Player[] players = game.getPlayers();
+				for (int i = 0; i < game.getPlayers().length; i++) {
+					if (players[i].getName().equals(inputArray[1])) {
+						//Player currentPlayer = 
+					}
+				}
+				
 			} else if (inputArray[0].equals(Protocol.ACKNOWLEDGE)) {
 				
 			} else if (inputArray[0].equals(Protocol.PLAYERS)) {

@@ -22,7 +22,7 @@ public class Game {
 		this.board = new Board();
 		this.view = new View(this);
 		for (int i = 0; i < names.length; i++) {
-			players[i] =new Player(names[i], this);
+			players[i] = new Player(names[i], this);
 		}
 	}
 
@@ -91,6 +91,10 @@ public class Game {
 	 */
 	public Board getBoard() {
 		return board;
+	}
+
+	public Player[] getPlayers() {
+		return players;
 	}
 
 	/**
