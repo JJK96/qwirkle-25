@@ -25,6 +25,7 @@ public class Server {
         this.port = port;
         players = new ArrayList<ServerPlayer>();
         games = new ArrayList<ServerGame>();
+        System.out.println(games.size());
     }
 
     public static void main(String[] args) {
@@ -80,9 +81,6 @@ public class Server {
                 e.printStackTrace();
             }
             games.remove(game);
-            for (ServerPlayer p : players) {
-                System.out.println(p.getThisName() + p.getGame());
-            }
         }
     }
 
@@ -124,20 +122,12 @@ public class Server {
                 }
             }
             if (game == null) {
-                game = newGame(size);
+                game = new ServerGame(size, this);
                 addGame(game);
             }
             if (game.addPlayer(player) == 0) {
                 startGame(game);
             }
-        }
-    }
-
-    public ServerGame newGame(int size) {
-        synchronized (games) {
-            ServerGame newgame = new ServerGame(size, this);
-            games.add(newgame);
-            return newgame;
         }
     }
 

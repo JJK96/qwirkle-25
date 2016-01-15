@@ -39,10 +39,10 @@ public class ServerGame extends Thread{
             players[playernum] = player;
             playernum += 1;
         }
+        player.setGame(this);
         return size-playernum;
     }
     public void removePlayer(ServerPlayer player) {
-        System.out.println("removing player "+ player.getThisName());
         ServerPlayer[] newplayers = new ServerPlayer[playernum -1];
         int i=0;
         for (ServerPlayer p : players ) {
@@ -51,6 +51,7 @@ public class ServerGame extends Thread{
                 i++;
             }
         }
+        this.players = newplayers;
         endgame();
     }
 
