@@ -12,7 +12,7 @@ public class ServerGame extends Thread{
     private ServerPlayer[] players;
     private int size;
     private int playernum;
-    private boolean started;
+    private boolean running;
     private Board board;
     private List<Stone> bag;
     private Server server;
@@ -25,7 +25,7 @@ public class ServerGame extends Thread{
         this.size = size;
         players = new ServerPlayer[size];
         playernum = 0;
-        started = false;
+        running = false;
         this.server = server;
     }
 
@@ -41,6 +41,18 @@ public class ServerGame extends Thread{
         }
         return size-playernum;
     }
+    public void removePlayer(ServerPlayer player) {
+        System.out.println("removing player "+ player.getThisName());
+        ServerPlayer[] newplayers = new ServerPlayer[playernum -1];
+        int i=0;
+        for (ServerPlayer p : players ) {
+            if (!p.equals(player)) {
+                newplayers[i] = p;
+                i++;
+            }
+        }
+        endgame();
+    }
 
     public int getSize() {
         return size;
@@ -50,8 +62,8 @@ public class ServerGame extends Thread{
         return playernum;
     }
 
-    public boolean isStarted() {
-        return started;
+    public boolean isRunning() {
+        return running;
     }
 
     public String getPlayerNames() {
@@ -67,6 +79,7 @@ public class ServerGame extends Thread{
             p.setGame(null);
         }
         broadcast(Protocol.ENDGAME);
+        running = false;
         server.removeGame(this);
     }
 

@@ -57,24 +57,40 @@ public class Server {
         }
     }
 
-    public synchronized void addPlayer(ServerPlayer player) {
-        players.add(player);
+    public void addPlayer(ServerPlayer player) {
+        synchronized (players) {
+            players.add(player);
+        }
     }
 
-    public synchronized void removePlayer(ServerPlayer player) {
-        players.remove(player);
-        if (player.inGame()) {
-            player.getGame().endgame();
+    public void removePlayer(ServerPlayer player) {
+        synchronized (players) {
+            players.remove(player);
+            if (player.inGame()) {
+                player.getGame().removePlayer(player);
+            }
         }
     }
 
     public synchronized void removeGame(ServerGame game) {
-        games.remove(game);
+        synchronized (games) {
+            try {
+                game.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            games.remove(game);
+            for (ServerPlayer p : players) {
+                System.out.println(p.getThisName() + p.getGame());
+            }
+        }
     }
 
     public void broadcast(String msg) {
-        for (ServerPlayer p : players) {
-            p.sendMessage(msg);
+        synchronized (players) {
+            for (ServerPlayer p : players) {
+                p.sendMessage(msg);
+            }
         }
     }
 
@@ -90,37 +106,45 @@ public class Server {
      * returns the list of player names
      */
     public String getPlayers() {
-        String out = "";
-        for (ServerPlayer p : players) {
-            out += p.getThisName() + Protocol.SPLIT;
+        synchronized(players) {
+            String out = "";
+            for (ServerPlayer p : players) {
+                out += p.getThisName() + Protocol.SPLIT;
+            }
+            return out;
         }
-        return out;
     }
-    public synchronized void joinGame(ServerPlayer player, int size) {
-        ServerGame game = null;
-        for (ServerGame g : games) {
-            if (g.getSize() == size) {
-                game = g;
-                break;
+    public void joinGame(ServerPlayer player, int size) {
+        synchronized (games) {
+            ServerGame game = null;
+            for (ServerGame g : games) {
+                if (g.getSize() == size && !g.isRunning()) {
+                    game = g;
+                    break;
+                }
+            }
+            if (game == null) {
+                game = newGame(size);
+                addGame(game);
+            }
+            if (game.addPlayer(player) == 0) {
+                startGame(game);
             }
         }
-        if (game == null) {
-            game = newGame(size);
-            addGame(game);
-        }
-        if (game.addPlayer(player) == 0) {
-            startGame(game);
+    }
+
+    public ServerGame newGame(int size) {
+        synchronized (games) {
+            ServerGame newgame = new ServerGame(size, this);
+            games.add(newgame);
+            return newgame;
         }
     }
 
-    public synchronized ServerGame newGame(int size) {
-        ServerGame newgame = new ServerGame(size, this);
-        games.add(newgame);
-        return newgame;
-    }
-
-    public synchronized void addGame(ServerGame game) {
-        games.add(game);
+    public void addGame(ServerGame game) {
+        synchronized (games) {
+            games.add(game);
+        }
     }
 
     public synchronized void startGame(ServerGame game) {
