@@ -1,5 +1,11 @@
 package server;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import server.Stone.Color;
+import server.Stone.Shape;
+
 /**
  * Created by jjk on 1/14/16.
  */
@@ -28,4 +34,26 @@ public class Protocol {
 	public static final String ACCEPT = "accept";
 	public static final String DECLINE = "decline";
 
+	public static List<Stone> intsToStones(String[] inputArray) {
+		List<Stone> stones = new ArrayList<Stone>();
+		for (int i = 1; i < inputArray.length; i++) {
+			if (inputArray[i] != null) {
+				String[] array = inputArray[i].split(",");
+				int shape = Integer.parseInt(array[0]);
+				int color = Integer.parseInt(array[1]);
+				if (shape >= 0 && shape < 7 && color >= 0 && color < 7) {
+					Shape[] shapes = Shape.values();
+					Color[] colors = Color.values();
+					Stone stone = new Stone(shapes[shape], colors[color]);
+					stones.add(stone);
+				}
+			}
+		}
+		return stones;
+	}
+
+	public static List<Stone> intsToStonesAndPositions(String[] inputArray) {
+		List<Stone> stones = new ArrayList<Stone>();
+		return  stones;
+	}
 }
