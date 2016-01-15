@@ -92,23 +92,23 @@ public class Client extends Thread {
 				}
 			} else if (inputArray[0].equals(Protocol.PLACED)) {
 				List<Stone> stones = Protocol.convertPlacedStones(inputArray);
+				List<Position> positions = Protocol.convertPlacedPositions(inputArray);
 				// implement
 			} else if (inputArray[0].equals(Protocol.NEWSTONES)) {
-				List<Stone> stones = Protocol.convertNewStones(inputArray);
-				game.currentPlayer().takeStones(stones);
+				List<Stone> stones = Protocol.convertStones(inputArray);
 				// implement
 			} else if (inputArray[0].equals(Protocol.TRADED)) {
-
+				List<Stone> stones = Protocol.convertStones(inputArray);
 			} else if (inputArray[0].equals(Protocol.TURN)) {
-
+				Player currentPlayer = Protocol.convertPlayer(inputArray);
 			} else if (inputArray[0].equals(Protocol.ACKNOWLEDGE)) {
-
+				
 			} else if (inputArray[0].equals(Protocol.PLAYERS)) {
 
 			} else if (inputArray[0].equals(Protocol.JOINLOBBY)) {
 
 			} else if (inputArray[0].equals(Protocol.START)) {
-
+				
 			} else if (inputArray[0].equals(Protocol.MSG)) {
 
 			} else if (inputArray[0].equals(Protocol.MSGPM)) {
@@ -142,7 +142,7 @@ public class Client extends Thread {
 			in.close();
 			out.close();
 			sock.close();
-			//implement dingen enzo
+			// implement dingen enzo
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

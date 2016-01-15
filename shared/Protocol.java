@@ -2,9 +2,7 @@ package shared;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import server.Position;
-import server.Stone;
+import server.*;
 import server.Stone.Color;
 import server.Stone.Shape;
 
@@ -36,7 +34,7 @@ public class Protocol {
 	public static final String ACCEPT = "accept";
 	public static final String DECLINE = "decline";
 
-	public static List<Stone> convertNewStones(String[] inputArray) {
+	public static List<Stone> convertStones(String[] inputArray) {
 		List<Stone> stones = new ArrayList<Stone>();
 		for (int i = 1; i < inputArray.length; i++) {
 			try {
@@ -67,7 +65,7 @@ public class Protocol {
 		String[] array = input.split(",");
 		int x = Integer.parseInt(array[0]);
 		int y = Integer.parseInt(array[1]);
-		Position position = new Position(x,y);
+		Position position = new Position(x, y);
 		return position;
 	}
 
@@ -76,14 +74,29 @@ public class Protocol {
 		for (int i = 1; i < inputArray.length; i += 2) {
 			try {
 				Stone stone = intsToStone(inputArray[i]);
-				Position position = intsToPosition(inputArray[i+1]);
+				stones.add(stone);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-
 		}
-
 		return stones;
+	}
+
+	public static List<Position> convertPlacedPositions(String[] inputArray) {
+		List<Position> positions = new ArrayList<Position>();
+		for (int i = 0; i < inputArray.length; i += 2) {
+			try {
+				Position position = intsToPosition(inputArray[i]);
+				positions.add(position);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return positions;
+	}
+
+	public static Player convertPlayer(String[] inputArray) {
+		return null;
 	}
 
 }
