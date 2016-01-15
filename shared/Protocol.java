@@ -1,8 +1,9 @@
-package server;
+package shared;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import server.Stone;
 import server.Stone.Color;
 import server.Stone.Shape;
 
@@ -19,7 +20,7 @@ public class Protocol {
 	public static final String JOINAANTAL = "join";
 	public static final String START = "start";
 	public static final String CHAT = "chat";
-	public static final String MSG = "msg"; // van server naar game/lobby "msgspeler bericht..."
+	public static final String MSG = "msg";
 	public static final String CHATPM = "chatpm";
 	public static final String MSGPM = "msgpm";
 	public static final String PLACE = "place";
@@ -34,26 +35,35 @@ public class Protocol {
 	public static final String ACCEPT = "accept";
 	public static final String DECLINE = "decline";
 
-	public static List<Stone> intsToStones(String[] inputArray) {
+	public static List<Stone> convertNewStones(String[] inputArray) {
 		List<Stone> stones = new ArrayList<Stone>();
 		for (int i = 1; i < inputArray.length; i++) {
-			if (inputArray[i] != null) {
-				String[] array = inputArray[i].split(",");
-				int shape = Integer.parseInt(array[0]);
-				int color = Integer.parseInt(array[1]);
-				if (shape >= 0 && shape < 7 && color >= 0 && color < 7) {
-					Shape[] shapes = Shape.values();
-					Color[] colors = Color.values();
-					Stone stone = new Stone(shapes[shape], colors[color]);
-					stones.add(stone);
-				}
+			try {
+				Stone stone = intsToStones(inputArray[i]);
+				stones.add(stone);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 		return stones;
 	}
 
+	public static Stone intsToStones(String input) throws Exception {
+		String[] array = input.split(",");
+		int shape = Integer.parseInt(array[0]);
+		int color = Integer.parseInt(array[1]);
+		if (shape >= 0 && shape <= Stone.Shape.values().length && color >= 0 && color <= Stone.Color.values().length) {
+			Shape[] shapes = Shape.values();
+			Color[] colors = Color.values();
+			Stone stone = new Stone(shapes[shape], colors[color]);
+			return stone;
+
+		} else
+			throw new InvalidStoneException(input);
+	}
+
 	public static List<Stone> intsToStonesAndPositions(String[] inputArray) {
 		List<Stone> stones = new ArrayList<Stone>();
-		return  stones;
+		return stones;
 	}
 }

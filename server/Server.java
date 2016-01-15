@@ -6,6 +6,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+import shared.Protocol;
+
 /**
  * Created by jjk on 1/14/16.
  */

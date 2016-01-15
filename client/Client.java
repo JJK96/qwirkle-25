@@ -14,6 +14,7 @@ import java.util.List;
 import server.*;
 import server.Stone.Color;
 import server.Stone.Shape;
+import shared.Protocol;
 
 public class Client extends Thread {
 
@@ -92,9 +93,9 @@ public class Client extends Thread {
 					}
 				} else if (inputArray[0].equals(Protocol.PLACED)) {
 					List<Stone> stones = Protocol.intsToStonesAndPositions(inputArray);
-					//implement
+					// implement
 				} else if (inputArray[0].equals(Protocol.NEWSTONES)) {
-					List<Stone> stones = Protocol.intsToStones(inputArray);
+					List<Stone> stones = Protocol.convertNewStones(inputArray);
 					game.currentPlayer().takeStones(stones);
 					// implement
 				} else if (inputArray[0].equals(Protocol.TRADED)) {
@@ -125,8 +126,6 @@ public class Client extends Thread {
 		}
 
 	}
-
-	
 
 	public void sendMessage(String msg) {
 		try {
