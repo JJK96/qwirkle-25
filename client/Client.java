@@ -11,10 +11,9 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
-import server.*;
-import server.Stone.Color;
-import server.Stone.Shape;
+import shared.Position;
 import shared.Protocol;
+import shared.Stone;
 
 public class Client extends Thread {
 
@@ -59,7 +58,7 @@ public class Client extends Thread {
 	private BufferedReader in;
 	private BufferedWriter out;
 	private String[] options;
-	private Game game;
+	private ClientGame game;
 	private View view;
 
 	public Client(String name, InetAddress host, int port) throws IOException {
@@ -114,7 +113,7 @@ public class Client extends Thread {
 			} else if (inputArray[0].equals(Protocol.JOINLOBBY)) {
 
 			} else if (inputArray[0].equals(Protocol.START)) {
-				
+				// zoiets als dit: this.game = new ClientGame();
 			} else if (inputArray[0].equals(Protocol.MSG)) {
 
 			} else if (inputArray[0].equals(Protocol.MSGPM)) {

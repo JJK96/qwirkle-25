@@ -2,9 +2,10 @@ package shared;
 
 import java.util.ArrayList;
 import java.util.List;
-import server.*;
-import server.Stone.Color;
-import server.Stone.Shape;
+import shared.Stone.Color;
+import shared.Stone.Shape;
+
+
 
 /**
  * Created by jjk on 1/14/16.
@@ -94,5 +95,4 @@ public class Protocol {
 		}
 		return positions;
 	}
-
 }
