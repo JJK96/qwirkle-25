@@ -93,7 +93,8 @@ public class Client extends Thread {
 				List<Stone> stones = Protocol.convertPlacedStones(inputArray);
 				List<Position> positions = Protocol.convertPlacedPositions(inputArray);
 				for (int i = 0; i < stones.size(); i++) {
-					// ?? game.getBoard().makeMove(stones.get(i), positions.get(i));
+					// ?? game.getBoard().makeMove(stones.get(i),
+					// positions.get(i));
 				}
 			} else if (inputArray[0].equals(Protocol.NEWSTONES)) {
 				List<Stone> stones = Protocol.convertStones(inputArray);
@@ -115,7 +116,11 @@ public class Client extends Thread {
 			} else if (inputArray[0].equals(Protocol.JOINLOBBY)) {
 
 			} else if (inputArray[0].equals(Protocol.START)) {
-				// zoiets als dit: this.game = new ClientGame();
+				String[] players = new String[inputArray.length - 1];
+				for (int i = 1; i < inputArray.length; i++) {
+					players[i - 1] = inputArray[i];
+				}
+				this.game = new ClientGame(players, players.length, this);
 			} else if (inputArray[0].equals(Protocol.MSG)) {
 
 			} else if (inputArray[0].equals(Protocol.MSGPM)) {

@@ -32,21 +32,6 @@ public class ClientGame {
 	}
 
 	/**
-	 * Starts the game and determines which players turn it is until the game
-	 * has a winner
-	 */
-	public void start() {
-		int i = players.length;
-		int j = ((int) Math.random() * (i + 1));
-		while (!hasWinner()) {
-			currentPlayer = players[j];
-			currentPlayer.makeMove();
-			j = (j + 1) % i;
-
-		}
-	}
-
-	/**
 	 * Get all the PossibleMoves
 	 * 
 	 * @return map of PossibleMoves
