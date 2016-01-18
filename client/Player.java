@@ -58,9 +58,16 @@ public class Player {
 		return stones;
 	}
 
+	/**
+	 * Makes a string representation of the stones the player has. Before every
+	 * stone is a number added so choosing is easy for the view.
+	 * 
+	 * @return String representation of the stones with a number for every
+	 *         stone.
+	 */
 	public String stonesToString() {
 		String stoneString = "";
-		for (int i = 0; i < stones.size(); i ++) {
+		for (int i = 0; i < stones.size(); i++) {
 			stoneString += i + " " + stones.get(i).toString() + "\n";
 		}
 		return stoneString;
@@ -76,15 +83,9 @@ public class Player {
 	}
 
 	/**
-	 * Swap specified stones with the bag
-	 * 
-	 * @param swapStones
+	 * Removes the specified stone from the players stones.
+	 * @param stone
 	 */
-	public void swapStones(List<Stone> swapStones) {
-		game.getClient().trade(swapStones);
-
-	}
-
 	public void removeStone(Stone stone) {
 		stones.remove(stone);
 	}
