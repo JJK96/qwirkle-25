@@ -1,5 +1,6 @@
 package server;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import shared.*;
@@ -26,6 +27,19 @@ public class ServerGame extends Thread{
         playernum = 0;
         running = false;
         this.server = server;
+        init();
+    }
+
+    public void init() {
+        board = new Board();
+        bag = new ArrayList<Stone>();
+        for(Stone.Color c : Stone.Color.values()) {
+            for (Stone.Shape s : Stone.Shape.values()) {
+                for (int i=0; i < 3; i++) {
+                    bag.add(new Stone(s,c));
+                }
+            }
+        }
     }
 
     @Override

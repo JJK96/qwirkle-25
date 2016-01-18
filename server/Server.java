@@ -25,7 +25,6 @@ public class Server {
         this.port = port;
         players = new ArrayList<ServerPlayer>();
         games = new ArrayList<ServerGame>();
-        System.out.println(games.size());
     }
 
     public static void main(String[] args) {
@@ -173,10 +172,5 @@ public class Server {
 		String msg = "turn " + player.getName();
 		broadcast(msg);
 	}
-
-	public void endGame() {
-		broadcast("endgame");
-	}
-
      */
 }
