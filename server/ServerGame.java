@@ -1,6 +1,7 @@
 package server;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
@@ -12,6 +13,7 @@ import shared.*;
  * Created by jjk on 1/14/16.
  */
 public class ServerGame extends Thread{
+    public static final int MAXSTONES = 6;
     private ServerPlayer[] players;
     private int size;
     private int playernum;
@@ -40,7 +42,7 @@ public class ServerGame extends Thread{
 
     public void init() {
         board = new Board();
-        bag = new ArrayList<Stone>();
+        bag = new LinkedList<Stone>();
         for(Stone.Color c : Stone.Color.values()) {
             for (Stone.Shape s : Stone.Shape.values()) {
                 for (int i=0; i < 3; i++) {
@@ -54,6 +56,7 @@ public class ServerGame extends Thread{
     public void run() {
         lock.lock();
         System.out.println("game started with players: " + getPlayerNames());
+        giveInitialStones();
         int currentplayernum = (int) Math.floor(Math.random() * playernum);
         while (!hasWinner()) {
             currentplayer = players[currentplayernum];
@@ -63,9 +66,20 @@ public class ServerGame extends Thread{
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            System.out.println("next player");
             currentplayernum = (currentplayernum + 1) % playernum;
         }
         lock.unlock();
+    }
+
+    public void giveInitialStones() {
+        for (ServerPlayer p : players) {
+            List stones = new ArrayList();
+            for (int i = 0; i<MAXSTONES; i++) {
+                stones.add(takeStone());
+            }
+            p.giveStones(stones);
+        }
     }
 
     public int addPlayer(ServerPlayer player) {
@@ -93,6 +107,9 @@ public class ServerGame extends Thread{
         return false;
     }
 
+    public ServerPlayer getCurrentPlayer() {
+        return currentplayer;
+    }
     public int getSize() {
         return size;
     }
@@ -107,6 +124,12 @@ public class ServerGame extends Thread{
 
     private void sendTurn() {
         broadcast(Protocol.TURN + Protocol.SPLIT + currentplayer.getThisName());
+    }
+
+    private Stone takeStone() {
+        Stone s = bag.get((int) Math.floor(Math.random() * bag.size()));
+        bag.remove(s);
+        return s;
     }
 
     public String getPlayerNames() {
@@ -130,5 +153,13 @@ public class ServerGame extends Thread{
         for (ServerPlayer p : players) {
             p.sendMessage(msg);
         }
+    }
+    //@ requires stones.size() == positions.size();
+    public void placeStones(List<Stone> stones, List<Position> positions) throws InvalidCommandException {
+        lock.lock();
+        board.makeMoves(positions, stones);
+        System.out.println("currentplayer placed stones");
+        playerDone.signal();
+        lock.unlock();
     }
 }

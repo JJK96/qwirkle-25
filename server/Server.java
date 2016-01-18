@@ -50,6 +50,8 @@ public class Server {
                     newplayer.register();
                     if (!isUniqueName(newplayer.getThisName())) throw new InvalidNameException(newplayer.getThisName());
                     addPlayer(newplayer);
+                    newplayer.acknowledge();
+                    newplayer.sendPlayers();
                     newplayer.start();
                     joinLobby(newplayer);
                 }

@@ -60,7 +60,7 @@ public class Protocol {
 	 * @return
 	 * @throws Exception
      */
-	public static Stone intsToStone(String input) throws Exception {
+	public static Stone intsToStone(String input) throws InvalidStoneException {
 		String[] array = input.split(",");
 		int shape = Integer.parseInt(array[0]);
 		int color = Integer.parseInt(array[1]);
@@ -75,21 +75,48 @@ public class Protocol {
 	}
 
 	/**
-	 * converts stone array received from server to a list of stones.
+	 * gets the received place command converted to array as input
+	 * returns an list of all stones placed.
 	 * @param inputArray
 	 * @return
      */
-	public static List<Stone> StringToPlacedStonelist(String[] inputArray) {
+	/*@ requires inputArray.length >= 3 && inputArray.length % 2 == 1;
+		ensures \result.size() == (inputArray.length -1) / 2;
+    */
+	public static List<Stone> StringToPlacedStonelist(String[] inputArray) throws InvalidCommandException{
 		List<Stone> stones = new ArrayList<Stone>();
-		for (int i = 1; i < inputArray.length; i += 2) {
+		for (int i = 1; i < inputArray.length -1; i += 2) {
 			try {
 				Stone stone = intsToStone(inputArray[i]);
 				stones.add(stone);
-			} catch (Exception e) {
-				e.printStackTrace();
+			} catch (InvalidStoneException e) {
+				throw new InvalidCommandException();
 			}
 		}
 		return stones;
+	}
+
+	/**
+	 * gets the received place command converted to array as input
+	 * returns a list of all positions where the stones are to be placed.
+	 */
+	/*@ requires inputArray.length >= 3 && inputArray.length % 2 == 1;
+		ensures \result.size() == (inputArray.length -1) / 2;
+	 */
+
+	public static List<Position> StringToPlacedPositionlist(String[] inputArray) throws InvalidCommandException{
+		List<Position> positions = new ArrayList<Position>();
+		for (int i=2; i< inputArray.length;i++) {
+			String[] xy = inputArray[i].split(",");
+			try {
+				int x = Integer.parseInt(xy[0]);
+				int y = Integer.parseInt(xy[1]);
+				positions.add(new Position(x,y));
+			} catch (NumberFormatException e) {
+				throw new InvalidCommandException();
+			}
+		}
+		return positions;
 	}
 
 	/**

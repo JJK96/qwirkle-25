@@ -1,6 +1,9 @@
 package shared;
 
+import org.omg.CORBA.DynAnyPackage.Invalid;
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Board {
@@ -69,8 +72,13 @@ public class Board {
 	 * @return true if the move is valid, otherwise false
 	 */
 	public boolean isValidMove(int x, int y, Stone stone) {
-		PossibleMove p = possibleMoves.get(new Position(x, y));
-		return p != null && p.acceptable(stone);
+		Position p = new Position(x,y);
+		return isValidMove(p, stone);
+	}
+
+	public boolean isValidMove(Position p, Stone stone) {
+		PossibleMove pm = possibleMoves.get(p);
+		return pm != null && pm.acceptable(stone);
 	}
 
 	/**
@@ -85,6 +93,43 @@ public class Board {
 		if (isValidMove(x, y, stone)) {
 			makeMove(stone, possibleMoves.get(new Position(x, y)));
 		}
+	}
+
+	public void makeMove(Position p, Stone stone) throws InvalidCommandException {
+		if (isValidMove(p,stone)) {
+			makeMove(stone, possibleMoves.get(p));
+		}
+		else {
+			throw new InvalidCommandException();
+		}
+	}
+
+	//@ requires stones.size() == positions.size();
+	public void makeMoves(List<Position> positions, List<Stone> stones) throws InvalidCommandException {
+		int[] moves = new int[positions.size()];
+		int movesindex = 0;
+		boolean validmovefound = true;
+		while (validmovefound) {
+			validmovefound = false;
+			for (int i = 0; i < positions.size(); i++) {
+				Position p = positions.get(i);
+				Stone s = stones.get(i);
+				if (isValidMove(p,s)) {
+					validmovefound = true;
+					moves[movesindex] = i;
+					movesindex += 1;
+				}
+			}
+		}
+		if (movesindex != positions.size() -1) {
+			throw new InvalidCommandException();
+		}
+		else {
+			for (int i : moves) {
+				makeMove(positions.get(i), stones.get(i));
+			}
+		}
+
 	}
 
 	/**

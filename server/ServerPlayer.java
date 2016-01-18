@@ -46,7 +46,12 @@ public class ServerPlayer extends Thread {
                 }
                 else if (inGame()) {
                     if (words[0].equals(Protocol.PLACE)) {
-                        place();
+                        if (!getThisName().equals(game.getCurrentPlayer() )) {
+                            place(words);
+                        }
+                        else {
+                            error(Protocol.errorcode.WRONGTURN);
+                        }
                     }
                 }
             }
@@ -70,12 +75,29 @@ public class ServerPlayer extends Thread {
         else throw new InvalidCommandException(line);
 
     }
-    public void place() {
-        //place stones
+    public void place(String[] inputArray) {
+        if (inputArray.length >= 3 && inputArray.length % 2 == 1) {
+            List<Stone> stones;
+            List<Position> positions;
+            try {
+                stones = Protocol.StringToPlacedStonelist(inputArray);
+                positions = Protocol.StringToPlacedPositionlist(inputArray);
+                game.placeStones(stones, positions);
+            } catch (InvalidCommandException e) {
+                error(Protocol.errorcode.WRONGCOMMAND);
+            }
+        }
+        else {
+            error(Protocol.errorcode.WRONGCOMMAND);
+        }
     }
 
     public void giveStones(List<Stone> stones) {
-
+        String stoneString = "";
+        for (Stone s : stones) {
+            stoneString += s.toUsableString() + Protocol.SPLIT;
+        }
+        sendMessage(Protocol.NEWSTONES + Protocol.SPLIT + stoneString);
     }
 
     public void acknowledge() {

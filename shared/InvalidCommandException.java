@@ -8,4 +8,7 @@ public class InvalidCommandException extends Exception{
     public InvalidCommandException(String msg) {
         super("invalid command given: " + msg);
     }
+    public InvalidCommandException() {
+        super();
+    }
 }
