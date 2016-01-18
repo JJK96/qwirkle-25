@@ -5,11 +5,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-import shared.Space;
-import shared.Stone;
-import shared.PossibleMove;
-import shared.Position;
-import shared.Protocol;
+import shared.*;
 import shared.Protocol;
 
 /**
@@ -45,6 +41,9 @@ public class ServerPlayer extends Thread {
                 if (words[0].equals(Protocol.JOINAANTAL)) {
                     server.joinGame(this, Integer.parseInt(words[1]));
                 }
+                else if (words[0].equals(Protocol.WHICHPLAYERS)) {
+                    sendPlayers();
+                }
             }
             shutdown();
         } catch (IOException e) {
@@ -52,7 +51,7 @@ public class ServerPlayer extends Thread {
         }
     }
 
-    public int register() throws IOException{
+    public void register() throws IOException, InvalidCommandException {
         String line = in.readLine();
         String[] words = line.split(Protocol.SPLIT);
         if (words.length >= 2 && words[0].equals(Protocol.REGISTER)) {
@@ -62,11 +61,9 @@ public class ServerPlayer extends Thread {
                     options += words[i] + Protocol.SPLIT;
                 }
             }
-            acknowledge();
-            sendPlayers();
-            return 1;
         }
-        return 0;
+        else throw new InvalidCommandException(line);
+
     }
     public void acknowledge() {
         sendMessage(Protocol.ACKNOWLEDGE + Protocol.SPLIT + options);
@@ -81,8 +78,8 @@ public class ServerPlayer extends Thread {
         }
     }
 
-    public void error(int code) {
-        sendMessage(Protocol.ERROR + Protocol.SPLIT + code);
+    public void error(Protocol.errorcode code) {
+        sendMessage(Protocol.ERROR + Protocol.SPLIT + code.ordinal());
     }
 
     public String getThisName() {
@@ -108,7 +105,7 @@ public class ServerPlayer extends Thread {
         return options;
     }
     public void sendPlayers() {
-        sendMessage(Protocol.PLAYERS + Protocol.SPLIT + server.getPlayers());
+        sendMessage(Protocol.PLAYERS + Protocol.SPLIT + server.getPlayers(getThisName()));
     }
     public boolean inGame() {
 

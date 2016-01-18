@@ -6,6 +6,9 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.omg.CORBA.ORBPackage.InvalidName;
+import shared.InvalidCommandException;
+import shared.InvalidNameException;
 import shared.Protocol;
 
 /**
@@ -43,18 +46,33 @@ public class Server {
             while (true) {
                 Socket client = sock.accept();
                 ServerPlayer newplayer = new ServerPlayer(client, this);
-                if (newplayer.register() > 0) {
+                try{
+                    newplayer.register();
+                    if (!isUniqueName(newplayer.getThisName())) throw new InvalidNameException(newplayer.getThisName());
                     addPlayer(newplayer);
                     newplayer.start();
                     joinLobby(newplayer);
                 }
-                else {
-                    newplayer.error(0);
+                catch (InvalidCommandException e){
+                    newplayer.error(Protocol.errorcode.WRONGCOMMAND);
+                }
+                catch (InvalidNameException e) {
+                    newplayer.error(Protocol.errorcode.INVALIDNAME);
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean isUniqueName(String name) {
+        boolean nameunique = true;
+        for (ServerPlayer p : players) {
+            if (p.getThisName().equals(name)) {
+                nameunique = false;
+            }
+        }
+        return nameunique;
     }
 
     public void addPlayer(ServerPlayer player) {
@@ -100,13 +118,17 @@ public class Server {
     }
 
     /**
-     * returns the list of player names
+     * returns the list of player names that do not equal the name argument
+     * this is used for getting an updated player list where the player asking for the list is not included.
+     * @param name
      */
-    public String getPlayers() {
+    public String getPlayers(String name) {
         synchronized(players) {
             String out = "";
             for (ServerPlayer p : players) {
-                out += p.getThisName() + Protocol.SPLIT;
+                if (!p.getThisName().equals(name)) {
+                    out += p.getThisName() + Protocol.SPLIT;
+                }
             }
             return out;
         }

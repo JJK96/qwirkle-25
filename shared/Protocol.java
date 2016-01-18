@@ -15,6 +15,7 @@ public class Protocol {
 	public static final String ERROR = "error";
 	public static final String JOINLOBBY = "joinlobby";
 	public static final String PLAYERS = "players";
+	public static final String WHICHPLAYERS = "players?";
 	public static final String JOINAANTAL = "join";
 	public static final String START = "start";
 	public static final String CHAT = "chat";
@@ -33,6 +34,7 @@ public class Protocol {
 	public static final String ACCEPT = "accept";
 	public static final String DECLINE = "decline";
 
+	public enum errorcode {WRONGCOMMAND, WRONGTURN, INVALIDNAME, PLAYERDISCONNECTED, MISSINGOPTION}
 	public static List<Stone> convertStones(String[] inputArray) {
 		List<Stone> stones = new ArrayList<Stone>();
 		for (int i = 1; i < inputArray.length; i++) {
