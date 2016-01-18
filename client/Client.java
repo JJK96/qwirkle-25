@@ -8,16 +8,17 @@ import java.io.OutputStreamWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.List;
-
-import shared.Position;
 import shared.Protocol;
 import shared.Stone;
 
 public class Client extends Thread {
 
 	private static final String USAGE = "usage: Client <name> <address> <port>";
+
+	private static void printStatic(String message) {
+		System.out.println(message);
+	}
 
 	/** Start een Client-applicatie op. */
 	public static void main(String[] args) {
@@ -32,14 +33,14 @@ public class Client extends Thread {
 		try {
 			host = InetAddress.getByName(args[1]);
 		} catch (UnknownHostException e) {
-			print("ERROR: no valid hostname!");
+			printStatic("ERROR: no valid hostname!");
 			System.exit(0);
 		}
 
 		try {
 			port = Integer.parseInt(args[2]);
 		} catch (NumberFormatException e) {
-			print("ERROR: no valid portnummer!");
+			printStatic("ERROR: no valid portnummer!");
 			System.exit(0);
 		}
 
@@ -47,7 +48,7 @@ public class Client extends Thread {
 			Client client = new Client(args[0], host, port);
 			client.start();
 		} catch (IOException e) {
-			print("ERROR: couldn't construct a client object!");
+			printStatic("ERROR: couldn't construct a client object!");
 			System.exit(0);
 		}
 
@@ -78,17 +79,17 @@ public class Client extends Thread {
 				// implement
 			} else if (inputArray[0].equals(Protocol.ERROR)) {
 				if (inputArray[1].equals("0")) {
-					print("Fout commando: 0");
+					view.print("Fout commando: 0");
 				} else if (inputArray[1].equals("1")) {
-					print("Foute beurt: 1");
+					view.print("Foute beurt: 1");
 				} else if (inputArray[1].equals("2")) {
-					print("Niet unieke naam of onjuiste naam: 2");
+					view.print("Niet unieke naam of onjuiste naam: 2");
 				} else if (inputArray[1].equals("3")) {
-					print("Speler disconnected: 3");
+					view.print("Speler disconnected: 3");
 				} else if (inputArray[1].equals("4")) {
-					print("Speler heeft functie niet: 4");
+					view.print("Speler heeft functie niet: 4");
 				} else if (inputArray.length == 1) {
-					print("Geen foutcode meegegeven foei foei foei");
+					view.print("Geen foutcode meegegeven foei foei foei");
 				}
 			} else if (inputArray[0].equals(Protocol.PLACED)) {
 				List<Stone> stones = Protocol.StringToPlacedStonelist(inputArray);
@@ -101,7 +102,7 @@ public class Client extends Thread {
 				List<Stone> stones = Protocol.StringToStonelist(inputArray);
 				game.getCurrentPlayer().takeStones(stones);
 			} else if (inputArray[0].equals(Protocol.TRADED)) {
-				print("Speler " + inputArray[1] + " " + inputArray[0] + " " + inputArray[2] + " stones.");
+				view.print("Speler " + inputArray[1] + " " + inputArray[0] + " " + inputArray[2] + " stones.");
 			} else if (inputArray[0].equals(Protocol.TURN)) {
 				Player[] players = game.getPlayers();
 				for (int i = 0; i < game.getPlayers().length; i++) {
@@ -121,7 +122,7 @@ public class Client extends Thread {
 				for (int i = 1; i < inputArray.length; i++) {
 					players[i - 1] = inputArray[i];
 				}
-				this.game = new ClientGame(players, players.length, this);
+				this.game = new ClientGame(players, this);
 			} else if (inputArray[0].equals(Protocol.MSG)) {
 
 			} else if (inputArray[0].equals(Protocol.MSGPM)) {
@@ -158,7 +159,7 @@ public class Client extends Thread {
 
 	/** close the socket connection. */
 	public void shutdown() {
-		print("Closing socket connection...");
+		view.print("Closing socket connection...");
 		try {
 			in.close();
 			out.close();
@@ -172,10 +173,6 @@ public class Client extends Thread {
 	/** returns the client name */
 	public String getClientName() {
 		return clientName;
-	}
-
-	private static void print(String message) {
-		System.out.println(message);
 	}
 
 	public String readString() {

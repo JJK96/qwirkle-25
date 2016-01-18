@@ -27,8 +27,8 @@ public class Player {
 	/**
 	 * The move the player makes
 	 */
-	public List<Stone> makeMove() {
-		return null;
+	public void makeMove() {
+
 	}
 
 	/**
@@ -59,6 +59,21 @@ public class Player {
 	}
 
 	/**
+	 * Makes a string representation of the stones the player has. Before every
+	 * stone is a number added so choosing is easy for the view.
+	 * 
+	 * @return String representation of the stones with a number for every
+	 *         stone.
+	 */
+	public String stonesToString() {
+		String stoneString = "";
+		for (int i = 0; i < stones.size(); i++) {
+			stoneString += i + " " + stones.get(i).toString() + "\n";
+		}
+		return stoneString;
+	}
+
+	/**
 	 * Take stones out of the bag after the player has made his move
 	 * 
 	 * @param stones
@@ -68,14 +83,11 @@ public class Player {
 	}
 
 	/**
-	 * Swap specified stones with the bag
-	 * 
-	 * @param swapStones
+	 * Removes the specified stone from the players stones.
+	 * @param stone
 	 */
-	public void swapStones(List<Stone> swapStones) {
-		stones.removeAll(swapStones);
-		game.getClient().trade(swapStones);
-
+	public void removeStone(Stone stone) {
+		stones.remove(stone);
 	}
 
 	/**

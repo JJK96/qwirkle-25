@@ -1,6 +1,5 @@
 package client;
 
-import java.util.ArrayList;
 import shared.*;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +10,6 @@ public class ClientGame {
 	private Player[] players;
 	private Player currentPlayer;
 	private Board board;
-	private int size;
 	private Client client;
 
 	/**
@@ -19,10 +17,9 @@ public class ClientGame {
 	 * 
 	 * @param names
 	 */
-	public ClientGame(String[] names, int size, Client client) {
+	public ClientGame(String[] names, Client client) {
 		players = new Player[names.length];
 		this.board = new Board();
-		this.size = size;
 		this.client = client;
 		for (int i = 0; i < names.length; i++) {
 			players[i] = new Player(names[i], this);
@@ -53,7 +50,7 @@ public class ClientGame {
 	public void reset() {
 
 	}
-	
+
 	public Client getClient() {
 		return client;
 	}
@@ -86,7 +83,15 @@ public class ClientGame {
 	 * @return true if choice is valid, false otherwise
 	 */
 	public boolean isValidInt(int choice) {
-		return (choice < getPossibleMoves().size() && choice >= 0);
+		return (choice < getPossibleMoves().size() && choice >= -1);
+	}
+	
+	public boolean isValidIntStonesRange(int choice) {
+		return (choice < getCurrentPlayer().getStones().size() && choice >= -1);
+	}
+	
+	public boolean isValidIntStonesRangeFrom0(int choice) {
+		return (choice < getCurrentPlayer().getStones().size() && choice >= 0);
 	}
 
 	/**
@@ -97,7 +102,7 @@ public class ClientGame {
 	public Player getCurrentPlayer() {
 		return currentPlayer;
 	}
-	
+
 	public void setCurrentPlayer(Player player) {
 		currentPlayer = player;
 	}

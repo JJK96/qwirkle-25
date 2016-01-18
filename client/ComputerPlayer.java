@@ -16,18 +16,6 @@ public class ComputerPlayer extends Player {
 
 	@Override
 	public void makeMove() {
-		int choice = strategy.determineMove(getGame(), getStones());
-		if (choice < 0) {
-			//stenen ruilen ?? beter morgen even overleggen hoe dit designen, misschien met een list van possiblemoves die gedaan worden en als ruilen dan de stenen die hij wil ruilene ofzo
-		}
-		Map<Position, PossibleMove> possibleMoves = getGame().getPossibleMoves();
-		PossibleMove place = possibleMoves.get(choice);
-		List<Stone> stones = getStones();
-		for (Stone s : stones) {
-			if (place.acceptable(s)) {
-				getGame().getBoard().makeMove(s, place);
-				break;
-			}
-		}
+		strategy.determineMove(getGame(), getStones());
 	}
 }
