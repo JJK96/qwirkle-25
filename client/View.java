@@ -11,7 +11,7 @@ public class View {
 	private Client client;
 
 	/**
-	 * Creates a view for the specified game
+	 * Creates a view for the specified client
 	 * 
 	 * @param game
 	 */
@@ -20,10 +20,8 @@ public class View {
 	}
 
 	/**
-	 * Checks of the userinput is a valid number and returns that number if it
-	 * is valid
-	 * 
-	 * @return number of the chosen possiblemove
+	 * Prints the prompt and waits for the user to give input, then decides if
+	 * it is a swap or a place and calls those methods respectively.
 	 */
 	public void determineMove() {
 		String prompt = client.getGame().getPossibleMoves().toString()
@@ -35,6 +33,13 @@ public class View {
 			placeStones(choice);
 	}
 
+	/**
+	 * Checks if the given input is in the range of -1 till the amount of
+	 * possiblemoves.
+	 * 
+	 * @param prompt
+	 * @return A valid integer
+	 */
 	private int intOutPromptMinus1TillPossibleMovesRange(String prompt) {
 		int choice = readInt(prompt);
 		boolean valid = client.getGame().isValidInt(choice);
@@ -46,6 +51,13 @@ public class View {
 		return choice;
 	}
 
+	/**
+	 * Checks if the given input is in the range of -1 till the amount of stones
+	 * the player has.
+	 * 
+	 * @param prompt
+	 * @return A valid integer
+	 */
 	private int intOutPromptMinus1TillStonesRange(String prompt) {
 		int choice = readInt(prompt);
 		boolean valid = client.getGame().isValidIntStonesRange(choice);
@@ -56,8 +68,15 @@ public class View {
 		}
 		return choice;
 	}
-	
-	private int intOutPromptFrom0ToStones(String prompt) {
+
+	/**
+	 * Checks if the given input is in the range of 0 till the amount of stones
+	 * the player has.
+	 * 
+	 * @param prompt
+	 * @return A valid integer
+	 */
+	private int intOutPromptFrom0ToStonesRange(String prompt) {
 		int choice = readInt(prompt);
 		boolean valid = client.getGame().isValidIntStonesRangeFrom0(choice);
 		while (!valid) {
@@ -67,29 +86,48 @@ public class View {
 		}
 		return choice;
 	}
-	
+
+	/**
+	 * Asks the humanplayer how many stones he wants to swap, the humanplayer
+	 * has to repeatedly give input and if he gives -1 the turn ends and the
+	 * stones selected will be send to the server to be swapped. The first input
+	 * cant be -1 since otherwise it was possible to swap no stones ;)
+	 */
 	private void swapStones() {
 		List<Stone> stones = new ArrayList<Stone>();
 		String swapPrompt = "These are your stones, which stone do you want to swap?\n"
-				+ client.getGame().getCurrentPlayer().getStones().toString()
+				+ client.getGame().getCurrentPlayer().stonesToString()
 				+ "\nChoose 1 stone now and then you will get the chance to pick more stones or end the swap.";
-		int choice = intOutPromptFrom0ToStones(swapPrompt);
+		int choice = intOutPromptFrom0ToStonesRange(swapPrompt);
 		Stone chosen1 = client.getGame().getCurrentPlayer().getStones().get(choice);
 		client.getGame().getCurrentPlayer().removeStone(chosen1);
 		stones.add(chosen1);
-		boolean send = false;
-		for (int i = 1; i < 6 && !send; i++) {
+		for (int i = 1; i < 7; i++) {
 			String swapPromptSecond = "These are your stones, which stone do you want to swap?\n"
-					+ client.getGame().getCurrentPlayer().getStones().toString()
-					+ "\nOr choose:\n-1 to end the swap and your turn.";
+					+ client.getGame().getCurrentPlayer().stonesToString()
+					+ "\nOr choose:\n-1 : to end the swap and your turn.";
 			int choiceSecond = intOutPromptMinus1TillStonesRange(swapPromptSecond);
 			if (choiceSecond == -1) {
 				client.trade(stones);
 				return;
+			} else {
+				Stone chosen2 = client.getGame().getCurrentPlayer().getStones().get(choice);
+				client.getGame().getCurrentPlayer().removeStone(chosen2);
+				stones.add(chosen2);
 			}
 		}
+		client.trade(stones);
 	}
 
+	/**
+	 * Asks the humanplayer how many stones he wants to place, the humanplayer
+	 * has to repeatedly give input and if he gives -1 the turn ends and the
+	 * stones selected will be send to the server to be placed. The int
+	 * firstChoice is the first stone to be placed. The first input cant be -1
+	 * since otherwise it was possible to place no stones ;)
+	 * 
+	 * @param firstChoice
+	 */
 	private void placeStones(int firstChoice) {
 
 	}

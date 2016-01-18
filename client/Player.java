@@ -58,6 +58,14 @@ public class Player {
 		return stones;
 	}
 
+	public String stonesToString() {
+		String stoneString = "";
+		for (int i = 0; i < stones.size(); i ++) {
+			stoneString += i + " " + stones.get(i).toString() + "\n";
+		}
+		return stoneString;
+	}
+
 	/**
 	 * Take stones out of the bag after the player has made his move
 	 * 
@@ -76,7 +84,7 @@ public class Player {
 		game.getClient().trade(swapStones);
 
 	}
-	
+
 	public void removeStone(Stone stone) {
 		stones.remove(stone);
 	}
