@@ -85,6 +85,14 @@ public class ClientGame {
 	public boolean isValidInt(int choice) {
 		return (choice < getPossibleMoves().size() && choice >= -1);
 	}
+	
+	public boolean isValidIntStonesRange(int choice) {
+		return (choice < getCurrentPlayer().getStones().size() && choice >= -1);
+	}
+	
+	public boolean isValidIntStonesRangeFrom0(int choice) {
+		return (choice < getCurrentPlayer().getStones().size() && choice >= 0);
+	}
 
 	/**
 	 * Get the player whose turn it is
