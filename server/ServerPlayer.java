@@ -71,8 +71,13 @@ public class ServerPlayer extends Thread {
 
     }
     public void place() {
+        //place stones
+    }
+
+    public void giveStones(List<Stone> stones) {
 
     }
+
     public void acknowledge() {
         sendMessage(Protocol.ACKNOWLEDGE + Protocol.SPLIT + options);
     }

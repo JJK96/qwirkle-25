@@ -91,14 +91,14 @@ public class Client extends Thread {
 					print("Geen foutcode meegegeven foei foei foei");
 				}
 			} else if (inputArray[0].equals(Protocol.PLACED)) {
-				List<Stone> stones = Protocol.convertPlacedStones(inputArray);
+				List<Stone> stones = Protocol.StringToPlacedStonelist(inputArray);
 				int[] x = Protocol.convertPlacedX(inputArray);
 				int[] y = Protocol.convertPlacedY(inputArray);
 				for (int i = 0; i < stones.size(); i++) {
 					game.getBoard().makeMove(x[i], y[i], stones.get(i));
 				}
 			} else if (inputArray[0].equals(Protocol.NEWSTONES)) {
-				List<Stone> stones = Protocol.convertStones(inputArray);
+				List<Stone> stones = Protocol.StringToStonelist(inputArray);
 				game.getCurrentPlayer().takeStones(stones);
 			} else if (inputArray[0].equals(Protocol.TRADED)) {
 				print("Speler " + inputArray[1] + " " + inputArray[0] + " " + inputArray[2] + " stones.");
