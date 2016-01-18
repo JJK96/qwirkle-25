@@ -5,6 +5,11 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+import shared.Space;
+import shared.Stone;
+import shared.PossibleMove;
+import shared.Position;
+import shared.Protocol;
 import shared.Protocol;
 
 /**

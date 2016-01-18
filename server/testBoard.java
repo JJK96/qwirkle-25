@@ -1,5 +1,8 @@
 package server;
 
+import shared.*;
+import shared.Position;
+
 /**
  * Created by jjk on 1/13/16.
  */

@@ -1,9 +1,8 @@
 package server;
 
 import java.util.List;
-import java.util.Observable;
 
-import shared.Protocol;
+import shared.*;
 
 /**
  * Created by jjk on 1/14/16.
