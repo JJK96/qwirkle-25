@@ -1,6 +1,10 @@
 package client;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
+
+import shared.Stone;
 
 public class View {
 
@@ -22,36 +26,16 @@ public class View {
 	 * @return number of the chosen possiblemove
 	 */
 	public void determineMove() {
-
 		String prompt = client.getGame().getPossibleMoves().toString() + "\n-1 : Swap stones\n-> What is your choice? ";
-		int choice = readInt(prompt);
-		choice = isValidChoice(prompt, choice);
+		int choice = intOutPrompt(prompt);
 		if (choice == -1) {
 			swapStones();
 		} else
-			placeStones();
+			placeStones(choice);
 	}
 
-	private void swapStones() {
-		String swapPrompt = "These are your stones, which stone do you want to swap?\n"
-				+ client.getGame().getCurrentPlayer().getStones().toString()
-				+ "\nChoose 1 stone now and then you will get the chance to pick more stones or end the swap.";
-		int choice2 = readInt(swapPrompt);
-		choice2 = isValidChoice(swapPrompt, choice2);
-		client.getGame().getCurrentPlayer().removeStone(client.getGame().getCurrentPlayer().getStones().get(choice2));
-		boolean send = false;
-		for (int i = 1; i < 6 && !send; i++) {
-			String swapPromptSecond = "These are your stones, which stone do you want to swap?\n"
-					+ client.getGame().getCurrentPlayer().getStones().toString()
-					+ "\nOr choose:\n-1 to end the swap and your turn.";
-		}
-	}
-
-	private void placeStones() {
-
-	}
-
-	private int isValidChoice(String prompt, int choice) {
+	private int intOutPrompt(String prompt) {
+		int choice = readInt(prompt);
 		boolean valid = client.getGame().isValidInt(choice);
 		while (!valid) {
 			System.out.println("ERROR: number " + choice + " is no valid choice.");
@@ -59,6 +43,32 @@ public class View {
 			valid = client.getGame().isValidInt(choice);
 		}
 		return choice;
+	}
+
+	private void swapStones() {
+		List<Stone> stones = new ArrayList<Stone>();
+		String swapPrompt = "These are your stones, which stone do you want to swap?\n"
+				+ client.getGame().getCurrentPlayer().getStones().toString()
+				+ "\nChoose 1 stone now and then you will get the chance to pick more stones or end the swap.";
+		int choice = intOutPrompt(swapPrompt);
+		Stone chosen1 = client.getGame().getCurrentPlayer().getStones().get(choice);
+		client.getGame().getCurrentPlayer().removeStone(chosen1);
+		stones.add(chosen1);
+		boolean send = false;
+		for (int i = 1; i < 6 && !send; i++) {
+			String swapPromptSecond = "These are your stones, which stone do you want to swap?\n"
+					+ client.getGame().getCurrentPlayer().getStones().toString()
+					+ "\nOr choose:\n-1 to end the swap and your turn.";
+			int choiceSecond = intOutPrompt(swapPromptSecond);
+			if (choiceSecond == -1) {
+				client.trade(stones);
+				return;
+			}
+		}
+	}
+
+	private void placeStones(int firstChoice) {
+
 	}
 
 	/**
