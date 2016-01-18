@@ -17,6 +17,7 @@ public class Protocol {
 	public static final String ERROR = "error";
 	public static final String JOINLOBBY = "joinlobby";
 	public static final String PLAYERS = "players";
+	public static final String WHICHPLAYERS = "players?";
 	public static final String JOINAANTAL = "join";
 	public static final String START = "start";
 	public static final String CHAT = "chat";

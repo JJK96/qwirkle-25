@@ -45,6 +45,9 @@ public class ServerPlayer extends Thread {
                 if (words[0].equals(Protocol.JOINAANTAL)) {
                     server.joinGame(this, Integer.parseInt(words[1]));
                 }
+                else if (words[0].equals(Protocol.WHICHPLAYERS)) {
+                    sendPlayers();
+                }
             }
             shutdown();
         } catch (IOException e) {
