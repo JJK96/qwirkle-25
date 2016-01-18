@@ -141,6 +141,10 @@ public class Client extends Thread {
 	public ClientGame getGame() {
 		return game;
 	}
+	
+	public View getView() {
+		return view;
+	}
 
 	public void sendMessage(String msg) {
 		try {
