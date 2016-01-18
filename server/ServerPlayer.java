@@ -44,6 +44,11 @@ public class ServerPlayer extends Thread {
                 else if (words[0].equals(Protocol.WHICHPLAYERS)) {
                     sendPlayers();
                 }
+                else if (inGame()) {
+                    if (words[0].equals(Protocol.PLACE)) {
+                        place();
+                    }
+                }
             }
             shutdown();
         } catch (IOException e) {
@@ -63,6 +68,9 @@ public class ServerPlayer extends Thread {
             }
         }
         else throw new InvalidCommandException(line);
+
+    }
+    public void place() {
 
     }
     public void acknowledge() {

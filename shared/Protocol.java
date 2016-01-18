@@ -35,6 +35,12 @@ public class Protocol {
 	public static final String DECLINE = "decline";
 
 	public enum errorcode {WRONGCOMMAND, WRONGTURN, INVALIDNAME, PLAYERDISCONNECTED, MISSINGOPTION}
+
+	/**
+	 * converts the received newstones command to a list of stones
+	 * @param inputArray
+	 * @return
+     */
 	public static List<Stone> convertStones(String[] inputArray) {
 		List<Stone> stones = new ArrayList<Stone>();
 		for (int i = 1; i < inputArray.length; i++) {
@@ -48,6 +54,12 @@ public class Protocol {
 		return stones;
 	}
 
+	/**
+	 * converts stones from the string format to the stone object.
+	 * @param input
+	 * @return
+	 * @throws Exception
+     */
 	public static Stone intsToStone(String input) throws Exception {
 		String[] array = input.split(",");
 		int shape = Integer.parseInt(array[0]);
@@ -62,6 +74,11 @@ public class Protocol {
 			throw new InvalidStoneException(input);
 	}
 
+	/**
+	 * converts stone array received from server to a list of stones.
+	 * @param inputArray
+	 * @return
+     */
 	public static List<Stone> convertPlacedStones(String[] inputArray) {
 		List<Stone> stones = new ArrayList<Stone>();
 		for (int i = 1; i < inputArray.length; i += 2) {

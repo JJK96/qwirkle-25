@@ -2,6 +2,9 @@ package server;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import shared.*;
 
@@ -16,6 +19,9 @@ public class ServerGame extends Thread{
     private Board board;
     private List<Stone> bag;
     private Server server;
+    private ServerPlayer currentplayer;
+    private Lock lock;
+    private Condition playerDone;
     /**
      * Creates a game with the given size
      *
@@ -27,6 +33,8 @@ public class ServerGame extends Thread{
         playernum = 0;
         running = false;
         this.server = server;
+        lock = new ReentrantLock();
+        playerDone = lock.newCondition();
         init();
     }
 
@@ -44,7 +52,20 @@ public class ServerGame extends Thread{
 
     @Override
     public void run() {
+        lock.lock();
         System.out.println("game started with players: " + getPlayerNames());
+        int currentplayernum = (int) Math.floor(Math.random() * playernum);
+        while (!hasWinner()) {
+            currentplayer = players[currentplayernum];
+            sendTurn();
+            try {
+                playerDone.await();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            currentplayernum = (currentplayernum + 1) % playernum;
+        }
+        lock.unlock();
     }
 
     public int addPlayer(ServerPlayer player) {
@@ -68,6 +89,10 @@ public class ServerGame extends Thread{
         endgame();
     }
 
+    public Boolean hasWinner() {
+        return false;
+    }
+
     public int getSize() {
         return size;
     }
@@ -78,6 +103,10 @@ public class ServerGame extends Thread{
 
     public boolean isRunning() {
         return running;
+    }
+
+    private void sendTurn() {
+        broadcast(Protocol.TURN + Protocol.SPLIT + currentplayer.getThisName());
     }
 
     public String getPlayerNames() {
