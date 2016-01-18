@@ -41,7 +41,7 @@ public class Protocol {
 	 * @param inputArray
 	 * @return
      */
-	public static List<Stone> convertStones(String[] inputArray) {
+	public static List<Stone> StringToStonelist(String[] inputArray) {
 		List<Stone> stones = new ArrayList<Stone>();
 		for (int i = 1; i < inputArray.length; i++) {
 			try {
@@ -79,7 +79,7 @@ public class Protocol {
 	 * @param inputArray
 	 * @return
      */
-	public static List<Stone> convertPlacedStones(String[] inputArray) {
+	public static List<Stone> StringToPlacedStonelist(String[] inputArray) {
 		List<Stone> stones = new ArrayList<Stone>();
 		for (int i = 1; i < inputArray.length; i += 2) {
 			try {
