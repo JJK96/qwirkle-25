@@ -10,7 +10,7 @@ public class ClientGame {
 	private List<Stone> bag;
 	private Player[] players;
 	private Player currentPlayer;
-	private ClientBoard board;
+	private Board board;
 	private View view;
 	private int size;
 	private Client client;
@@ -22,7 +22,7 @@ public class ClientGame {
 	 */
 	public ClientGame(String[] names, int size, Client client) {
 		players = new Player[names.length];
-		this.board = new ClientBoard();
+		this.board = new Board();
 		this.view = new View(this);
 		this.size = size;
 		this.client = client;
@@ -79,7 +79,7 @@ public class ClientGame {
 	 * 
 	 * @return board
 	 */
-	public ClientBoard getBoard() {
+	public Board getBoard() {
 		return board;
 	}
 
@@ -118,8 +118,12 @@ public class ClientGame {
 	 * 
 	 * @return currentplayer
 	 */
-	public Player currentPlayer() {
+	public Player getCurrentPlayer() {
 		return currentPlayer;
+	}
+	
+	public void setCurrentPlayer(Player player) {
+		currentPlayer = player;
 	}
 
 	/**

@@ -91,21 +91,23 @@ public class Client extends Thread {
 				}
 			} else if (inputArray[0].equals(Protocol.PLACED)) {
 				List<Stone> stones = Protocol.convertPlacedStones(inputArray);
-				List<Position> positions = Protocol.convertPlacedPositions(inputArray);
+				int[] x = Protocol.convertPlacedX(inputArray);
+				int[] y = Protocol.convertPlacedY(inputArray);
 				for (int i = 0; i < stones.size(); i++) {
-					// ?? game.getBoard().makeMove(stones.get(i),
-					// positions.get(i));
+					game.getBoard().makeMove(x[i], y[i], stones.get(i));
 				}
 			} else if (inputArray[0].equals(Protocol.NEWSTONES)) {
 				List<Stone> stones = Protocol.convertStones(inputArray);
-				// implement
+				game.getCurrentPlayer().takeStones(stones);
 			} else if (inputArray[0].equals(Protocol.TRADED)) {
 				List<Stone> stones = Protocol.convertStones(inputArray);
+
 			} else if (inputArray[0].equals(Protocol.TURN)) {
 				Player[] players = game.getPlayers();
 				for (int i = 0; i < game.getPlayers().length; i++) {
 					if (players[i].getName().equals(inputArray[1])) {
-						// Player currentPlayer =
+						game.setCurrentPlayer(players[i]);
+						break;
 					}
 				}
 

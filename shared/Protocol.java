@@ -5,8 +5,6 @@ import java.util.List;
 import shared.Stone.Color;
 import shared.Stone.Shape;
 
-
-
 /**
  * Created by jjk on 1/14/16.
  */
@@ -62,14 +60,6 @@ public class Protocol {
 			throw new InvalidStoneException(input);
 	}
 
-	public static Position intsToPosition(String input) {
-		String[] array = input.split(",");
-		int x = Integer.parseInt(array[0]);
-		int y = Integer.parseInt(array[1]);
-		Position position = new Position(x, y);
-		return position;
-	}
-
 	public static List<Stone> convertPlacedStones(String[] inputArray) {
 		List<Stone> stones = new ArrayList<Stone>();
 		for (int i = 1; i < inputArray.length; i += 2) {
@@ -83,16 +73,40 @@ public class Protocol {
 		return stones;
 	}
 
-	public static List<Position> convertPlacedPositions(String[] inputArray) {
-		List<Position> positions = new ArrayList<Position>();
+	public static int[] convertPlacedX(String[] inputArray) {
+		int[] x = new int[inputArray.length - 1];
 		for (int i = 0; i < inputArray.length; i += 2) {
 			try {
-				Position position = intsToPosition(inputArray[i]);
-				positions.add(position);
+				x[i] = intsToY(inputArray[i]);
+
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-		return positions;
+		return x;
+	}
+
+	public static int[] convertPlacedY(String[] inputArray) {
+		int[] y = new int[inputArray.length - 1];
+		for (int i = 0; i < inputArray.length; i += 2) {
+			try {
+				y[i] = intsToY(inputArray[i]);
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return y;
+	}
+
+	public static int intsToX(String input) {
+		String[] array = input.split(",");
+		return Integer.parseInt(array[0]);
+	}
+
+	public static int intsToY(String input) {
+		String[] array = input.split(",");
+		return Integer.parseInt(array[1]);
+
 	}
 }

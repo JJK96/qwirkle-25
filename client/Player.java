@@ -40,10 +40,6 @@ public class Player {
 		return game;
 	}
 
-	public void setGame(ClientGame game) {
-		this.game = game;
-	}
-
 	/**
 	 * Get the name of the player
 	 * 
