@@ -5,5 +5,5 @@ import shared.*;
 
 public interface Strategy {
 
-	public int determineMove(ClientGame game, List<Stone> stones);
+	public void determineMove(ClientGame game, List<Stone> stones);
 }

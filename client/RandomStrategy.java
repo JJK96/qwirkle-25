@@ -2,7 +2,6 @@ package client;
 
 import java.util.List;
 import shared.*;
-import java.util.Map;
 
 public class RandomStrategy implements Strategy {
 
@@ -11,12 +10,8 @@ public class RandomStrategy implements Strategy {
 	}
 
 	@Override
-	public int determineMove(ClientGame game, List<Stone> stones) {
-		
-	
-			
-		
-		return 0;
+	public void determineMove(ClientGame game, List<Stone> stones) {
+
 	}
 
 }

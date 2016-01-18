@@ -27,8 +27,8 @@ public class Player {
 	/**
 	 * The move the player makes
 	 */
-	public List<Stone> makeMove() {
-		return null;
+	public void makeMove() {
+
 	}
 
 	/**
@@ -73,9 +73,12 @@ public class Player {
 	 * @param swapStones
 	 */
 	public void swapStones(List<Stone> swapStones) {
-		stones.removeAll(swapStones);
 		game.getClient().trade(swapStones);
 
+	}
+	
+	public void removeStone(Stone stone) {
+		stones.remove(stone);
 	}
 
 	/**
