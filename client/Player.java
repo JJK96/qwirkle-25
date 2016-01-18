@@ -27,8 +27,8 @@ public class Player {
 	/**
 	 * The move the player makes
 	 */
-	public void makeMove() {
-
+	public List<Stone> makeMove() {
+		return null;
 	}
 
 	/**

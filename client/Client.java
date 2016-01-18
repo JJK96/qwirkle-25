@@ -137,11 +137,11 @@ public class Client extends Thread {
 		}
 		shutdown();
 	}
-	
+
 	public ClientGame getGame() {
 		return game;
 	}
-	
+
 	public View getView() {
 		return view;
 	}
