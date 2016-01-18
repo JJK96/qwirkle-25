@@ -6,7 +6,9 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.omg.CORBA.ORBPackage.InvalidName;
 import shared.InvalidCommandException;
+import shared.InvalidNameException;
 import shared.Protocol;
 
 /**
@@ -46,28 +48,31 @@ public class Server {
                 ServerPlayer newplayer = new ServerPlayer(client, this);
                 try{
                     newplayer.register();
-                }
-                catch (InvalidCommandException e){
-                    newplayer.error(Protocol.errorcode.WRONGCOMMAND);
-                }
-                boolean nameunique = true;
-                for (ServerPlayer p : players) {
-                    if (newplayer.getThisName().equals(p.getThisName())) {
-                        nameunique = false;
-                    }
-                }
-                if (nameunique) {
+                    if (!isUniqueName(newplayer.getThisName())) throw new InvalidNameException(newplayer.getThisName());
                     addPlayer(newplayer);
                     newplayer.start();
                     joinLobby(newplayer);
                 }
-                else {
+                catch (InvalidCommandException e){
+                    newplayer.error(Protocol.errorcode.WRONGCOMMAND);
+                }
+                catch (InvalidNameException e) {
                     newplayer.error(Protocol.errorcode.INVALIDNAME);
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean isUniqueName(String name) {
+        boolean nameunique = true;
+        for (ServerPlayer p : players) {
+            if (p.getThisName().equals(name)) {
+                nameunique = false;
+            }
+        }
+        return nameunique;
     }
 
     public void addPlayer(ServerPlayer player) {
