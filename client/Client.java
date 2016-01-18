@@ -66,6 +66,7 @@ public class Client extends Thread {
 		this.sock = new Socket(host, port);
 		this.in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
 		this.out = new BufferedWriter(new OutputStreamWriter(sock.getOutputStream()));
+		this.view = new View(this);
 	}
 
 	public void run() {
@@ -100,8 +101,7 @@ public class Client extends Thread {
 				List<Stone> stones = Protocol.convertStones(inputArray);
 				game.getCurrentPlayer().takeStones(stones);
 			} else if (inputArray[0].equals(Protocol.TRADED)) {
-				List<Stone> stones = Protocol.convertStones(inputArray);
-
+				print("Speler " + inputArray[1] + " " + inputArray[0] + " " + inputArray[2] + " stones.");
 			} else if (inputArray[0].equals(Protocol.TURN)) {
 				Player[] players = game.getPlayers();
 				for (int i = 0; i < game.getPlayers().length; i++) {
@@ -110,7 +110,6 @@ public class Client extends Thread {
 						break;
 					}
 				}
-
 			} else if (inputArray[0].equals(Protocol.ACKNOWLEDGE)) {
 
 			} else if (inputArray[0].equals(Protocol.PLAYERS)) {
@@ -137,6 +136,10 @@ public class Client extends Thread {
 				;
 		}
 		shutdown();
+	}
+	
+	public ClientGame getGame() {
+		return game;
 	}
 
 	public void sendMessage(String msg) {

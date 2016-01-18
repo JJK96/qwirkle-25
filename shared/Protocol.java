@@ -92,6 +92,11 @@ public class Protocol {
 		return stones;
 	}
 
+	/**
+	 * Converts the coordinates from inputArray to an array x's of the stones to be placed
+	 * @param inputArray
+	 * @return array of Y coordinates
+	 */
 	public static int[] convertPlacedX(String[] inputArray) {
 		int[] x = new int[inputArray.length - 1];
 		for (int i = 0; i < inputArray.length; i += 2) {
@@ -105,6 +110,11 @@ public class Protocol {
 		return x;
 	}
 
+	/**
+	 * Converts the coordinates from inputArray to an array y's of the stones to be placed
+	 * @param inputArray
+	 * @return array of X coordinates
+	 */
 	public static int[] convertPlacedY(String[] inputArray) {
 		int[] y = new int[inputArray.length - 1];
 		for (int i = 0; i < inputArray.length; i += 2) {
@@ -117,12 +127,21 @@ public class Protocol {
 		}
 		return y;
 	}
-
+	/**
+	 * converts the first half of the input int,int to a usable int as X coordinate
+	 * @param input
+	 * @return
+	 */
 	public static int intsToX(String input) {
 		String[] array = input.split(",");
 		return Integer.parseInt(array[0]);
 	}
 
+	/**
+	 * converts the second half of the input int,int to a usable int as Y coordinate
+	 * @param input
+	 * @return
+	 */
 	public static int intsToY(String input) {
 		String[] array = input.split(",");
 		return Integer.parseInt(array[1]);

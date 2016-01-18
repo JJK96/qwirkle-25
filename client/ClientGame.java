@@ -11,7 +11,6 @@ public class ClientGame {
 	private Player[] players;
 	private Player currentPlayer;
 	private Board board;
-	private View view;
 	private int size;
 	private Client client;
 
@@ -23,7 +22,6 @@ public class ClientGame {
 	public ClientGame(String[] names, int size, Client client) {
 		players = new Player[names.length];
 		this.board = new Board();
-		this.view = new View(this);
 		this.size = size;
 		this.client = client;
 		for (int i = 0; i < names.length; i++) {
@@ -55,6 +53,10 @@ public class ClientGame {
 	public void reset() {
 
 	}
+	
+	public Client getClient() {
+		return client;
+	}
 
 	/**
 	 * Get all the stones in the bag
@@ -63,15 +65,6 @@ public class ClientGame {
 	 */
 	public List<Stone> stones() {
 		return bag;
-	}
-
-	/**
-	 * Get the view which is currently used
-	 * 
-	 * @return view
-	 */
-	public View getView() {
-		return view;
 	}
 
 	/**
@@ -94,23 +87,6 @@ public class ClientGame {
 	 */
 	public boolean isValidInt(int choice) {
 		return (choice < getPossibleMoves().size() && choice >= 0);
-	}
-
-	/**
-	 * Returns the amount of stones to the player out of the bag and removes the
-	 * stones the player gets from the bag
-	 * 
-	 * @param player
-	 * @param amount
-	 */
-	public void giveStones(Player player, int amount) {
-		List<Stone> randomStones = new ArrayList<Stone>();
-		for (int i = 0; i < amount; i++) {
-			int place = ((int) Math.random() * (bag.size() + 1));
-			randomStones.add(bag.get(place));
-			bag.remove(place);
-		}
-		player.takeStones(randomStones);
 	}
 
 	/**

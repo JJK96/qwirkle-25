@@ -74,7 +74,7 @@ public class Player {
 	 */
 	public void swapStones(List<Stone> swapStones) {
 		stones.removeAll(swapStones);
-		game.giveStones(this, swapStones.size());
+		game.getClient().trade(swapStones);
 
 	}
 

@@ -4,22 +4,22 @@ import java.util.Scanner;
 
 public class View {
 
-	private ClientGame game;
+	private Client client;
 
 	/**
 	 * Creates a view for the specified game
 	 * 
 	 * @param game
 	 */
-	public View(ClientGame game) {
-		this.game = game;
+	public View(Client client) {
+		this.client = client;
 	}
 
 	/**
 	 * Shows the error occurred
 	 */
 	public void showError() {
-
+		
 	}
 
 	/**
@@ -29,13 +29,13 @@ public class View {
 	 * @return number of the chosen possiblemove
 	 */
 	public int determineMove() {
-		String prompt = game.getPossibleMoves().toString() + "\n-> What is your choice? ";
+		String prompt = client.getGame().getPossibleMoves().toString() + "\n-> What is your choice? ";
 		int choice = readInt(prompt);
-		boolean valid = game.isValidInt(choice);
+		boolean valid = client.getGame().isValidInt(choice);
 		while (!valid) {
 			System.out.println("ERROR: number " + choice + " is no valid choice.");
 			choice = readInt(prompt);
-			valid = game.isValidInt(choice);
+			valid = client.getGame().isValidInt(choice);
 		}
 		return choice;
 	}
