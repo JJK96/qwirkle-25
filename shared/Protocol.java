@@ -36,6 +36,7 @@ public class Protocol {
 	public static final String ACCEPT = "accept";
 	public static final String DECLINE = "decline";
 
+	public enum errorcode {WRONGCOMMAND, WRONGTURN, INVALIDNAME, PLAYERDISCONNECTED, MISSINGOPTION}
 	public static List<Stone> convertStones(String[] inputArray) {
 		List<Stone> stones = new ArrayList<Stone>();
 		for (int i = 1; i < inputArray.length; i++) {
