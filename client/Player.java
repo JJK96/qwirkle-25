@@ -34,7 +34,7 @@ public class Player {
 	public boolean isValidPossiblemove(PossibleMove p) {
 		for (int i = 0; i < stones.size(); i++) {
 			if (getGame().getBoard().isValidMove(p, stones.get(i))) {
-
+				
 			}
 		}
 	}
