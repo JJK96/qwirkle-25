@@ -17,7 +17,7 @@ import shared.Stone;
 
 public class Client extends Thread {
 
-	private static final String USAGE = "usage: Client <name> <address> <port>";
+	private static final String USAGE = "usage: Client <address> <port>";
 
 	private static void printStatic(String message) {
 		System.out.println(message);
@@ -25,7 +25,7 @@ public class Client extends Thread {
 
 	/** Start een Client-applicatie op. */
 	public static void main(String[] args) {
-		if (args.length != 3) {
+		if (args.length != 2) {
 			System.out.println(USAGE);
 			System.exit(0);
 		}
@@ -34,22 +34,22 @@ public class Client extends Thread {
 		int port = 0;
 
 		try {
-			host = InetAddress.getByName(args[1]);
+			host = InetAddress.getByName(args[0]);
 		} catch (UnknownHostException e) {
 			printStatic("ERROR: no valid hostname!");
 			System.exit(0);
 		}
 
 		try {
-			port = Integer.parseInt(args[2]);
+			port = Integer.parseInt(args[1]);
 		} catch (NumberFormatException e) {
 			printStatic("ERROR: no valid portnummer!");
 			System.exit(0);
 		}
 
 		try {
-			Client client = new Client(args[0], host, port);
-			client.start();
+			Client client = new Client(host, port);
+			client.start();			
 		} catch (IOException e) {
 			printStatic("ERROR: couldn't construct a client object!");
 			System.exit(0);
@@ -66,16 +66,38 @@ public class Client extends Thread {
 	private View view;
 	private boolean registerSuccesfull = false;
 
-	public Client(String name, InetAddress host, int port) throws IOException {
-		this.clientName = name;
+	public Client(InetAddress host, int port) throws IOException {
 		this.sock = new Socket(host, port);
 		this.in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
 		this.out = new BufferedWriter(new OutputStreamWriter(sock.getOutputStream()));
 		this.view = new View(this);
+		init();
+	}
+
+	public void init() {
+		while (!registerSuccesfull) {
+			clientName = view.getClientName();
+			sendMessage(Protocol.REGISTER + Protocol.SPLIT + getClientName());
+			String input = null;
+			if ((input = readString()) != null) {
+				String[] inputArray = input.split(Protocol.SPLIT);
+				if (inputArray[0].equals(Protocol.ACKNOWLEDGE)) {
+					registerSuccesfull = true;
+				} else if (inputArray[0].equals(Protocol.ERROR)) {
+					if (inputArray.length == 1) {
+						System.out.println("wrong error code");
+					}
+					else if (!inputArray[1].equals(Protocol.errorcode.INVALIDNAME)) {
+						System.out.println(input);
+					}
+				}
+			}
+		}
+		//view.start();
+
 	}
 
 	public void run() {
-		sendMessage(Protocol.REGISTER + Protocol.SPLIT + getClientName());
 		String input = null;
 		while ((input = readString()) != null) {
 			String[] inputArray = input.split(Protocol.SPLIT);
@@ -129,7 +151,10 @@ public class Client extends Thread {
 			} else if (inputArray[0].equals(Protocol.PLAYERS)) {
 
 			} else if (inputArray[0].equals(Protocol.JOINLOBBY)) {
-
+				if (inputArray[1].equals(clientName)) {
+					String prompt = "";
+					view.readInt(prompt);
+				}
 			} else if (inputArray[0].equals(Protocol.START)) {
 				String[] players = new String[inputArray.length - 1];
 				for (int i = 1; i < inputArray.length; i++) {

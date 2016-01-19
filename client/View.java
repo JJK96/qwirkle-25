@@ -19,6 +19,11 @@ public class View {
 		this.client = client;
 	}
 
+	public String getClientName() {
+		String prompt = "Specify your name:";
+		return readString(prompt);
+	}
+
 	/**
 	 * Prints the prompt and waits for the user to give input, then decides if
 	 * it is a swap or a place and calls those methods respectively.
@@ -139,7 +144,7 @@ public class View {
 	 * @param prompt
 	 * @return
 	 */
-	private int readInt(String prompt) {
+	public int readInt(String prompt) {
 		int value = 0;
 		boolean intRead = false;
 		@SuppressWarnings("resource")
@@ -154,6 +159,24 @@ public class View {
 			}
 		} while (!intRead);
 		return value;
+	}
+
+	public String readString(String prompt) {
+		String input = "";
+		boolean stringRead = false;
+		@SuppressWarnings("resource")
+		Scanner line = new Scanner(System.in);
+		do {
+			System.out.print(prompt);
+			try (Scanner scannerLine = new Scanner(line.nextLine());) {
+				if (scannerLine.hasNext()) {
+					stringRead = true;
+					input = scannerLine.next();
+				}
+			}
+		} while (!stringRead);
+		return input;
+
 	}
 
 	public void print(String message) {
