@@ -49,7 +49,7 @@ public class Client extends Thread {
 
 		try {
 			Client client = new Client(host, port);
-			client.start();			
+			client.start();
 		} catch (IOException e) {
 			printStatic("ERROR: couldn't construct a client object!");
 			System.exit(0);
@@ -86,15 +86,12 @@ public class Client extends Thread {
 				} else if (inputArray[0].equals(Protocol.ERROR)) {
 					if (inputArray.length == 1) {
 						System.out.println("wrong error code");
-					}
-					else if (!inputArray[1].equals(Protocol.errorcode.INVALIDNAME)) {
+					} else if (!inputArray[1].equals(Protocol.errorcode.INVALIDNAME)) {
 						System.out.println(input);
 					}
 				}
 			}
 		}
-		//view.start();
-
 	}
 
 	public void run() {
