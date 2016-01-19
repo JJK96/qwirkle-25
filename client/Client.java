@@ -49,7 +49,8 @@ public class Client extends Thread {
 
 		try {
 			Client client = new Client(host, port);
-			client.start();			
+			client.start();
+			client.startGame();
 		} catch (IOException e) {
 			printStatic("ERROR: couldn't construct a client object!");
 			System.exit(0);
@@ -93,8 +94,9 @@ public class Client extends Thread {
 				}
 			}
 		}
-		//view.start();
-
+	}
+	public void startGame() {
+		view.startGame();
 	}
 
 	public void run() {
@@ -111,6 +113,7 @@ public class Client extends Thread {
 				// implement
 			} else if (inputArray[0].equals(Protocol.ERROR)) {
 				if (inputArray.length == 1) {
+					System.out.println("error");
 					view.print("Geen foutcode meegegeven foei foei foei");
 				} else if (inputArray[1].equals("0")) {
 					view.print("Fout commando: 0");
