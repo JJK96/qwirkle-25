@@ -31,6 +31,14 @@ public class Player {
 
 	}
 
+	public boolean isValidPossiblemove(PossibleMove p) {
+		for (int i = 0; i < stones.size(); i++) {
+			if (getGame().getBoard().isValidMove(p, stones.get(i))) {
+
+			}
+		}
+	}
+
 	/**
 	 * Get the game the player plays
 	 * 
@@ -67,8 +75,12 @@ public class Player {
 	 */
 	public String stonesToString() {
 		String stoneString = "";
-		for (int i = 0; i < stones.size(); i++) {
-			stoneString += i + " " + stones.get(i).toString() + "\n";
+		if (stones.size() == 0) {
+			return stoneString;
+		} else {
+			for (int i = 0; i < stones.size(); i++) {
+				stoneString += i + " " + stones.get(i).toString() + "\n";
+			}
 		}
 		return stoneString;
 	}
@@ -84,6 +96,7 @@ public class Player {
 
 	/**
 	 * Removes the specified stone from the players stones.
+	 * 
 	 * @param stone
 	 */
 	public void removeStone(Stone stone) {

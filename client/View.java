@@ -25,7 +25,8 @@ public class View {
 	 */
 	public void determineMove() {
 		String prompt = client.getGame().getPossibleMoves().toString()
-				+ "\n-1 : Swap stones\n-> What is your choice?\n";
+				+ "\n-1 : Swap stones\n-> What is your choice?\n\nThese are your stones:\n"
+				+ client.getGame().getCurrentPlayer().stonesToString();
 		int choice = intOutPromptMinus1TillPossibleMovesRange(prompt);
 		if (choice == -1) {
 			swapStones();
@@ -129,7 +130,7 @@ public class View {
 	 * @param firstChoice
 	 */
 	private void placeStones(int firstChoice) {
-
+		if ();
 	}
 
 	/**

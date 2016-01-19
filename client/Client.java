@@ -8,7 +8,10 @@ import java.io.OutputStreamWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.List;
+
+import shared.InvalidCommandException;
 import shared.Protocol;
 import shared.Stone;
 
@@ -73,6 +76,7 @@ public class Client extends Thread {
 	public void run() {
 		sendMessage(Protocol.REGISTER + Protocol.SPLIT + getClientName());
 		String input = null;
+		input = readString();
 		while ((input = readString()) != null) {
 			String[] inputArray = input.split(Protocol.SPLIT);
 			if (inputArray[0].equals(Protocol.ENDGAME)) {
@@ -92,7 +96,12 @@ public class Client extends Thread {
 					view.print("Geen foutcode meegegeven foei foei foei");
 				}
 			} else if (inputArray[0].equals(Protocol.PLACED)) {
-				List<Stone> stones = Protocol.StringToPlacedStonelist(inputArray);
+				List<Stone> stones = new ArrayList<Stone>();
+				try {
+					stones = Protocol.StringToPlacedStonelist(inputArray);
+				} catch (InvalidCommandException e) {
+					e.printStackTrace();
+				}
 				int[] x = Protocol.convertPlacedX(inputArray);
 				int[] y = Protocol.convertPlacedY(inputArray);
 				for (int i = 0; i < stones.size(); i++) {
@@ -111,8 +120,6 @@ public class Client extends Thread {
 						break;
 					}
 				}
-			} else if (inputArray[0].equals(Protocol.ACKNOWLEDGE)) {
-
 			} else if (inputArray[0].equals(Protocol.PLAYERS)) {
 
 			} else if (inputArray[0].equals(Protocol.JOINLOBBY)) {
