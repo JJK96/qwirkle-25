@@ -13,10 +13,16 @@ public class View {
 	/**
 	 * Creates a view for the specified client
 	 * 
-	 * @param game
+	 * @param
 	 */
 	public View(Client client) {
 		this.client = client;
+	}
+
+	public void startGame() {
+		int aantal = 0;
+		//vraag  dingen aan user
+		client.join(aantal);
 	}
 
 	public String getClientName() {
