@@ -65,7 +65,10 @@ public class Client extends Thread {
 	private String[] options;
 	private ClientGame game;
 	private View view;
+	private int aantal;
 	private boolean registerSuccesfull = false;
+	private boolean computerPlayerBool;
+	private Strategy strategy;
 
 	public Client(InetAddress host, int port) throws IOException {
 		this.sock = new Socket(host, port);
@@ -81,6 +84,7 @@ public class Client extends Thread {
 			sendMessage(Protocol.REGISTER + Protocol.SPLIT + getClientName());
 			String input = null;
 			if ((input = readString()) != null) {
+				System.out.println(input);
 				String[] inputArray = input.split(Protocol.SPLIT);
 				if (inputArray[0].equals(Protocol.ACKNOWLEDGE)) {
 					registerSuccesfull = true;
@@ -94,9 +98,22 @@ public class Client extends Thread {
 			}
 		}
 	}
-	
+
 	public void startGame() {
-		view.startGame();
+		this.computerPlayerBool = view.askHumanOrComputerPlayer();
+		if (computerPlayerBool == true) {
+			this.strategy = new SuperStrategy();
+		}
+		this.aantal = view.startGame();
+
+	}
+
+	public boolean getComputerPlayerBool() {
+		return computerPlayerBool;
+	}
+
+	public Strategy getStrategy() {
+		return strategy;
 	}
 
 	public void run() {
@@ -148,22 +165,27 @@ public class Client extends Thread {
 				for (int i = 0; i < game.getPlayers().length; i++) {
 					if (players[i].getName().equals(inputArray[1])) {
 						game.setCurrentPlayer(players[i]);
+						if (inputArray[1].equals(clientName)) {
+							game.getCurrentPlayer().makeMove();
+						}
 						break;
 					}
 				}
 			} else if (inputArray[0].equals(Protocol.PLAYERS)) {
 
 			} else if (inputArray[0].equals(Protocol.JOINLOBBY)) {
-				if (inputArray[1].equals(clientName)) {
-					String prompt = "";
-					view.readInt(prompt);
-				}
+				view.print(inputArray.toString());
 			} else if (inputArray[0].equals(Protocol.START)) {
 				String[] players = new String[inputArray.length - 1];
-				for (int i = 1; i < inputArray.length; i++) {
-					players[i - 1] = inputArray[i];
+				if (players.length == aantal) {
+					for (int i = 1; i < inputArray.length; i++) {
+						players[i - 1] = inputArray[i];
+					}
+					this.game = new ClientGame(players, this);
+				} else {
+					view.print("Server is broken grrr doei!");
+					shutdown();
 				}
-				this.game = new ClientGame(players, this);
 			} else if (inputArray[0].equals(Protocol.MSG)) {
 
 			} else if (inputArray[0].equals(Protocol.MSGPM)) {
@@ -255,5 +277,9 @@ public class Client extends Thread {
 
 	public void chatPM(String msg, Player player) {
 		sendMessage(Protocol.CHATPM + Protocol.SPLIT + player.getName() + Protocol.SPLIT + msg);
+	}
+
+	public void askPlayers() {
+		sendMessage(Protocol.WHICHPLAYERS);
 	}
 }

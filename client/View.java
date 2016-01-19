@@ -19,10 +19,30 @@ public class View {
 		this.client = client;
 	}
 
-	public void startGame() {
+	public boolean askHumanOrComputerPlayer() {
+		while (true) {
+			int bool = readInt(
+					"Do you want to play as human or shall a computerplayer play?\n0 : HumanPlayer.\n1 : ComputerPlayer.");
+			if (bool != 1 && bool != 0) {
+				System.out.println("invalid choice");
+			} else if (bool == 0) {
+				return false;
+			} else
+				return true;
+		}
+	}
+
+	public int startGame() {
+		String prompt = "With how many players do you want to start a game?\nYou can choose: 2, 3 or 4.";
 		int aantal = 0;
-		//vraag  dingen aan user
-		client.join(aantal);
+		while (true) {
+			aantal = readInt(prompt);
+			if (aantal == 2 || aantal == 3 || aantal == 4) {
+				client.join(aantal);
+				return aantal;
+			} else
+				System.out.println("invalid number.");
+		}
 	}
 
 	public String getClientName() {
