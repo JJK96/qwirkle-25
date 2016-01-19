@@ -130,7 +130,7 @@ public class View {
 	 * @param firstChoice
 	 */
 	private void placeStones(int firstChoice) {
-		if ();
+
 	}
 
 	/**
