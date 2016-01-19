@@ -82,7 +82,9 @@ public class Client extends Thread {
 			if (inputArray[0].equals(Protocol.ENDGAME)) {
 				// implement
 			} else if (inputArray[0].equals(Protocol.ERROR)) {
-				if (inputArray[1].equals("0")) {
+				if (inputArray.length == 1) {
+					view.print("Geen foutcode meegegeven foei foei foei");
+				} else if (inputArray[1].equals("0")) {
 					view.print("Fout commando: 0");
 				} else if (inputArray[1].equals("1")) {
 					view.print("Foute beurt: 1");
@@ -92,8 +94,6 @@ public class Client extends Thread {
 					view.print("Speler disconnected: 3");
 				} else if (inputArray[1].equals("4")) {
 					view.print("Speler heeft functie niet: 4");
-				} else if (inputArray.length == 1) {
-					view.print("Geen foutcode meegegeven foei foei foei");
 				}
 			} else if (inputArray[0].equals(Protocol.PLACED)) {
 				List<Stone> stones = new ArrayList<Stone>();

@@ -1,7 +1,5 @@
 package shared;
 
-import org.omg.CORBA.DynAnyPackage.Invalid;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -72,7 +70,7 @@ public class Board {
 	 * @return true if the move is valid, otherwise false
 	 */
 	public boolean isValidMove(int x, int y, Stone stone) {
-		Position p = new Position(x,y);
+		Position p = new Position(x, y);
 		return isValidMove(p, stone);
 	}
 
@@ -80,8 +78,9 @@ public class Board {
 		PossibleMove pm = possibleMoves.get(p);
 		return pm != null && pm.acceptable(stone);
 	}
+
 	public boolean isValidMove(PossibleMove p, Stone stone) {
-		return p!= null && p.acceptable(stone);
+		return p != null && p.acceptable(stone);
 	}
 
 	/**
@@ -99,15 +98,14 @@ public class Board {
 	}
 
 	public void makeMove(Position p, Stone stone) throws InvalidCommandException {
-		if (isValidMove(p,stone)) {
+		if (isValidMove(p, stone)) {
 			makeMove(stone, possibleMoves.get(p));
-		}
-		else {
+		} else {
 			throw new InvalidCommandException();
 		}
 	}
 
-	//@ requires stones.size() == positions.size();
+	// @ requires stones.size() == positions.size();
 	public void makeMoves(List<Position> positions, List<Stone> stones) throws InvalidCommandException {
 		int[] moves = new int[positions.size()];
 		int movesindex = 0;
@@ -117,17 +115,16 @@ public class Board {
 			for (int i = 0; i < positions.size(); i++) {
 				Position p = positions.get(i);
 				Stone s = stones.get(i);
-				if (isValidMove(p,s)) {
+				if (isValidMove(p, s)) {
 					validmovefound = true;
 					moves[movesindex] = i;
 					movesindex += 1;
 				}
 			}
 		}
-		if (movesindex != positions.size() -1) {
+		if (movesindex != positions.size() - 1) {
 			throw new InvalidCommandException();
-		}
-		else {
+		} else {
 			for (int i : moves) {
 				makeMove(positions.get(i), stones.get(i));
 			}
@@ -141,7 +138,7 @@ public class Board {
 	 * @param stone
 	 * @param place
 	 */
-	//@ requires possibleMoves.contains(place) && place.acceptable(stone));
+	// @ requires possibleMoves.contains(place) && place.acceptable(stone));
 	public void makeMove(Stone stone, PossibleMove place) {
 		stone = place.fill(stone);
 		stones.put(stone.getPosition(), stone);
@@ -160,6 +157,7 @@ public class Board {
 
 	/**
 	 * Adds a possiblemove on the specified position ??
+	 * 
 	 * @param pos
 	 */
 	public void addPossibleMove(Position pos) {
@@ -188,8 +186,9 @@ public class Board {
 	}
 
 	/**
-	 * Get the boundaries of the game 
-	 * (the bigness of the board, measured in biggest and smalles X and Y coordinates)
+	 * Get the boundaries of the game (the bigness of the board, measured in
+	 * biggest and smalles X and Y coordinates)
+	 * 
 	 * @return Biggest and Smallest X and Y
 	 */
 	public int[] getBoundaries() {
@@ -215,8 +214,9 @@ public class Board {
 	}
 
 	/**
-	 * Sets the board and all the possiblemoves to a string representation for the TUI.
-	 * The board is first in the string, then an enter, then the possiblemoves numbered from 0.
+	 * Sets the board and all the possiblemoves to a string representation for
+	 * the TUI. The board is first in the string, then an enter, then the
+	 * possiblemoves numbered from 0.
 	 */
 	public String toString() {
 		int[] boundaries = getBoundaries();
