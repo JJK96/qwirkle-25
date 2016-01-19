@@ -189,7 +189,7 @@ public class Client extends Thread {
 					}
 					this.game = new ClientGame(players, this);
 				} else {
-					view.print("Server is broken OK DOEI!\n\nThis server doesnt even "
+					view.print(Protocol.BORDER + "Server is broken OK DOEI!\n\nThis server doesnt even "
 							+ "check with how many players I want to Play pffffff");
 					shutdown();
 				}
