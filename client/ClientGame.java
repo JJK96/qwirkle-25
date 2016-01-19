@@ -25,8 +25,10 @@ public class ClientGame {
 			if (names[i].equals(client.getClientName())) {
 				if (client.getComputerPlayerBool()) {
 					players[i] = new ComputerPlayer(names[i], this, client.getStrategy());
+					client.setYou(players[i]);
 				} else {
 					players[i] = new HumanPlayer(names[i], this);
+					client.setYou(players[i]);
 				}
 			} else {
 				players[i] = new Player(names[i], this);

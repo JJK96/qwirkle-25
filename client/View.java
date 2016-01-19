@@ -33,7 +33,7 @@ public class View {
 	}
 
 	public Strategy getStrategyFromInput() {
-		String prompt = "Which strategy shall the ComputerPlayer have?\n0 : BadStrategy.\n\nMore options follow.";
+		String prompt = "Which strategy shall the ComputerPlayer have?\n0 : BadStrategy.\n\nMore options will follow.";
 		int strat = 0;
 		while (true) {
 			strat = readInt(prompt);

@@ -69,6 +69,7 @@ public class Client extends Thread {
 	private boolean registerSuccesfull = false;
 	private boolean computerPlayerBool;
 	private Strategy strategy;
+	private Player you;
 
 	public Client(InetAddress host, int port) throws IOException {
 		this.sock = new Socket(host, port);
@@ -106,6 +107,10 @@ public class Client extends Thread {
 		}
 		this.aantal = view.startGame();
 
+	}
+
+	public void setYou(Player player) {
+		you = player;
 	}
 
 	public boolean getComputerPlayerBool() {
@@ -157,7 +162,8 @@ public class Client extends Thread {
 				}
 			} else if (inputArray[0].equals(Protocol.NEWSTONES)) {
 				List<Stone> stones = Protocol.StringToStonelist(inputArray);
-				game.getCurrentPlayer().takeStones(stones);
+				///////// gaat fout komt geen stenen
+				you.takeStones(stones);
 			} else if (inputArray[0].equals(Protocol.TRADED)) {
 				view.print("Speler " + inputArray[1] + " " + inputArray[0] + " " + inputArray[2] + " stones.");
 			} else if (inputArray[0].equals(Protocol.TURN)) {
@@ -165,12 +171,13 @@ public class Client extends Thread {
 				for (int i = 0; i < game.getPlayers().length; i++) {
 					if (players[i].getName().equals(inputArray[1])) {
 						game.setCurrentPlayer(players[i]);
-						if (inputArray[1].equals(clientName)) {
-							game.getCurrentPlayer().makeMove();
+						if (inputArray[1].equals(you.getName())) {
+							you.makeMove();
 						}
 						break;
 					}
-				}
+				} //
+
 			} else if (inputArray[0].equals(Protocol.PLAYERS)) {
 
 			} else if (inputArray[0].equals(Protocol.JOINLOBBY)) {
