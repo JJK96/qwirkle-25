@@ -64,6 +64,7 @@ public class Client extends Thread {
 	private String[] options;
 	private ClientGame game;
 	private View view;
+	private boolean registerSuccesfull = false;
 
 	public Client(String name, InetAddress host, int port) throws IOException {
 		this.clientName = name;
@@ -76,9 +77,14 @@ public class Client extends Thread {
 	public void run() {
 		sendMessage(Protocol.REGISTER + Protocol.SPLIT + getClientName());
 		String input = null;
-		input = readString();
 		while ((input = readString()) != null) {
 			String[] inputArray = input.split(Protocol.SPLIT);
+			if (inputArray[0].equals(Protocol.ACKNOWLEDGE)) {
+				registerSuccesfull = true;
+			}
+			if (!registerSuccesfull) {
+				break;
+			}
 			if (inputArray[0].equals(Protocol.ENDGAME)) {
 				// implement
 			} else if (inputArray[0].equals(Protocol.ERROR)) {
