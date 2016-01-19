@@ -101,7 +101,7 @@ public class Player {
 	 * @param stone
 	 */
 	public void removeStone(Stone stone) {
-		stones.remove(stone);
+		this.stones.remove(stone);
 	}
 
 	/**

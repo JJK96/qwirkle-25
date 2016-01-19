@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import shared.Protocol;
 import shared.Stone;
 
 public class View {
@@ -20,9 +21,11 @@ public class View {
 	}
 
 	public boolean askHumanOrComputerPlayer() {
+		String prompt = Protocol.BORDER + "Do you want to play as human or shall a computerplayer play?"
+				+ "\n0 : HumanPlayer.\n1 : ComputerPlayer.";
 		while (true) {
-			int bool = readInt(
-					"Do you want to play as human or shall a computerplayer play?\n0 : HumanPlayer.\n1 : ComputerPlayer.");
+			int bool = readInt(prompt);
+
 			if (bool != 1 && bool != 0) {
 				System.out.println("invalid choice");
 			} else if (bool == 0) {
@@ -33,7 +36,8 @@ public class View {
 	}
 
 	public Strategy getStrategyFromInput() {
-		String prompt = "Which strategy shall the ComputerPlayer have?\n0 : BadStrategy.\n\nMore options will follow.";
+		String prompt = Protocol.BORDER
+				+ "Which strategy shall the ComputerPlayer have?\n0 : BadStrategy.\n\nMore options will follow.";
 		int strat = 0;
 		while (true) {
 			strat = readInt(prompt);
@@ -46,7 +50,8 @@ public class View {
 	}
 
 	public int startGame() {
-		String prompt = "With how many players do you want to start a game?\nYou can choose: 2, 3 or 4.";
+		String prompt = Protocol.BORDER
+				+ "With how many players do you want to start a game?\nYou can choose: 2, 3 or 4.";
 		int aantal = 0;
 		while (true) {
 			aantal = readInt(prompt);
@@ -68,7 +73,7 @@ public class View {
 	 * it is a swap or a place and calls those methods respectively.
 	 */
 	public void determineMove() {
-		String prompt = client.getGame().getPossibleMoves().toString()
+		String prompt = Protocol.BORDER + client.getGame().getPossibleMoves().toString()
 				+ "\n-1 : Swap stones\n-> What is your choice?\n\nThese are your stones:\n"
 				+ client.getGame().getCurrentPlayer().stonesToString();
 		int choice = intOutPromptMinus1TillPossibleMovesRange(prompt);
@@ -140,7 +145,7 @@ public class View {
 	 */
 	private void swapStones() {
 		List<Stone> stones = new ArrayList<Stone>();
-		String swapPrompt = "These are your stones, which stone do you want to swap?\n"
+		String swapPrompt = Protocol.BORDER + "These are your stones, which stone do you want to swap?\n"
 				+ client.getGame().getCurrentPlayer().stonesToString()
 				+ "\nChoose 1 stone now and then you will get the chance to pick more stones or end the swap.";
 		int choice = intOutPromptFrom0ToStonesRange(swapPrompt);
@@ -148,7 +153,7 @@ public class View {
 		client.getGame().getCurrentPlayer().removeStone(chosen1);
 		stones.add(chosen1);
 		for (int i = 1; i < 7; i++) {
-			String swapPromptSecond = "These are your stones, which stone do you want to swap?\n"
+			String swapPromptSecond = Protocol.BORDER + "These are your stones, which stone do you want to swap?\n"
 					+ client.getGame().getCurrentPlayer().stonesToString()
 					+ "\nOr choose:\n-1 : to end the swap and your turn.";
 			int choiceSecond = intOutPromptMinus1TillStonesRange(swapPromptSecond);

@@ -55,8 +55,9 @@ public class Client extends Thread {
 			printStatic("ERROR: couldn't construct a client object!");
 			System.exit(0);
 		}
-
 	}
+
+	// hello_from_the_other_side
 
 	private String clientName;
 	private Socket sock;
@@ -154,7 +155,7 @@ public class Client extends Thread {
 					stones = Protocol.StringToPlacedStonelist(inputArray);
 				} catch (InvalidCommandException e) {
 					e.printStackTrace();
-				} // hello_from_the_other_side
+				}
 				int[] x = Protocol.convertPlacedX(inputArray);
 				int[] y = Protocol.convertPlacedY(inputArray);
 				for (int i = 0; i < stones.size(); i++) {
@@ -162,8 +163,6 @@ public class Client extends Thread {
 				}
 			} else if (inputArray[0].equals(Protocol.NEWSTONES)) {
 				List<Stone> stones = Protocol.StringToStonelist(inputArray);
-				
-				///////// gaat fout komt geen stenen
 				you.takeStones(stones);
 			} else if (inputArray[0].equals(Protocol.TRADED)) {
 				view.print("Speler " + inputArray[1] + " " + inputArray[0] + " " + inputArray[2] + " stones.");
@@ -258,6 +257,7 @@ public class Client extends Thread {
 	public void place(List<Stone> stones) {
 		String msg = Protocol.PLACE;
 		for (Stone s : stones) {
+			you.removeStone(s);
 			msg = msg + Protocol.SPLIT + s.toUsableString() + Protocol.SPLIT + s.getPosition().toUsableString();
 		}
 		sendMessage(msg);
@@ -266,6 +266,7 @@ public class Client extends Thread {
 	public void trade(List<Stone> stones) {
 		String msg = Protocol.TRADE;
 		for (Stone s : stones) {
+			you.removeStone(s);
 			msg = msg + Protocol.SPLIT + s.toUsableString();
 		}
 		sendMessage(msg);
