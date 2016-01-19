@@ -80,6 +80,9 @@ public class Board {
 		PossibleMove pm = possibleMoves.get(p);
 		return pm != null && pm.acceptable(stone);
 	}
+	public boolean isValidMove(PossibleMove p, Stone stone) {
+		return p!= null && p.acceptable(stone);
+	}
 
 	/**
 	 * Make a move at the spefified position with the spefified stone if that is
