@@ -22,7 +22,15 @@ public class ClientGame {
 		this.board = new Board();
 		this.client = client;
 		for (int i = 0; i < names.length; i++) {
-			players[i] = new Player(names[i], this);
+			if (names[i].equals(client.getClientName())) {
+				if (client.getComputerPlayerBool()) {
+					players[i] = new ComputerPlayer(names[i], this, client.getStrategy());
+				} else {
+					players[i] = new HumanPlayer(names[i], this);
+				}
+			} else {
+				players[i] = new Player(names[i], this);
+			}
 		}
 	}
 
@@ -85,11 +93,11 @@ public class ClientGame {
 	public boolean isValidInt(int choice) {
 		return (choice < getPossibleMoves().size() && choice >= -1);
 	}
-	
+
 	public boolean isValidIntStonesRange(int choice) {
 		return (choice < getCurrentPlayer().getStones().size() && choice >= -1);
 	}
-	
+
 	public boolean isValidIntStonesRangeFrom0(int choice) {
 		return (choice < getCurrentPlayer().getStones().size() && choice >= 0);
 	}
