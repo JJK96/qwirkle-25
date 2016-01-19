@@ -46,7 +46,7 @@ public class ServerPlayer extends Thread {
                 }
                 else if (inGame()) {
                     if (words[0].equals(Protocol.PLACE)) {
-                        if (!getThisName().equals(game.getCurrentPlayer() )) {
+                        if (game.getCurrentPlayer().equals(this)) {
                             place(words);
                         }
                         else {
@@ -85,6 +85,8 @@ public class ServerPlayer extends Thread {
                 game.placeStones(stones, positions);
             } catch (InvalidCommandException e) {
                 error(Protocol.errorcode.WRONGCOMMAND);
+            } catch (InvalidMoveException e) {
+                error(Protocol.errorcode.WRONGTURN);
             }
         }
         else {
@@ -152,7 +154,7 @@ public class ServerPlayer extends Thread {
             out.close();
             in.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         server.removePlayer(this);
     }

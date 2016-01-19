@@ -55,6 +55,7 @@ public class ServerGame extends Thread{
     @Override
     public void run() {
         lock.lock();
+        running = true;
         System.out.println("game started with players: " + getPlayerNames());
         giveInitialStones();
         int currentplayernum = (int) Math.floor(Math.random() * playernum);
@@ -155,11 +156,18 @@ public class ServerGame extends Thread{
         }
     }
     //@ requires stones.size() == positions.size();
-    public void placeStones(List<Stone> stones, List<Position> positions) throws InvalidCommandException {
+    public void placeStones(List<Stone> stones, List<Position> positions) throws InvalidMoveException {
         lock.lock();
-        board.makeMoves(positions, stones);
-        System.out.println("currentplayer placed stones");
-        playerDone.signal();
-        lock.unlock();
+        try {
+            board.makeMoves(positions, stones);
+            System.out.println("currentplayer placed stones");
+            playerDone.signal();
+        } catch (InvalidMoveException e) {
+            board = board.deepCopy();
+            throw new InvalidMoveException();
+        }
+        finally {
+            lock.unlock();
+        }
     }
 }

@@ -1,13 +1,12 @@
 package shared;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Board {
 
 	private Map<Position, Stone> stones;
 	private Map<Position, PossibleMove> possibleMoves;
+	private List<Stone> backup;
 
 	/**
 	 * Creates a new board
@@ -22,6 +21,7 @@ public class Board {
 	public void reset() {
 		stones = new HashMap<Position, Stone>();
 		possibleMoves = new HashMap<Position, PossibleMove>();
+		backup = new ArrayList<Stone>();
 		PossibleMove init = new PossibleMove(new Position(0, 0));
 		possibleMoves.put(init.getPosition(), init);
 	}
@@ -33,6 +33,14 @@ public class Board {
 	 */
 	public Map<Position, PossibleMove> getPossibleMoves() {
 		return possibleMoves;
+	}
+
+	public void setStones(Map<Position, Stone> stones) {
+		this.stones = stones;
+	}
+
+	public void setPossibleMoves(Map<Position, PossibleMove> possibleMoves) {
+		this.possibleMoves = possibleMoves;
 	}
 
 	/**
@@ -57,7 +65,13 @@ public class Board {
 	 * @return a copy of the board ??
 	 */
 	public Board deepCopy() {
-		return null;
+		System.out.println(backup);
+		Board b = new Board();
+		for (Stone s : backup) {
+			Stone newS = new Stone(s.getShape(), s.getColor());
+			b.makeMove(s.getPosition(), newS);
+		}
+		return b;
 	}
 
 	/**
@@ -76,7 +90,7 @@ public class Board {
 
 	public boolean isValidMove(Position p, Stone stone) {
 		PossibleMove pm = possibleMoves.get(p);
-		return pm != null && pm.acceptable(stone);
+		return isValidMove(pm, stone);
 	}
 
 	public boolean isValidMove(PossibleMove p, Stone stone) {
@@ -91,45 +105,37 @@ public class Board {
 	 * @param y
 	 * @param stone
 	 */
+	//@ requires isValidMove(x,y,stone);
 	public void makeMove(int x, int y, Stone stone) {
 		if (isValidMove(x, y, stone)) {
 			makeMove(stone, possibleMoves.get(new Position(x, y)));
 		}
 	}
 
-	public void makeMove(Position p, Stone stone) throws InvalidCommandException {
-		if (isValidMove(p, stone)) {
-			makeMove(stone, possibleMoves.get(p));
-		} else {
-			throw new InvalidCommandException();
-		}
+	//@ requires isValidMove(p, stone);
+	public void makeMove(Position p, Stone stone) {
+        makeMove(stone, possibleMoves.get(p));
 	}
 
 	// @ requires stones.size() == positions.size();
-	public void makeMoves(List<Position> positions, List<Stone> stones) throws InvalidCommandException {
-		int[] moves = new int[positions.size()];
-		int movesindex = 0;
-		boolean validmovefound = true;
-		while (validmovefound) {
-			validmovefound = false;
-			for (int i = 0; i < positions.size(); i++) {
-				Position p = positions.get(i);
-				Stone s = stones.get(i);
+	public void makeMoves(List<Position> positions, List<Stone> stones) throws InvalidMoveException {
+		int movesmade = 0;
+		while (movesmade < positions.size()) {
+			boolean validmovefound = false;
+			for (int j = 0; j < positions.size(); j++) {
+				Position p = positions.get(j);
+				Stone s = stones.get(j);
 				if (isValidMove(p, s)) {
+					makeMove(p, s);
+					movesmade += 1;
 					validmovefound = true;
-					moves[movesindex] = i;
-					movesindex += 1;
 				}
 			}
-		}
-		if (movesindex != positions.size() - 1) {
-			throw new InvalidCommandException();
-		} else {
-			for (int i : moves) {
-				makeMove(positions.get(i), stones.get(i));
+			if (!validmovefound) {
+				backup.removeAll(stones);
+				throw new InvalidMoveException();
 			}
 		}
-
 	}
 
 	/**
@@ -153,6 +159,7 @@ public class Board {
 		addPossibleMove(pos.below());
 		addPossibleMove(pos.right());
 		addPossibleMove(pos.left());
+		backup.add(stone);
 	}
 
 	/**
