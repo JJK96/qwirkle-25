@@ -154,7 +154,7 @@ public class Client extends Thread {
 					stones = Protocol.StringToPlacedStonelist(inputArray);
 				} catch (InvalidCommandException e) {
 					e.printStackTrace();
-				}
+				} // hello_from_the_other_side
 				int[] x = Protocol.convertPlacedX(inputArray);
 				int[] y = Protocol.convertPlacedY(inputArray);
 				for (int i = 0; i < stones.size(); i++) {
@@ -162,6 +162,7 @@ public class Client extends Thread {
 				}
 			} else if (inputArray[0].equals(Protocol.NEWSTONES)) {
 				List<Stone> stones = Protocol.StringToStonelist(inputArray);
+				
 				///////// gaat fout komt geen stenen
 				you.takeStones(stones);
 			} else if (inputArray[0].equals(Protocol.TRADED)) {
@@ -176,10 +177,9 @@ public class Client extends Thread {
 						}
 						break;
 					}
-				} //
-
+				}
 			} else if (inputArray[0].equals(Protocol.PLAYERS)) {
-
+				view.print("These players are online:\n" + inputArray.toString());
 			} else if (inputArray[0].equals(Protocol.JOINLOBBY)) {
 				view.print(inputArray.toString());
 			} else if (inputArray[0].equals(Protocol.START)) {
@@ -190,7 +190,8 @@ public class Client extends Thread {
 					}
 					this.game = new ClientGame(players, this);
 				} else {
-					view.print("Server is broken grrr doei!");
+					view.print("Server is broken OK DOEI!\n\nThis server doesnt even "
+							+ "check with how many players I want to Play pffffff");
 					shutdown();
 				}
 			} else if (inputArray[0].equals(Protocol.MSG)) {

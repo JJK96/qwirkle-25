@@ -92,7 +92,7 @@ public class Player {
 	 * @param stones
 	 */
 	public void takeStones(List<Stone> stones) {
-		stones.addAll(stones);
+		this.stones.addAll(stones);
 	}
 
 	/**

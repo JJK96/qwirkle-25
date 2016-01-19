@@ -24,11 +24,13 @@ public class ClientGame {
 		for (int i = 0; i < names.length; i++) {
 			if (names[i].equals(client.getClientName())) {
 				if (client.getComputerPlayerBool()) {
-					players[i] = new ComputerPlayer(names[i], this, client.getStrategy());
-					client.setYou(players[i]);
+					Player p = new ComputerPlayer(names[i], this, client.getStrategy());
+					players[i] = p;
+					client.setYou(p);
 				} else {
-					players[i] = new HumanPlayer(names[i], this);
-					client.setYou(players[i]);
+					Player p1 = new HumanPlayer(names[i], this);
+					players[i] = p1;
+					client.setYou(p1);
 				}
 			} else {
 				players[i] = new Player(names[i], this);
@@ -43,22 +45,6 @@ public class ClientGame {
 	 */
 	public Map<Position, PossibleMove> getPossibleMoves() {
 		return board.getPossibleMoves();
-	}
-
-	/**
-	 * Checks if the game has a winner
-	 * 
-	 * @return true if the game has a winner, otherwise false
-	 */
-	public Boolean hasWinner() {
-		return false;
-	}
-
-	/**
-	 * Resets the game
-	 */
-	public void reset() {
-
 	}
 
 	public Client getClient() {
@@ -115,13 +101,6 @@ public class ClientGame {
 
 	public void setCurrentPlayer(Player player) {
 		currentPlayer = player;
-	}
-
-	/**
-	 * Shows the GUI/TUI for the game
-	 */
-	public void showGUI() {
-
 	}
 
 }

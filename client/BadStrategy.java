@@ -21,20 +21,19 @@ public class BadStrategy implements Strategy {
 		for (Position p : pos) {
 			pm.add(moves.get(p));
 		}
-		List<Stone> stoness = game.getCurrentPlayer().getStones();
-		System.out.println(stoness);
+		List<Stone> stoness = new ArrayList<Stone>();
 		for (int i = 0; i < moves.size(); i++) {
-			for (int j = 0; j < stoness.size(); j++) {
-				if (game.getBoard().isValidMove(pm.get(i), stoness.get(j))) {
-					Stone stone = stoness.get(j);
-					stoness.removeAll(stoness);
+			for (int j = 0; j < stones.size(); j++) {
+				if (game.getBoard().isValidMove(pm.get(i), stones.get(j))) {
+					Stone stone = stones.get(j);
+					stone.setPosition(pm.get(i).getPosition());
 					stoness.add(stone);
 					game.getClient().place(stoness);
 					return;
 				}
 			}
 		}
-		game.getClient().trade(stoness);
+		game.getClient().trade(stones);
 	}
 
 }
