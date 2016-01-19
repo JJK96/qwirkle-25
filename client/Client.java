@@ -102,7 +102,7 @@ public class Client extends Thread {
 	public void startGame() {
 		this.computerPlayerBool = view.askHumanOrComputerPlayer();
 		if (computerPlayerBool == true) {
-			this.strategy = new SuperStrategy();
+			this.strategy = view.getStrategyFromInput();
 		}
 		this.aantal = view.startGame();
 

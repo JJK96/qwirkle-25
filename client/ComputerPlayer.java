@@ -1,9 +1,5 @@
 package client;
 
-import java.util.List;
-import shared.*;
-import java.util.Map;
-
 public class ComputerPlayer extends Player {
 
 	private Strategy strategy;

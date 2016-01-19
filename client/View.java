@@ -32,6 +32,19 @@ public class View {
 		}
 	}
 
+	public Strategy getStrategyFromInput() {
+		String prompt = "Which strategy shall the ComputerPlayer have?\n0 : BadStrategy.\n\nMore options follow.";
+		int strat = 0;
+		while (true) {
+			strat = readInt(prompt);
+			if (strat != 0) {
+				System.out.println("invalid choice");
+			} else if (strat == 0) {
+				return new BadStrategy();
+			} // else als er meer strats zijn enzoooo
+		}
+	}
+
 	public int startGame() {
 		String prompt = "With how many players do you want to start a game?\nYou can choose: 2, 3 or 4.";
 		int aantal = 0;
@@ -162,6 +175,7 @@ public class View {
 	 */
 	private void placeStones(int firstChoice) {
 
+		// String prompt =
 	}
 
 	/**
