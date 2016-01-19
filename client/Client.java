@@ -94,7 +94,7 @@ public class Client extends Thread {
 			}
 		}
 	}
-	
+
 	public void startGame() {
 		view.startGame();
 	}
@@ -255,6 +255,10 @@ public class Client extends Thread {
 
 	public void chatPM(String msg, Player player) {
 		sendMessage(Protocol.CHATPM + Protocol.SPLIT + player.getName() + Protocol.SPLIT + msg);
+	}
+
+	public void hoi() {
+
 	}
 
 }
