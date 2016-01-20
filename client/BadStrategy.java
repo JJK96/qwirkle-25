@@ -24,13 +24,10 @@ public class BadStrategy implements Strategy {
 					stone.setPosition(moves.get(i).getPosition());
 					stonesPlace.add(stone);
 					game.getClient().place(stonesPlace);
-				} else
-					break;
+					return;
+				}
 			}
-
 		}
-
 		game.getClient().trade(stones);
 	}
-
 }

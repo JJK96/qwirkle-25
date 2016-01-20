@@ -35,21 +35,6 @@ public class Board {
 		return possibleMoves;
 	}
 
-	public void setStones(Map<Position, Stone> stones) {
-		this.stones = stones;
-	}
-
-	public void setPossibleMoves(Map<Position, PossibleMove> possibleMoves) {
-		this.possibleMoves = possibleMoves;
-	}
-
-	/**
-	 * Update??
-	 */
-	public void update() {
-
-	}
-
 	/**
 	 * Get all the stones on the board with their position
 	 * 
@@ -60,9 +45,9 @@ public class Board {
 	}
 
 	/**
-	 * Get a copy of the board ??
+	 * Get a copy of the board
 	 * 
-	 * @return a copy of the board ??
+	 * @return a copy of the board
 	 */
 	public Board deepCopy() {
 		Board b = new Board();
@@ -74,7 +59,7 @@ public class Board {
 	}
 
 	/**
-	 * Checks if the specified stone can be placed on the spefified positions
+	 * Checks if the specified stone can be placed on the specified positions
 	 * according to the board
 	 * 
 	 * @param x
@@ -87,11 +72,27 @@ public class Board {
 		return isValidMove(p, stone);
 	}
 
+	/**
+	 * Checks if the specified stone can be placed on the specified position
+	 * according to the board
+	 * 
+	 * @param p
+	 * @param stone
+	 * @return
+	 */
 	public boolean isValidMove(Position p, Stone stone) {
 		PossibleMove pm = possibleMoves.get(p);
 		return isValidMove(pm, stone);
 	}
 
+	/**
+	 * Checks if the specified stone can be placed on the specified posiblemove
+	 * according to the board
+	 * 
+	 * @param p
+	 * @param stone
+	 * @return
+	 */
 	public boolean isValidMove(PossibleMove p, Stone stone) {
 		return p != null && p.acceptable(stone);
 	}
@@ -104,19 +105,19 @@ public class Board {
 	 * @param y
 	 * @param stone
 	 */
-	// @ requires isValidMove(x,y,stone);
+	//@ requires isValidMove(x,y,stone);
 	public void makeMove(int x, int y, Stone stone) {
 		if (isValidMove(x, y, stone)) {
 			makeMove(stone, possibleMoves.get(new Position(x, y)));
 		}
 	}
 
-	// @ requires isValidMove(p, stone);
+	//@ requires isValidMove(p, stone);
 	public void makeMove(Position p, Stone stone) {
 		makeMove(stone, possibleMoves.get(p));
 	}
 
-	// @ requires stones.size() == positions.size();
+	//@ requires stones.size() == positions.size();
 	public void makeMoves(List<Position> positions, List<Stone> stones) throws InvalidMoveException {
 		if (allStonesOneRow(positions)) {
 			int movesmade = 0;
@@ -132,8 +133,8 @@ public class Board {
 					}
 				}
 				if (!validmovefound) {
-					for (int i=0; i<movesmade; i++) {
-						backup.remove(backup.size() -1);
+					for (int i = 0; i < movesmade; i++) {
+						backup.remove(backup.size() - 1);
 					}
 					throw new InvalidMoveException();
 				}
@@ -142,39 +143,43 @@ public class Board {
 			throw new InvalidMoveException();
 		}
 	}
-    public boolean sameRow(List<Position> positions) {
-        boolean allX = true;
-        int x = positions.get(0).getX();
-        for (Position p : positions) {
-            if (p.getX() != x) {
-                allX = false;
-            }
-        }
-        return allX;
-    }
-    public boolean sameColumn(List<Position> positions) {
-        boolean allY = true;
-        int y = positions.get(0).getY();
-        for (Position p : positions) {
-            if (p.getY() != y) {
-                allY = false;
-            }
-        }
-        return allY;
-    }
-    public boolean allStonesOneRow(List<Position> positions) {
-        return sameRow(positions) || sameColumn(positions);
-    }
+
+	public boolean sameRow(List<Position> positions) {
+		boolean allX = true;
+		int x = positions.get(0).getX();
+		for (Position p : positions) {
+			if (p.getX() != x) {
+				allX = false;
+			}
+		}
+		return allX;
+	}
+
+	public boolean sameColumn(List<Position> positions) {
+		boolean allY = true;
+		int y = positions.get(0).getY();
+		for (Position p : positions) {
+			if (p.getY() != y) {
+				allY = false;
+			}
+		}
+		return allY;
+	}
+
+	public boolean allStonesOneRow(List<Position> positions) {
+		return sameRow(positions) || sameColumn(positions);
+	}
+
 	/**
 	 * Places the stone on the position of the possiblemove on the board
 	 * 
 	 * @param stone
 	 * @param place
 	 */
-	// @ requires possibleMoves.contains(place) && place.acceptable(stone));
+	//@ requires possibleMoves.contains(place) && place.acceptable(stone));
 	public void makeMove(Stone stone, PossibleMove place) {
-		System.out.println("stone: "+ stone);
-		System.out.println("place "+ place);
+		System.out.println("stone: " + stone);
+		System.out.println("place " + place);
 		stone = place.fill(stone);
 		stones.put(stone.getPosition(), stone);
 		possibleMoves.remove(place.getPosition());
