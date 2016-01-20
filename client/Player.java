@@ -13,6 +13,7 @@ public class Player {
 	private ClientGame game;
 	private Position position;
 	private Stone secondLastStone;
+	private List<Stone> backupStones;
 
 	/**
 	 * Create a player with specified name and game
@@ -34,10 +35,35 @@ public class Player {
 
 	}
 
+	/**
+	 * Get the position of the last stone that was placed by the humanplayer.
+	 * 
+	 * @return the position of the last stone.
+	 */
 	public Position getPosition() {
 		return position;
 	}
 
+	/**
+	 * Sets the stones from the backup back in the stones from the player.
+	 * Deletes all the stones from the backup so its empty again.
+	 */
+	public void setStonesFromBackup() {
+		for (int i = 0; i < backupStones.size(); i++) {
+			if (!stones.contains(backupStones.get(i))) {
+				stones.add(backupStones.get(i));
+			}
+			backupStones.remove(i);
+		}
+	}
+
+	/**
+	 * Checks if the player has a stone that can be placed on the specified
+	 * possiblemove.
+	 * 
+	 * @param p
+	 * @return true if the player has such a stone, otherwise false.
+	 */
 	public boolean isValidPossiblemove(PossibleMove p) {
 		for (int i = 0; i < stones.size(); i++) {
 			if (getGame().getBoard().isValidMove(p, stones.get(i))) {
@@ -129,6 +155,16 @@ public class Player {
 		return points;
 	}
 
+	/**
+	 * Checks if the possiblemove chosen by the humanplayer can be placed on the
+	 * specified board by all the rules.
+	 * 
+	 * @param choice
+	 * @param b
+	 * @param lastStone
+	 * @return the stone that the player will place or null if the player
+	 *         doesn't have a stone for that place.
+	 */
 	public Stone possibleMoveToStone(int choice, Board b, Stone lastStone) {
 		Map<Position, PossibleMove> moves = b.getPossibleMoves();
 		PossibleMove p = (PossibleMove) moves.values().toArray()[choice];
@@ -139,6 +175,7 @@ public class Player {
 					Stone stone = stones.get(i);
 					this.position = p.getPosition();
 					stones.remove(i);
+					backupStones.add(stone);
 					this.secondLastStone = stone;
 					return stone;
 				}
@@ -154,6 +191,7 @@ public class Player {
 						Stone stone = stones.get(i);
 						this.position = p.getPosition();
 						stones.remove(i);
+						backupStones.add(stone);
 						this.secondLastStone = lastStone;
 						return stone;
 					}
@@ -170,6 +208,7 @@ public class Player {
 						Stone stone = stones.get(i);
 						this.position = p.getPosition();
 						stones.remove(i);
+						backupStones.add(stone);
 						this.secondLastStone = lastStone;
 						return stone;
 					}

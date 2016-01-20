@@ -202,6 +202,7 @@ public class View {
 			if (choice != -1) {
 				Stone stone = client.getGame().getCurrentPlayer().possibleMoveToStone(choice, b, lastStone);
 				if (stone == null) {
+					client.getGame().getCurrentPlayer().setStonesFromBackup();
 					placeStones();
 					return;
 				}
