@@ -24,6 +24,7 @@ public class ServerGame extends Thread{
     private ServerPlayer currentplayer;
     private Lock lock;
     private Condition playerDone;
+    private ServerPlayer winner;
     /**
      * Creates a game with the given size
      *
@@ -50,17 +51,20 @@ public class ServerGame extends Thread{
                 }
             }
         }
+        bag = bag.subList(0,12);
+        System.out.println(bag.size());
     }
 
     @Override
     public void run() {
         lock.lock();
+        boolean movesLeft = true;
         running = true;
         System.out.println("game started with players: " + getPlayerNames());
         giveInitialStones();
         int currentplayernum = (int) Math.floor(Math.random() * playernum);
-        while (!hasWinner() && isRunning() && !this.isInterrupted())  {
-            currentplayer = players[currentplayernum];
+        currentplayer = players[currentplayernum];
+        while (!hasWinner() && isRunning() && !this.isInterrupted() && movesLeft)  {
             sendTurn();
             try {
                 playerDone.await();
@@ -68,9 +72,24 @@ public class ServerGame extends Thread{
                 running = false;
             }
             System.out.println("next player");
-            currentplayernum = (currentplayernum + 1) % playernum;
+            int loop = 0;
+            do {
+                currentplayernum = (currentplayernum + 1) % playernum;
+                currentplayer = players[currentplayernum];
+                loop++;
+            } while (bag.isEmpty() && !currentplayer.canPlay(board) && loop < playernum);
+            if (loop == playernum) {
+                movesLeft = false;
+            }
         }
         lock.unlock();
+        if (hasWinner() || !movesLeft) {
+            endgame();
+        }
+        else {
+            broadcast(Protocol.ERROR + Protocol.SPLIT + Protocol.errorcode.PLAYERDISCONNECTED.ordinal());
+        }
+        end();
     }
 
     public void giveInitialStones() {
@@ -94,8 +113,6 @@ public class ServerGame extends Thread{
     public void removePlayer(ServerPlayer player) {
         this.interrupt();
         running = false;
-        broadcast(Protocol.ERROR + Protocol.SPLIT + Protocol.errorcode.PLAYERDISCONNECTED.ordinal());
-        end();
     }
 
     public void end() {
@@ -105,7 +122,7 @@ public class ServerGame extends Thread{
         server.removeGame(this);
     }
     public Boolean hasWinner() {
-        return false;
+        return winner != null;
     }
 
     public ServerPlayer getCurrentPlayer() {
@@ -126,7 +143,7 @@ public class ServerGame extends Thread{
     private void sendTurn() {
         broadcast(Protocol.TURN + Protocol.SPLIT + currentplayer.getThisName());
     }
-
+    //@ requires !bag.isEmpty();
     private Stone takeStone() {
         Stone s = bag.get((int) Math.floor(Math.random() * bag.size()));
         bag.remove(s);
@@ -143,7 +160,6 @@ public class ServerGame extends Thread{
 
     public void endgame() {
         broadcast(Protocol.ENDGAME);
-        end();
     }
 
     public void broadcast(String msg) {
@@ -151,9 +167,10 @@ public class ServerGame extends Thread{
             p.sendMessage(msg);
         }
     }
-    public void placed(List<Stone> stones, List<Position> positions) {
+    public void placed(List<Stone> stones, List<Position> positions, int points) {
+        currentplayer.removeStones(stones);
         String message = Protocol.PLACED + Protocol.SPLIT + currentplayer.getThisName() + Protocol.SPLIT;
-        message += calculatePoints(stones, positions) + Protocol.SPLIT;
+        message += points + Protocol.SPLIT;
         for (int i=0; i<stones.size(); i++) {
             message += stones.get(i).toUsableString() + Protocol.SPLIT + positions.get(i).toUsableString();
         }
@@ -173,7 +190,13 @@ public class ServerGame extends Thread{
                 System.out.println("currentplayer placed stones");
                 System.out.println(board);
                 currentplayer.giveStones(takeSomeStones(stones.size()));
-                placed(stones, positions);
+                int points = calculatePoints(stones, positions);
+                currentplayer.addpoints(points);
+                placed(stones, positions, points);
+                if (currentplayer.getStones().isEmpty()) {
+                    winner = currentplayer;
+                    currentplayer.addpoints(6);
+                }
                 playerDone.signal();
             } catch (InvalidMoveException e) {
                 System.out.println("resetting board");
@@ -232,7 +255,7 @@ public class ServerGame extends Thread{
     }
 
     public void trade(List<Stone> stones) throws InvalidMoveException {
-        if (gotAllStones(stones) && bag.size() >= stones.size()) {
+        if (gotAllStones(stones) && bag.size() >= stones.size() && !board.getStones().isEmpty()) {
             lock.lock();
             List<Stone> newStones = new ArrayList<Stone>();
             currentplayer.giveStones(takeSomeStones(stones.size()));
@@ -246,6 +269,9 @@ public class ServerGame extends Thread{
     }
 
     public List<Stone> takeSomeStones(int num) {
+        if (num > bag.size()) {
+            num = bag.size();
+        }
         List<Stone> stonelist = new ArrayList<>();
         for (int i=0; i<num; i++) {
             stonelist.add(takeStone());

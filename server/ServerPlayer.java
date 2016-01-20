@@ -32,6 +32,10 @@ public class ServerPlayer extends Thread {
 
     }
 
+    public void addpoints(int points) {
+        this.points += points;
+    }
+
     @Override
     public void run() {
         String line = null;
@@ -66,7 +70,17 @@ public class ServerPlayer extends Thread {
             shutdown();
         }
     }
-
+    //@ requires inGame();
+    public boolean canPlay(Board board) {
+        for (Stone s : stones) {
+            for (PossibleMove p : board.getPossibleMoves().values()) {
+                if (p.acceptable(s)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
     public void register() throws IOException, InvalidCommandException {
         String line = in.readLine();
         String[] words = line.split(Protocol.SPLIT);
@@ -115,6 +129,11 @@ public class ServerPlayer extends Thread {
         }
     }
 
+    public void removeStones(List<Stone> stonelist) {
+        for (Stone s : stonelist) {
+            stones.remove(s);
+        }
+    }
 
     public void giveStones(List<Stone> stones) {
         this.stones.addAll(stones);
