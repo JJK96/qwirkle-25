@@ -22,6 +22,13 @@ public class View {
 		this.client = client;
 	}
 
+	/**
+	 * Asks the person who sets up the client if he wants to play himself or
+	 * want a computerplayer to play.
+	 * 
+	 * @return true if he wants a computerplayer, false if he wants to play as
+	 *         humanplayer himself.
+	 */
 	public boolean askHumanOrComputerPlayer() {
 		String prompt = Protocol.BORDER + "Do you want to play as human or shall a computerplayer play?"
 				+ "\n0 : HumanPlayer.\n1 : ComputerPlayer.";
@@ -37,6 +44,11 @@ public class View {
 		}
 	}
 
+	/**
+	 * Asks the person which strategy the computerplayer shall have.
+	 * 
+	 * @return the strategy chosen.
+	 */
 	public Strategy getStrategyFromInput() {
 		String prompt = Protocol.BORDER
 				+ "Which strategy shall the ComputerPlayer have?\n0 : BadStrategy.\n\nMore options will follow.";
@@ -51,6 +63,11 @@ public class View {
 		}
 	}
 
+	/**
+	 * Asks the person with how many players he wants to start a game.
+	 * 
+	 * @return the amount of players he wants to have in his game: 2, 3 or 4
+	 */
 	public int startGame() {
 		String prompt = Protocol.BORDER
 				+ "With how many players do you want to start a game?\nYou can choose: 2, 3 or 4.";
@@ -65,6 +82,11 @@ public class View {
 		}
 	}
 
+	/**
+	 * Asks the person who sets up the client how the client should be named.
+	 * 
+	 * @return the name the person types.
+	 */
 	public String getClientName() {
 		String prompt = "Specify your name:";
 		return readString(prompt);
@@ -239,7 +261,7 @@ public class View {
 	 * Asks the humanplayer for input of a number by showing the prompt.
 	 * 
 	 * @param prompt
-	 * @return
+	 * @return the number the player typed.
 	 */
 	public int readInt(String prompt) {
 		int value = 0;
@@ -258,6 +280,13 @@ public class View {
 		return value;
 	}
 
+	/**
+	 * Shows the specified prompt to the user and receives input back from the
+	 * user.
+	 * 
+	 * @param prompt
+	 * @return A string the user types.
+	 */
 	public String readString(String prompt) {
 		String input = "";
 		boolean stringRead = false;
@@ -276,6 +305,11 @@ public class View {
 
 	}
 
+	/**
+	 * Prints the message to the output.
+	 * 
+	 * @param message
+	 */
 	public void print(String message) {
 		System.out.println(message);
 	}
