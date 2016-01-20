@@ -257,7 +257,9 @@ public class Client extends Thread {
 	public void place(List<Stone> stones) {
 		String msg = Protocol.PLACE;
 		for (Stone s : stones) {
-			you.removeStone(s);
+			if (you.getStones().contains(s)) {
+				you.removeStone(s);
+			}
 			msg = msg + Protocol.SPLIT + s.toUsableString() + Protocol.SPLIT + s.getPosition().toUsableString();
 		}
 		sendMessage(msg);
@@ -266,7 +268,9 @@ public class Client extends Thread {
 	public void trade(List<Stone> stones) {
 		String msg = Protocol.TRADE;
 		for (Stone s : stones) {
-			you.removeStone(s);
+			if (you.getStones().contains(s)) {
+				you.removeStone(s);
+			}
 			msg = msg + Protocol.SPLIT + s.toUsableString();
 		}
 		sendMessage(msg);
