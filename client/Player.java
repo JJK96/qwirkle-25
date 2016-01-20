@@ -11,6 +11,8 @@ public class Player {
 	private int points;
 	private List<Stone> stones;
 	private ClientGame game;
+	private Position position;
+	private Stone secondLastStone;
 
 	/**
 	 * Create a player with specified name and game
@@ -30,6 +32,10 @@ public class Player {
 	 */
 	public void makeMove() {
 
+	}
+
+	public Position getPosition() {
+		return position;
 	}
 
 	public boolean isValidPossiblemove(PossibleMove p) {
@@ -123,14 +129,51 @@ public class Player {
 		return points;
 	}
 
-	public Stone possibleMoveToStone(int choice, Board b) {
+	public Stone possibleMoveToStone(int choice, Board b, Stone lastStone) {
 		Map<Position, PossibleMove> moves = b.getPossibleMoves();
 		PossibleMove p = (PossibleMove) moves.values().toArray()[choice];
-		for (int i = 0; i < stones.size(); i++) {
-			if (b.isValidMove(p.getPosition(), stones.get(i))) {
-				Stone stone = stones.get(i);
-				stones.remove(i);
-				return stone;
+		List<Position> PList = new ArrayList<Position>();
+		if (lastStone == null) {
+			for (int i = 0; i < stones.size(); i++) {
+				if (b.isValidMove(p.getPosition(), stones.get(i))) {
+					Stone stone = stones.get(i);
+					this.position = p.getPosition();
+					stones.remove(i);
+					this.secondLastStone = stone;
+					return stone;
+				}
+			}
+		} else if (secondLastStone.equals(lastStone)) {
+			Position pos = lastStone.getPosition();
+			PList.add(pos);
+			PList.add(p.getPosition());
+			PList.add(secondLastStone.getPosition());
+			if (b.allStonesOneRow(PList)) {
+				for (int i = 0; i < stones.size(); i++) {
+					if (b.isValidMove(p.getPosition(), stones.get(i))) {
+						Stone stone = stones.get(i);
+						this.position = p.getPosition();
+						stones.remove(i);
+						this.secondLastStone = lastStone;
+						return stone;
+					}
+				}
+			}
+		} else {
+			Position pos = lastStone.getPosition();
+			PList.add(pos);
+			PList.add(p.getPosition());
+			PList.add(secondLastStone.getPosition());
+			if (b.allStonesOneRow(PList)) {
+				for (int i = 0; i < stones.size(); i++) {
+					if (b.isValidMove(p.getPosition(), stones.get(i))) {
+						Stone stone = stones.get(i);
+						this.position = p.getPosition();
+						stones.remove(i);
+						this.secondLastStone = lastStone;
+						return stone;
+					}
+				}
 			}
 		}
 		return null;
