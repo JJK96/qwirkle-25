@@ -67,7 +67,6 @@ public class ServerGame extends Thread{
             } catch (InterruptedException e) {
                 running = false;
             }
-            System.out.println(isRunning());
             System.out.println("next player");
             currentplayernum = (currentplayernum + 1) % playernum;
         }
@@ -152,19 +151,106 @@ public class ServerGame extends Thread{
             p.sendMessage(msg);
         }
     }
+    public void placed(List<Stone> stones, List<Position> positions) {
+        String message = Protocol.PLACED + Protocol.SPLIT + currentplayer.getThisName() + Protocol.SPLIT;
+        message += calculatePoints(stones, positions) + Protocol.SPLIT;
+        for (int i=0; i<stones.size(); i++) {
+            message += stones.get(i).toUsableString() + Protocol.SPLIT + positions.get(i).toUsableString();
+        }
+        broadcast(message);
+    }
+
+    public void traded(List<Stone> stones) {
+        String message = Protocol.TRADED + Protocol.SPLIT + currentplayer.getThisName() + Protocol.SPLIT + stones.size();
+        broadcast(message);
+    }
     //@ requires stones.size() == positions.size();
     public void placeStones(List<Stone> stones, List<Position> positions) throws InvalidMoveException {
-        lock.lock();
-        try {
-            board.makeMoves(positions, stones);
-            System.out.println("currentplayer placed stones");
-            playerDone.signal();
-        } catch (InvalidMoveException e) {
-            board = board.deepCopy();
+        if (gotAllStones(stones)) {
+            lock.lock();
+            try {
+                board.makeMoves(positions, stones);
+                System.out.println("currentplayer placed stones");
+                System.out.println(board);
+                currentplayer.giveStones(takeSomeStones(stones.size()));
+                placed(stones, positions);
+                playerDone.signal();
+            } catch (InvalidMoveException e) {
+                System.out.println("resetting board");
+                board = board.deepCopy();
+                throw new InvalidMoveException();
+            } finally {
+                lock.unlock();
+            }
+        } else {
             throw new InvalidMoveException();
         }
-        finally {
+    }
+    public int calculatePoints(List<Stone> stonelist, List<Position> positionlist) {
+        int points =0;
+        if (board.sameRow(positionlist)) {
+            int rowsize = stonelist.get(0).getRow().size();
+            if (rowsize == Stone.Color.values().length) {
+                points += 2*rowsize;
+            }
+            else if (rowsize > 1) {
+                points += rowsize;
+            }
+            for (Stone s : stonelist) {
+                int columnsize = s.getColumn().size();
+                if (columnsize == Stone.Color.values().length) {
+                    points += 2*columnsize;
+                }
+                else if (columnsize > 1) {
+                    points += columnsize;
+                }
+            }
+        }
+        else if (board.sameColumn(positionlist)) {
+            int columnsize = stonelist.get(0).getColumn().size();
+            if (columnsize == Stone.Color.values().length) {
+                points += 2*columnsize;
+            }
+            else if (columnsize > 1) {
+                points += columnsize;
+            }
+            for (Stone s: stonelist) {
+                int rowsize = s.getRow().size();
+                if (rowsize == Stone.Color.values().length) {
+                    points += 2*rowsize;
+                }
+                else if (rowsize > 1) {
+                    points += rowsize;
+                }
+            }
+        }
+        return points;
+    }
+
+    public boolean gotAllStones(List<Stone> stonelist) {
+        return currentplayer.getStones().containsAll(stonelist);
+    }
+
+    public void trade(List<Stone> stones) throws InvalidMoveException {
+        if (gotAllStones(stones) && bag.size() >= stones.size()) {
+            lock.lock();
+            List<Stone> newStones = new ArrayList<Stone>();
+            currentplayer.giveStones(takeSomeStones(stones.size()));
+            bag.addAll(stones);
+            playerDone.signal();
             lock.unlock();
         }
+        else {
+            throw new InvalidMoveException();
+        }
     }
+
+    public List<Stone> takeSomeStones(int num) {
+        List<Stone> stonelist = new ArrayList<>();
+        for (int i=0; i<num; i++) {
+            stonelist.add(takeStone());
+        }
+        return stonelist;
+    }
+
 }
