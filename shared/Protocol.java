@@ -45,15 +45,12 @@ public class Protocol {
 	 * @param inputArray
 	 * @return
 	 */
-	public static List<Stone> StringToStonelist(String[] inputArray) {
+	//@ requires inputArray.length >= 2;
+	public static List<Stone> StringToStonelist(String[] inputArray) throws InvalidStoneException {
 		List<Stone> stones = new ArrayList<Stone>();
 		for (int i = 1; i < inputArray.length; i++) {
-			try {
-				Stone stone = intsToStone(inputArray[i]);
-				stones.add(stone);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+            Stone stone = intsToStone(inputArray[i]);
+            stones.add(stone);
 		}
 		return stones;
 	}
@@ -114,7 +111,7 @@ public class Protocol {
 
 	public static List<Position> StringToPlacedPositionlist(String[] inputArray) throws InvalidCommandException {
 		List<Position> positions = new ArrayList<Position>();
-		for (int i = 2; i < inputArray.length; i++) {
+		for (int i = 2; i < inputArray.length; i += 2) {
 			String[] xy = inputArray[i].split(",");
 			try {
 				int x = Integer.parseInt(xy[0]);

@@ -39,7 +39,12 @@ public class ServerPlayer extends Thread {
             while ((line = in.readLine()) != null) {
                 String[] words = line.split(Protocol.SPLIT);
                 if (words[0].equals(Protocol.JOINAANTAL)) {
-                    server.joinGame(this, Integer.parseInt(words[1]));
+                    if (words.length >= 2) {
+                        int number = Integer.parseInt(words[1]);
+                        if (number >= 2 && number <= 4) {
+                            server.joinGame(this, number);
+                        }
+                    }
                 }
                 else if (words[0].equals(Protocol.WHICHPLAYERS)) {
                     sendPlayers();
@@ -48,6 +53,10 @@ public class ServerPlayer extends Thread {
                     if (words[0].equals(Protocol.PLACE)) {
                         if (game.getCurrentPlayer().equals(this)) {
                             place(words);
+                        }
+                    } else if (words[0].equals(Protocol.TRADE)) {
+                        if (game.getCurrentPlayer().equals(this)) {
+                            trade(words);
                         }
                     }
                 }
@@ -72,6 +81,21 @@ public class ServerPlayer extends Thread {
         else throw new InvalidCommandException(line);
 
     }
+    public void trade(String[] inputArray) {
+        if (inputArray.length >= 2) {
+            try {
+                List<Stone> stones = Protocol.StringToStonelist(inputArray);
+                game.trade(stones);
+            } catch (InvalidStoneException e) {
+                error(Protocol.errorcode.WRONGTURN);
+            } catch (InvalidMoveException e) {
+                error(Protocol.errorcode.WRONGTURN);
+            }
+        }
+        else {
+            error(Protocol.errorcode.WRONGCOMMAND);
+        }
+    }
     public void place(String[] inputArray) {
         if (inputArray.length >= 3 && inputArray.length % 2 == 1) {
             List<Stone> stones;
@@ -79,12 +103,7 @@ public class ServerPlayer extends Thread {
             try {
                 stones = Protocol.StringToPlacedStonelist(inputArray);
                 positions = Protocol.StringToPlacedPositionlist(inputArray);
-                if (gotAllStones(stones) && allStonesOneRow(positions)) {
-                    game.placeStones(stones, positions);
-                }
-                else {
-                    throw new InvalidMoveException();
-                }
+                game.placeStones(stones, positions);
             } catch (InvalidCommandException e) {
                 error(Protocol.errorcode.WRONGCOMMAND);
             } catch (InvalidMoveException e) {
@@ -96,25 +115,7 @@ public class ServerPlayer extends Thread {
         }
     }
 
-    public boolean gotAllStones(List<Stone> stonelist) {
-        return this.stones.containsAll(stonelist);
-    }
 
-    public boolean allStonesOneRow(List<Position> positions) {
-        boolean allX = true;
-        boolean allY = true;
-        int x = positions.get(0).getX();
-        int y = positions.get(0).getY();
-        for (Position p : positions) {
-            if (p.getX() != x) {
-                allX = false;
-            }
-            if (p.getY() != y) {
-                allY = false;
-            }
-        }
-        return allX || allY;
-    }
     public void giveStones(List<Stone> stones) {
         this.stones.addAll(stones);
         String stoneString = "";

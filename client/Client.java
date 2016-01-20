@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import shared.InvalidCommandException;
+import shared.InvalidStoneException;
 import shared.Protocol;
 import shared.Stone;
 
@@ -154,7 +155,7 @@ public class Client extends Thread {
 				try {
 					stones = Protocol.StringToPlacedStonelist(inputArray);
 				} catch (InvalidCommandException e) {
-					e.printStackTrace();
+					System.out.println("server is broken stones command invalid");
 				}
 				int[] x = Protocol.convertPlacedX(inputArray);
 				int[] y = Protocol.convertPlacedY(inputArray);
@@ -162,7 +163,12 @@ public class Client extends Thread {
 					game.getBoard().makeMove(x[i], y[i], stones.get(i));
 				}
 			} else if (inputArray[0].equals(Protocol.NEWSTONES)) {
-				List<Stone> stones = Protocol.StringToStonelist(inputArray);
+				List<Stone> stones = null;
+				try {
+					stones = Protocol.StringToStonelist(inputArray);
+				} catch (InvalidStoneException e) {
+
+				}
 				you.takeStones(stones);
 			} else if (inputArray[0].equals(Protocol.TRADED)) {
 				view.print("Speler " + inputArray[1] + " " + inputArray[0] + " " + inputArray[2] + " stones.");

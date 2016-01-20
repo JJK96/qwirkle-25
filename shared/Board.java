@@ -6,6 +6,7 @@ public class Board {
 
 	private Map<Position, Stone> stones;
 	private Map<Position, PossibleMove> possibleMoves;
+	private List<Stone> lastmove;
 	private List<Stone> backup;
 
 	/**
@@ -22,6 +23,7 @@ public class Board {
 		stones = new HashMap<Position, Stone>();
 		possibleMoves = new HashMap<Position, PossibleMove>();
 		backup = new ArrayList<Stone>();
+		lastmove = new ArrayList<Stone>();
 		PossibleMove init = new PossibleMove(new Position(0, 0));
 		possibleMoves.put(init.getPosition(), init);
 	}
@@ -65,7 +67,6 @@ public class Board {
 	 * @return a copy of the board ??
 	 */
 	public Board deepCopy() {
-		System.out.println(backup);
 		Board b = new Board();
 		for (Stone s : backup) {
 			Stone newS = new Stone(s.getShape(), s.getColor());
@@ -119,25 +120,53 @@ public class Board {
 
 	// @ requires stones.size() == positions.size();
 	public void makeMoves(List<Position> positions, List<Stone> stones) throws InvalidMoveException {
-		int movesmade = 0;
-		while (movesmade < positions.size()) {
-			boolean validmovefound = false;
-			for (int j = 0; j < positions.size(); j++) {
-				Position p = positions.get(j);
-				Stone s = stones.get(j);
-				if (isValidMove(p, s)) {
-					makeMove(p, s);
-					movesmade += 1;
-					validmovefound = true;
+		System.out.println(positions);
+		System.out.println(stones);
+		if (allStonesOneRow(positions)) {
+			int movesmade = 0;
+			while (movesmade < positions.size()) {
+				boolean validmovefound = false;
+				for (int j = 0; j < positions.size(); j++) {
+					Position p = positions.get(j);
+					Stone s = stones.get(j);
+					if (isValidMove(p, s)) {
+						makeMove(p, s);
+						movesmade += 1;
+						validmovefound = true;
+					}
+				}
+				if (!validmovefound) {
+					backup.removeAll(stones);
+					throw new InvalidMoveException();
 				}
 			}
-			if (!validmovefound) {
-				backup.removeAll(stones);
-				throw new InvalidMoveException();
-			}
+		} else {
+			throw new InvalidMoveException();
 		}
 	}
-
+    public boolean sameRow(List<Position> positions) {
+        boolean allX = true;
+        int x = positions.get(0).getX();
+        for (Position p : positions) {
+            if (p.getX() != x) {
+                allX = false;
+            }
+        }
+        return allX;
+    }
+    public boolean sameColumn(List<Position> positions) {
+        boolean allY = true;
+        int y = positions.get(0).getY();
+        for (Position p : positions) {
+            if (p.getY() != y) {
+                allY = false;
+            }
+        }
+        return allY;
+    }
+    public boolean allStonesOneRow(List<Position> positions) {
+        return sameRow(positions) || sameColumn(positions);
+    }
 	/**
 	 * Places the stone on the position of the possiblemove on the board
 	 * 
@@ -160,6 +189,7 @@ public class Board {
 		addPossibleMove(pos.right());
 		addPossibleMove(pos.left());
 		backup.add(stone);
+		lastmove.add(stone);
 	}
 
 	/**
