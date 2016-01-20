@@ -65,7 +65,6 @@ public class Board {
 	 * @return a copy of the board ??
 	 */
 	public Board deepCopy() {
-		System.out.println(backup);
 		Board b = new Board();
 		for (Stone s : backup) {
 			Stone newS = new Stone(s.getShape(), s.getColor());
@@ -105,16 +104,16 @@ public class Board {
 	 * @param y
 	 * @param stone
 	 */
-	//@ requires isValidMove(x,y,stone);
+	// @ requires isValidMove(x,y,stone);
 	public void makeMove(int x, int y, Stone stone) {
 		if (isValidMove(x, y, stone)) {
 			makeMove(stone, possibleMoves.get(new Position(x, y)));
 		}
 	}
 
-	//@ requires isValidMove(p, stone);
+	// @ requires isValidMove(p, stone);
 	public void makeMove(Position p, Stone stone) {
-        makeMove(stone, possibleMoves.get(p));
+		makeMove(stone, possibleMoves.get(p));
 	}
 
 	// @ requires stones.size() == positions.size();
