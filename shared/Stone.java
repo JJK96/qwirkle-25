@@ -68,4 +68,9 @@ public class Stone extends Space {
 	public String toUsableString() {
 		return shape.ordinal() + "," + color.ordinal();
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return (((Stone) obj).getColor() == this.getColor()) && (((Stone) obj).getShape() == this.getShape());
+	}
 }

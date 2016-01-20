@@ -49,9 +49,6 @@ public class ServerPlayer extends Thread {
                         if (game.getCurrentPlayer().equals(this)) {
                             place(words);
                         }
-                        else {
-                            error(Protocol.errorcode.WRONGTURN);
-                        }
                     }
                 }
             }
@@ -82,7 +79,12 @@ public class ServerPlayer extends Thread {
             try {
                 stones = Protocol.StringToPlacedStonelist(inputArray);
                 positions = Protocol.StringToPlacedPositionlist(inputArray);
-                game.placeStones(stones, positions);
+                if (gotAllStones(stones) && allStonesOneRow(positions)) {
+                    game.placeStones(stones, positions);
+                }
+                else {
+                    throw new InvalidMoveException();
+                }
             } catch (InvalidCommandException e) {
                 error(Protocol.errorcode.WRONGCOMMAND);
             } catch (InvalidMoveException e) {
@@ -94,7 +96,27 @@ public class ServerPlayer extends Thread {
         }
     }
 
+    public boolean gotAllStones(List<Stone> stonelist) {
+        return this.stones.containsAll(stonelist);
+    }
+
+    public boolean allStonesOneRow(List<Position> positions) {
+        boolean allX = true;
+        boolean allY = true;
+        int x = positions.get(0).getX();
+        int y = positions.get(0).getY();
+        for (Position p : positions) {
+            if (p.getX() != x) {
+                allX = false;
+            }
+            if (p.getY() != y) {
+                allY = false;
+            }
+        }
+        return allX || allY;
+    }
     public void giveStones(List<Stone> stones) {
+        this.stones.addAll(stones);
         String stoneString = "";
         for (Stone s : stones) {
             stoneString += s.toUsableString() + Protocol.SPLIT;
@@ -111,7 +133,7 @@ public class ServerPlayer extends Thread {
             out.newLine();
             out.flush();
         } catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 
