@@ -184,9 +184,18 @@ public class Client extends Thread {
 					}
 				}
 			} else if (inputArray[0].equals(Protocol.PLAYERS)) {
-				view.print("These players are online:\n" + inputArray.toString());
+				if (inputArray.length >= 2) {
+					String message = "These players are online:\n";
+					for (int i=1; i<inputArray.length;i++) {
+						message += inputArray[i];
+					}
+					view.print(message);
+				}
 			} else if (inputArray[0].equals(Protocol.JOINLOBBY)) {
-				view.print(inputArray.toString());
+				if (inputArray.length >= 2) {
+					String message = "Player " + inputArray[1] + " joined the room";
+					view.print(message);
+				}
 			} else if (inputArray[0].equals(Protocol.START)) {
 				String[] players = new String[inputArray.length - 1];
 				if (players.length == aantal) {
