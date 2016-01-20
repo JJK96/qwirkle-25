@@ -6,7 +6,6 @@ public class Board {
 
 	private Map<Position, Stone> stones;
 	private Map<Position, PossibleMove> possibleMoves;
-	private List<Stone> lastmove;
 	private List<Stone> backup;
 
 	/**
@@ -23,7 +22,6 @@ public class Board {
 		stones = new HashMap<Position, Stone>();
 		possibleMoves = new HashMap<Position, PossibleMove>();
 		backup = new ArrayList<Stone>();
-		lastmove = new ArrayList<Stone>();
 		PossibleMove init = new PossibleMove(new Position(0, 0));
 		possibleMoves.put(init.getPosition(), init);
 	}
@@ -120,8 +118,6 @@ public class Board {
 
 	// @ requires stones.size() == positions.size();
 	public void makeMoves(List<Position> positions, List<Stone> stones) throws InvalidMoveException {
-		System.out.println(positions);
-		System.out.println(stones);
 		if (allStonesOneRow(positions)) {
 			int movesmade = 0;
 			while (movesmade < positions.size()) {
@@ -136,7 +132,9 @@ public class Board {
 					}
 				}
 				if (!validmovefound) {
-					backup.removeAll(stones);
+					for (int i=0; i<movesmade; i++) {
+						backup.remove(backup.size() -1);
+					}
 					throw new InvalidMoveException();
 				}
 			}
@@ -175,6 +173,8 @@ public class Board {
 	 */
 	// @ requires possibleMoves.contains(place) && place.acceptable(stone));
 	public void makeMove(Stone stone, PossibleMove place) {
+		System.out.println("stone: "+ stone);
+		System.out.println("place "+ place);
 		stone = place.fill(stone);
 		stones.put(stone.getPosition(), stone);
 		possibleMoves.remove(place.getPosition());
@@ -189,7 +189,6 @@ public class Board {
 		addPossibleMove(pos.right());
 		addPossibleMove(pos.left());
 		backup.add(stone);
-		lastmove.add(stone);
 	}
 
 	/**
