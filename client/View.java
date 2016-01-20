@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 import shared.Protocol;
 import shared.Stone;
+import shared.Board;
 
 public class View {
 
@@ -74,13 +75,15 @@ public class View {
 	 */
 	public void determineMove() {
 		String prompt = Protocol.BORDER + client.getGame().getPossibleMoves().toString()
+				+ "\nIf you choose one of these places you will go to the place view, where you can place stones"
+				+ "\nThe number doesn't matter now you can choose your first stone later"
 				+ "\n-1 : Swap stones\n-> What is your choice?\n\nThese are your stones:\n"
 				+ client.getGame().getCurrentPlayer().stonesToString();
-		int choice = intOutPromptMinus1TillPossibleMovesRange(prompt);
+		int choice = intOutPromptMinus1TillPossibleMovesRange(prompt, client.getGame().getBoard());
 		if (choice == -1) {
 			swapStones();
 		} else
-			placeStones(choice);
+			placeStones();
 	}
 
 	/**
@@ -90,13 +93,13 @@ public class View {
 	 * @param prompt
 	 * @return A valid integer
 	 */
-	private int intOutPromptMinus1TillPossibleMovesRange(String prompt) {
+	private int intOutPromptMinus1TillPossibleMovesRange(String prompt, Board b) {
 		int choice = readInt(prompt);
-		boolean valid = client.getGame().isValidInt(choice);
+		boolean valid = client.getGame().isValidInt(choice, b);
 		while (!valid) {
 			System.out.println("ERROR: number " + choice + " is no valid choice.");
 			choice = readInt(prompt);
-			valid = client.getGame().isValidInt(choice);
+			valid = client.getGame().isValidInt(choice, b);
 		}
 		return choice;
 	}
@@ -114,7 +117,7 @@ public class View {
 		while (!valid) {
 			System.out.println("ERROR: number " + choice + " is no valid choice.");
 			choice = readInt(prompt);
-			valid = client.getGame().isValidInt(choice);
+			valid = client.getGame().isValidIntStonesRange(choice);
 		}
 		return choice;
 	}
@@ -132,7 +135,7 @@ public class View {
 		while (!valid) {
 			System.out.println("ERROR: number " + choice + " is no valid choice.");
 			choice = readInt(prompt);
-			valid = client.getGame().isValidInt(choice);
+			valid = client.getGame().isValidIntStonesRangeFrom0(choice);
 		}
 		return choice;
 	}
@@ -178,9 +181,49 @@ public class View {
 	 * 
 	 * @param firstChoice
 	 */
-	private void placeStones(int firstChoice) {
+	private void placeStones() {
+		Board b = client.getGame().getBoard().deepCopy();
+		List<Stone> stones = new ArrayList<Stone>();
+		int choice;
+		for (int i = 0; i < 7; i++) {
+			String prompt = Protocol.BORDER + b.getPossibleMoves().toString()
+					+ "\nThis is the board with all you can choose." + "\nThese are your stones:\n"
+					+ client.getGame().getCurrentPlayer().stonesToString() + "\nCHOOSE CAREFULL:\n"
+					+ "If you choose a possiblemove and you can't place 1 of your stones there you "
+					+ "have to start over with placing stones!!";
+			if (stones.size() > 0) {
+				prompt += "\nIf you want to end your turn choose -1.";
+				choice = intOutPromptMinus1TillPossibleMovesRange(prompt, b);
+			} else {
+				choice = intOutPromptPossibleMovesRange(prompt);
+			}
+			if (choice != -1) {
+				Stone stone = client.getGame().getCurrentPlayer().possibleMoveToStone(choice, b);
+				if (stone == null) {
+					placeStones();
+					return;
+				}
 
-		// String prompt =
+			}
+		}
+	}
+
+	/**
+	 * Checks if the given input is in the range of 0 till the amount of
+	 * possiblemoves.
+	 * 
+	 * @param prompt
+	 * @return A valid integer
+	 */
+	private int intOutPromptPossibleMovesRange(String prompt) {
+		int choice = readInt(prompt);
+		boolean valid = client.getGame().isValidIntNotMinusOne(choice);
+		while (!valid) {
+			System.out.println("ERROR: number " + choice + " is no valid choice.");
+			choice = readInt(prompt);
+			valid = client.getGame().isValidIntNotMinusOne(choice);
+		}
+		return choice;
 	}
 
 	/**

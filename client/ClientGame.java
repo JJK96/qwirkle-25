@@ -1,12 +1,10 @@
 package client;
 
 import shared.*;
-import java.util.List;
 import java.util.Map;
 
 public class ClientGame {
 
-	private List<Stone> bag;
 	private Player[] players;
 	private Player currentPlayer;
 	private Board board;
@@ -52,15 +50,6 @@ public class ClientGame {
 	}
 
 	/**
-	 * Get all the stones in the bag
-	 * 
-	 * @return List off stones in the bag
-	 */
-	public List<Stone> stones() {
-		return bag;
-	}
-
-	/**
 	 * Get the board which is currently used
 	 * 
 	 * @return board
@@ -78,8 +67,12 @@ public class ClientGame {
 	 * 
 	 * @return true if choice is valid, false otherwise
 	 */
-	public boolean isValidInt(int choice) {
-		return (choice < getPossibleMoves().size() && choice >= -1);
+	public boolean isValidInt(int choice, Board b) {
+		return (choice < b.getPossibleMoves().size() && choice >= -1);
+	}
+
+	public boolean isValidIntNotMinusOne(int choice) {
+		return (choice < getPossibleMoves().size() && choice >= 0);
 	}
 
 	public boolean isValidIntStonesRange(int choice) {
