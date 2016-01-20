@@ -3,6 +3,7 @@ package client;
 import java.util.ArrayList;
 import shared.*;
 import java.util.List;
+import java.util.Map;
 
 public class Player {
 
@@ -120,5 +121,18 @@ public class Player {
 	 */
 	public int getPoints() {
 		return points;
+	}
+
+	public Stone possibleMoveToStone(int choice, Board b) {
+		Map<Position, PossibleMove> moves = b.getPossibleMoves();
+		PossibleMove p = (PossibleMove) moves.values().toArray()[choice];
+		for (int i = 0; i < stones.size(); i++) {
+			if (b.isValidMove(p.getPosition(), stones.get(i))) {
+				Stone stone = stones.get(i);
+				stones.remove(i);
+				return stone;
+			}
+		}
+		return null;
 	}
 }
