@@ -7,6 +7,7 @@ import java.util.Scanner;
 import shared.Protocol;
 import shared.Stone;
 import shared.Board;
+import shared.Position;
 
 public class View {
 
@@ -184,6 +185,7 @@ public class View {
 	private void placeStones() {
 		Board b = client.getGame().getBoard().deepCopy();
 		List<Stone> stones = new ArrayList<Stone>();
+		Stone lastStone = null;
 		int choice;
 		for (int i = 0; i < 7; i++) {
 			String prompt = Protocol.BORDER + b.getPossibleMoves().toString()
@@ -198,14 +200,20 @@ public class View {
 				choice = intOutPromptPossibleMovesRange(prompt);
 			}
 			if (choice != -1) {
-				Stone stone = client.getGame().getCurrentPlayer().possibleMoveToStone(choice, b);
+				Stone stone = client.getGame().getCurrentPlayer().possibleMoveToStone(choice, b, lastStone);
 				if (stone == null) {
 					placeStones();
 					return;
 				}
-
+				Position pos = client.getGame().getCurrentPlayer().getPosition();
+				b.makeMove(pos, stone);
+				lastStone = b.getStones().get(pos);
+				stones.add(stone);
+			} else {
+				client.place(stones);
 			}
 		}
+		client.place(stones);
 	}
 
 	/**
