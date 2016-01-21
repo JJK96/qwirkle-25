@@ -6,7 +6,7 @@ import java.util.*;
 
 import shared.*;
 
-public class View implements Observer{
+public class View implements Observer {
 
 	private Client client;
 

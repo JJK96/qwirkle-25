@@ -115,6 +115,7 @@ public class ClientGame extends Observable {
 			throw e;
 		}
 		bag -= positions.size();
+		setChanged();
 		notifyObservers();
 	}
 
