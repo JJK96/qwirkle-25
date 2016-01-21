@@ -2,13 +2,11 @@ package client;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 import shared.*;
 
-public class View {
+public class View implements Observer{
 
 	private Client client;
 
@@ -334,5 +332,15 @@ public class View {
 	 */
 	public void print(String message) {
 		System.out.println(message);
+	}
+
+	@Override
+	public void update(Observable observable, Object o) {
+		if (observable instanceof HumanPlayer) {
+			determineMove();
+		}
+		else if (observable instanceof ClientGame) {
+			print(((ClientGame) observable).getBoard().toString());
+		}
 	}
 }

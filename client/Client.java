@@ -126,7 +126,7 @@ public class Client extends Thread {
 			while ((input = readString()) != null) {
 				String[] inputArray = input.split(Protocol.SPLIT);
 				if (inputArray[0].equals(Protocol.ENDGAME)) {
-					// implement
+					endgame();
 				} else if (inputArray[0].equals(Protocol.ERROR)) {
 					if (inputArray.length == 1) {
 						System.out.println("error");
@@ -143,7 +143,11 @@ public class Client extends Thread {
 						view.print("Speler heeft functie niet: 4");
 					}
 				} else if (inputArray[0].equals(Protocol.PLACED)) {
-					placed(inputArray);
+					String[] newArray = new String[inputArray.length -2];
+					for (int i=2; i<inputArray.length;i++) {
+						newArray[i-2] = inputArray[i];
+					}
+					placed(newArray);
 				} else if (inputArray[0].equals(Protocol.NEWSTONES)) {
 					List<Stone> stones = null;
 					try {
@@ -155,7 +159,7 @@ public class Client extends Thread {
 						throw new InvalidCommandException();
 					}
 				} else if (inputArray[0].equals(Protocol.TRADED)) {
-					view.print("Speler " + inputArray[1] + " " + inputArray[0] + " " + inputArray[2] + " stones.");
+					view.print("Speler " + inputArray[1] + " traded " + inputArray[2] + " stones.");
 				} else if (inputArray[0].equals(Protocol.TURN)) {
 					if (inputArray.length == 2) {
 						turn(inputArray);
@@ -185,6 +189,22 @@ public class Client extends Thread {
 		}
 		shutdown();
 	}
+	public void endgame() {
+		String message = "Game ended, player " + game.getWinner() + " has won.\n" +
+				"with " + game.getWinner().getPoints() + " points.";
+		view.print(message);
+		playagain();
+	}
+	public void playagain() {
+		String playagain = view.readString("Do you want to play another game? y/n: ");
+		if (playagain.equals("y")) {
+			init();
+		}
+		else {
+			shutdown();
+		}
+
+	}
 
 	public void placed(String[] inputArray) throws InvalidCommandException {
 		List<Stone> stones = Protocol.stringToPlacedStoneList(inputArray);
@@ -195,12 +215,15 @@ public class Client extends Thread {
 			throw new InvalidCommandException();
 		}
 	}
+
 	//@ requires inputArray.length == 2;
 	public void turn(String[] inputArray) throws InvalidCommandException{
         game.setCurrentPlayer(inputArray[1]);
         if (inputArray[1].equals(clientName)) {
             you.makeMove();
-        }
+        } else {
+			view.print("waiting for player: " + inputArray[1] + " to make a move");
+		}
 	}
 	public void initGame(String[] inputArray) {
 		String[] players = new String[inputArray.length - 1];

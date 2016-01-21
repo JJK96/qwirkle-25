@@ -4,13 +4,15 @@ import shared.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Observable;
 
-public class ClientGame {
+public class ClientGame extends Observable {
 
 	private Player[] players;
 	private Player currentPlayer;
 	private Board board;
 	private Client client;
+	private Player winner;
 	private int bag;
 
 	/**
@@ -30,6 +32,7 @@ public class ClientGame {
 					p = new ComputerPlayer(names[i], this, client.getStrategy());
 				} else {
 					p = new HumanPlayer(names[i], this);
+					p.addObserver(client.getView());
 				}
 				players[i] = p;
 				client.setYou(p);
@@ -112,6 +115,7 @@ public class ClientGame {
 			throw e;
 		}
 		bag -= positions.size();
+		notifyObservers();
 	}
 
 	public void removeFromBag(int num) throws InvalidMoveException {
@@ -136,4 +140,7 @@ public class ClientGame {
 		}
 	}
 
+	public Player getWinner() {
+		return winner;
+	}
 }

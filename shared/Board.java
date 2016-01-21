@@ -120,7 +120,7 @@ public class Board {
 	/**
 	 * makes the given moves on the board, if an invalid move is found, the board should be replaced by it's deepcopy.
 	 * @param positions
-	 * @param stones
+	 * @param
 	 * @throws InvalidMoveException
      */
 	//@ requires stones.size() == positions.size();
@@ -186,9 +186,7 @@ public class Board {
 	//@ requires possibleMoves.contains(place) && place.acceptable(stone));
 	public void makeMove(Stone stone, PossibleMove place) {
 		Stone stoneToMove = stone;
-		System.out.println("stone: " + stone);
-		System.out.println("place " + place);
-		stoneToMove = place.fill(stone); 
+		stoneToMove = place.fill(stone);
 		stones.put(stoneToMove.getPosition(), stoneToMove);
 		possibleMoves.remove(place.getPosition());
 		for (Position p : possibleMoves.keySet()) {
@@ -271,7 +269,12 @@ public class Board {
 	 */
 	public String toString() {
 		int[] boundaries = getBoundaries();
-		String res = "";
+		String res = "   ";
+		for (int k = boundaries[0]; k <= boundaries[2]; k++) {
+			res += "  " + k + "  ";
+		}
+		res += "\n" + boundaries[1];
+		res += (boundaries[1] <0) ? " " : "  ";
 		for (int i = boundaries[1]; i <= boundaries[3]; i++) {
 			for (int j = boundaries[0]; j <= boundaries[2]; j++) {
 				Stone s = null;
@@ -281,7 +284,9 @@ public class Board {
 					res += "     ";
 				}
 			}
-			res += "\n";
+			int nextnumber = i+1;
+			res += "\n" + nextnumber;
+			res += (nextnumber <0) ? " " : "  ";
 		}
 		res += "\nPossible moves: ";
 		Object[] possibleMovesArray = possibleMoves.values().toArray();

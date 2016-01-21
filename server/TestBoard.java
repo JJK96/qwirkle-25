@@ -15,7 +15,5 @@ public class TestBoard {
 		b.makeMove(2, 0, new Stone(Stone.Shape.o, Stone.Color.Y));
 		b.makeMove(0, -1, new Stone(Stone.Shape.v, Stone.Color.R));
 		System.out.println(b);
-		Board c = b.deepCopy();
-		System.out.println(c);
 	}
 }

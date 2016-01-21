@@ -33,28 +33,25 @@ public class Protocol {
 	public static final String NEWCHALLENGE = "newchallenge";
 	public static final String ACCEPT = "accept";
 	public static final String DECLINE = "decline";
-	public static final String BORDER = "\n\n=================================================================\n\n";
+	public static final String BORDER = "\n\n===================================="
+					+ "=============================\n\n";
 
-	public enum errorcode {
+	public enum ErrorCode {
 		WRONGCOMMAND, WRONGTURN, INVALIDNAME, PLAYERDISCONNECTED, MISSINGOPTION
 	}
 
 	/**
-	 * converts the received newstones command to a list of stones
+	 * converts the received newstones command to a list of stones.
 	 * 
 	 * @param inputArray
 	 * @return
 	 */
-	//@ requires inputArray.length >= 2
-	public static List<Stone> StringToStonelist(String[] inputArray) {
+	//@ requires inputArray.length >= 2;
+	public static List<Stone> stringToStoneList(String[] inputArray) throws InvalidStoneException {
 		List<Stone> stones = new ArrayList<Stone>();
 		for (int i = 1; i < inputArray.length; i++) {
-			try {
-				Stone stone = intsToStone(inputArray[i]);
-				stones.add(stone);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			Stone stone = intsToStone(inputArray[i]);
+			stones.add(stone);
 		}
 		return stones;
 	}
@@ -70,14 +67,16 @@ public class Protocol {
 		String[] array = input.split(",");
 		int shape = Integer.parseInt(array[0]);
 		int color = Integer.parseInt(array[1]);
-		if (shape >= 0 && shape <= Stone.Shape.values().length && color >= 0 && color <= Stone.Color.values().length) {
+		if (shape >= 0 && shape <= Stone.Shape.values().length && color >= 0 
+							&& color <= Stone.Color.values().length) {
 			Shape[] shapes = Shape.values();
 			Color[] colors = Color.values();
 			Stone stone = new Stone(shapes[shape], colors[color]);
 			return stone;
 
-		} else
+		} else {
 			throw new InvalidStoneException(input);
+		}
 	}
 
 	/**
@@ -88,10 +87,11 @@ public class Protocol {
 	 * @return
 	 */
 	/*
-	 * @ requires inputArray.length >= 3 && inputArray.length % 2 == 1; ensures
+	 *@ requires inputArray.length >= 3 && inputArray.length % 2 == 1; ensures
 	 * \result.size() == (inputArray.length -1) / 2;
 	 */
-	public static List<Stone> StringToPlacedStonelist(String[] inputArray) throws InvalidCommandException {
+	public static List<Stone> stringToPlacedStoneList(String[] inputArray) 
+			throws InvalidCommandException {
 		List<Stone> stones = new ArrayList<Stone>();
 		for (int i = 1; i < inputArray.length - 1; i += 2) {
 			try {
@@ -109,11 +109,11 @@ public class Protocol {
 	 * list of all positions where the stones are to be placed.
 	 */
 	/*
-	 * @ requires inputArray.length >= 3 && inputArray.length % 2 == 1; ensures
+	 *@ requires inputArray.length >= 3 && inputArray.length % 2 == 1; ensures
 	 * \result.size() == (inputArray.length -1) / 2;
 	 */
-
-	public static List<Position> StringToPlacedPositionlist(String[] inputArray) throws InvalidCommandException {
+	public static List<Position> stringToPlacePositionList(String[] inputArray) 
+			throws InvalidCommandException {
 		List<Position> positions = new ArrayList<Position>();
 		for (int i = 2; i < inputArray.length; i += 2) {
 			String[] xy = inputArray[i].split(",");
@@ -130,7 +130,7 @@ public class Protocol {
 
 	/**
 	 * Converts the coordinates from inputArray to an array x's of the stones to
-	 * be placed
+	 * be placed.
 	 * 
 	 * @param inputArray
 	 * @return array of Y coordinates
@@ -138,19 +138,14 @@ public class Protocol {
 	public static int[] convertPlacedX(String[] inputArray) {
 		int[] x = new int[inputArray.length - 1];
 		for (int i = 0; i < inputArray.length; i += 2) {
-			try {
-				x[i] = intsToY(inputArray[i]);
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			x[i] = intsToX(inputArray[i]);
 		}
 		return x;
 	}
 
 	/**
 	 * Converts the coordinates from inputArray to an array y's of the stones to
-	 * be placed
+	 * be placed.
 	 * 
 	 * @param inputArray
 	 * @return array of X coordinates
@@ -158,19 +153,14 @@ public class Protocol {
 	public static int[] convertPlacedY(String[] inputArray) {
 		int[] y = new int[inputArray.length - 1];
 		for (int i = 0; i < inputArray.length; i += 2) {
-			try {
-				y[i] = intsToY(inputArray[i]);
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			y[i] = intsToY(inputArray[i]);
 		}
 		return y;
 	}
 
 	/**
 	 * converts the first half of the input int,int to a usable int as X
-	 * coordinate
+	 * coordinate.
 	 * 
 	 * @param input
 	 * @return
@@ -182,7 +172,7 @@ public class Protocol {
 
 	/**
 	 * converts the second half of the input int,int to a usable int as Y
-	 * coordinate
+	 * coordinate.
 	 * 
 	 * @param input
 	 * @return

@@ -178,7 +178,7 @@ public class ServerGame extends Thread {
 		message += points + Protocol.SPLIT;
 		for (int i = 0; i < stones.size(); i++) {
 			message += stones.get(i).toUsableString() + Protocol.SPLIT 
-						+ positions.get(i).toUsableString();
+						+ positions.get(i).toUsableString() + Protocol.SPLIT;
 		}
 		broadcast(message);
 	}

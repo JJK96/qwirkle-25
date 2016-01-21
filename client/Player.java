@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import shared.*;
 import java.util.List;
 import java.util.Map;
+import java.util.Observable;
 
-public class Player {
+public class Player extends Observable {
 
 	private String name;
 	private int points;

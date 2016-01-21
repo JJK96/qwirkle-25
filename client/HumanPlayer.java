@@ -9,7 +9,6 @@ public class HumanPlayer extends Player {
 
 	@Override
 	public void makeMove() {
-		getGame().getClient().getView().determineMove();
-
+		notifyObservers();
 	}
 }
