@@ -9,14 +9,14 @@ public class Board {
 	private List<Stone> backup;
 
 	/**
-	 * Creates a new board
+	 * Creates a new board.
 	 */
 	public Board() {
 		reset();
 	}
 
 	/**
-	 * Resets the board to the state at the begin of the game
+	 * Resets the board to the state at the begin of the game.
 	 */
 	public void reset() {
 		stones = new HashMap<Position, Stone>();
@@ -27,7 +27,7 @@ public class Board {
 	}
 
 	/**
-	 * Get the possiblemoves
+	 * Get the possiblemoves.
 	 * 
 	 * @return a map of possiblemoves
 	 */
@@ -36,7 +36,7 @@ public class Board {
 	}
 
 	/**
-	 * Get all the stones on the board with their position
+	 * Get all the stones on the board with their position.
 	 * 
 	 * @return map of stones and their positions
 	 */
@@ -45,7 +45,7 @@ public class Board {
 	}
 
 	/**
-	 * Get a copy of the board
+	 * Get a copy of the board.
 	 * 
 	 * @return a copy of the board
 	 */
@@ -60,7 +60,7 @@ public class Board {
 
 	/**
 	 * Checks if the specified stone can be placed on the specified positions
-	 * according to the board
+	 * according to the board.
 	 * 
 	 * @param x
 	 * @param y
@@ -74,7 +74,7 @@ public class Board {
 
 	/**
 	 * Checks if the specified stone can be placed on the specified position
-	 * according to the board
+	 * according to the board.
 	 * 
 	 * @param p
 	 * @param stone
@@ -87,7 +87,7 @@ public class Board {
 
 	/**
 	 * Checks if the specified stone can be placed on the specified posiblemove
-	 * according to the board
+	 * according to the board.
 	 * 
 	 * @param p
 	 * @param stone
@@ -99,7 +99,7 @@ public class Board {
 
 	/**
 	 * Make a move at the spefified position with the spefified stone if that is
-	 * valid
+	 * valid.
 	 * 
 	 * @param x
 	 * @param y
@@ -118,14 +118,15 @@ public class Board {
 	}
 
 	//@ requires stones.size() == positions.size();
-	public void makeMoves(List<Position> positions, List<Stone> stones) throws InvalidMoveException {
+	public void makeMoves(List<Position> positions, List<Stone> stonesList)
+			throws InvalidMoveException {
 		if (allStonesOneRow(positions)) {
 			int movesmade = 0;
 			while (movesmade < positions.size()) {
 				boolean validmovefound = false;
 				for (int j = 0; j < positions.size(); j++) {
 					Position p = positions.get(j);
-					Stone s = stones.get(j);
+					Stone s = stonesList.get(j);
 					if (isValidMove(p, s)) {
 						makeMove(p, s);
 						movesmade += 1;
@@ -171,29 +172,31 @@ public class Board {
 	}
 
 	/**
-	 * Places the stone on the position of the possiblemove on the board
+	 * Places the stone on the position of the possiblemove on the board.
 	 * 
 	 * @param stone
 	 * @param place
 	 */
 	//@ requires possibleMoves.contains(place) && place.acceptable(stone));
 	public void makeMove(Stone stone, PossibleMove place) {
+		Stone stoneToMove = stone;
 		System.out.println("stone: " + stone);
 		System.out.println("place " + place);
-		stone = place.fill(stone);
-		stones.put(stone.getPosition(), stone);
+		stoneToMove = place.fill(stone); 
+		stones.put(stoneToMove.getPosition(), stoneToMove);
 		possibleMoves.remove(place.getPosition());
 		for (Position p : possibleMoves.keySet()) {
-			if (p.getX() == stone.getPosition().getX() || p.getY() == stone.getPosition().getY()) {
+			if (p.getX() == stoneToMove.getPosition().getX() ||
+							p.getY() == stoneToMove.getPosition().getY()) {
 				addPossibleMove(p);
 			}
 		}
-		Position pos = stone.getPosition();
+		Position pos = stoneToMove.getPosition();
 		addPossibleMove(pos.above());
 		addPossibleMove(pos.below());
 		addPossibleMove(pos.right());
 		addPossibleMove(pos.left());
-		backup.add(stone);
+		backup.add(stoneToMove);
 	}
 
 	/**
@@ -209,6 +212,7 @@ public class Board {
 			Stone right;
 			Stone left;
 			if ((above = stones.get(new Position(pos.getX(), pos.getY() - 1))) != null) {
+				// 
 				newPM.addColumn(above.getColumn());
 			}
 			if ((below = stones.get(new Position(pos.getX(), pos.getY() + 1))) != null) {
@@ -228,30 +232,30 @@ public class Board {
 
 	/**
 	 * Get the boundaries of the game (the bigness of the board, measured in
-	 * biggest and smalles X and Y coordinates)
+	 * biggest and smalles X and Y coordinates).
 	 * 
 	 * @return Biggest and Smallest X and Y
 	 */
 	public int[] getBoundaries() {
-		int SmallestX = 0;
-		int BiggestX = 0;
-		int SmallestY = 0;
-		int BiggestY = 0;
+		int smallestX = 0;
+		int biggestX = 0;
+		int smallestY = 0;
+		int biggestY = 0;
 		for (Position p : stones.keySet()) {
-			if (p.getX() > BiggestX) {
-				BiggestX = p.getX();
+			if (p.getX() > biggestX) {
+				biggestX = p.getX();
 			}
-			if (p.getX() < SmallestX) {
-				SmallestX = p.getX();
+			if (p.getX() < smallestX) {
+				smallestX = p.getX();
 			}
-			if (p.getY() > BiggestY) {
-				BiggestY = p.getY();
+			if (p.getY() > biggestY) {
+				biggestY = p.getY();
 			}
-			if (p.getY() < SmallestY) {
-				SmallestY = p.getY();
+			if (p.getY() < smallestY) {
+				smallestY = p.getY();
 			}
 		}
-		return new int[] { SmallestX, SmallestY, BiggestX, BiggestY };
+		return new int[] {smallestX, smallestY, biggestX, biggestY};
 	}
 
 	/**

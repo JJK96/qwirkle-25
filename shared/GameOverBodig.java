@@ -2,12 +2,10 @@ package shared;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import server.*;
 import client.*;
 
-public class Game {
+public class GameOverBodig {
 
 	private List<Stone> bag;
 	private Player[] players;
@@ -23,11 +21,11 @@ public class Game {
 
 	/**
 	 * Starts the game and determines which players turn it is until the game
-	 * has a winner
+	 * has a winner.
 	 */
 	public void start() {
 		int i = players.length;
-		int j = ((int) Math.random() * (i + 1));
+		int j = (int) Math.random() * (i + 1);
 		while (!hasWinner()) {
 			currentPlayer = players[j];
 			currentPlayer.makeMove();
@@ -37,15 +35,7 @@ public class Game {
 	}
 
 	/**
-	 * Get all the PossibleMoves
-	 * 
-	 * @return map of PossibleMoves
-	public Map<server.Position, PossibleMove> getPossibleMoves() {
-		return board.getPossibleMoves();
-	}
-*/
-	/**
-	 * Checks if the game has a winner
+	 * Checks if the game has a winner.
 	 * 
 	 * @return true if the game has a winner, otherwise false
 	 */
@@ -54,14 +44,14 @@ public class Game {
 	}
 
 	/**
-	 * Resets the game
+	 * Resets the game.
 	 */
 	public void reset() {
 
 	}
 
 	/**
-	 * Get all the stones in the bag
+	 * Get all the stones in the bag.
 	 * 
 	 * @return List off stones in the bag
 	 */
@@ -70,7 +60,7 @@ public class Game {
 	}
 
 	/**
-	 * Get the view which is currently used
+	 * Get the view which is currently used.
 	 * 
 	 * @return view
 	 */
@@ -79,7 +69,7 @@ public class Game {
 	}
 
 	/**
-	 * Get the board which is currently used
+	 * Get the board which is currently used.
 	 * 
 	 * @return board
 	 */
@@ -92,17 +82,8 @@ public class Game {
 	}
 
 	/**
-	 * Checks if the choice the humanplayer made is a valid possiblemove
-	 * 
-	 * @return true if choice is valid, false otherwise
-	 */
-	/*public boolean isValidInt(int choice) {
-		return (choice < getPossibleMoves().size() && choice >= 0);
-	}*/
-
-	/**
 	 * Returns the amount of stones to the player out of the bag and removes the
-	 * stones the player gets from the bag
+	 * stones the player gets from the bag.
 	 * 
 	 * @param player
 	 * @param amount
@@ -110,7 +91,7 @@ public class Game {
 	public void giveStones(Player player, int amount) {
 		List<Stone> randomStones = new ArrayList<Stone>();
 		for (int i = 0; i < amount; i++) {
-			int place = ((int) Math.random() * (bag.size() + 1));
+			int place = (int) Math.random() * (bag.size() + 1);
 			randomStones.add(bag.get(place));
 			bag.remove(place);
 		}
@@ -118,7 +99,7 @@ public class Game {
 	}
 
 	/**
-	 * Get the player whose turn it is
+	 * Get the player whose turn it is.
 	 * 
 	 * @return currentplayer
 	 */
@@ -127,7 +108,7 @@ public class Game {
 	}
 
 	/**
-	 * Shows the GUI/TUI for the game
+	 * Shows the GUI/TUI for the game.
 	 */
 	public void showGUI() {
 

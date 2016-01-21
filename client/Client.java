@@ -94,7 +94,7 @@ public class Client extends Thread {
 				} else if (inputArray[0].equals(Protocol.ERROR)) {
 					if (inputArray.length == 1) {
 						System.out.println("wrong error code");
-					} else if (!inputArray[1].equals(Protocol.errorcode.INVALIDNAME)) {
+					} else if (!inputArray[1].equals(Protocol.ErrorCode.INVALIDNAME)) {
 						System.out.println(input);
 					}
 				}
@@ -147,7 +147,7 @@ public class Client extends Thread {
 			} else if (inputArray[0].equals(Protocol.PLACED)) {
 				List<Stone> stones = new ArrayList<Stone>();
 				try {
-					stones = Protocol.StringToPlacedStonelist(inputArray);
+					stones = Protocol.stringToPlacedStoneList(inputArray);
 				} catch (InvalidCommandException e) {
 					serverBroken();
 				}
@@ -159,7 +159,7 @@ public class Client extends Thread {
 			} else if (inputArray[0].equals(Protocol.NEWSTONES)) {
 				List<Stone> stones = null;
 				try {
-					stones = Protocol.StringToStonelist(inputArray);
+					stones = Protocol.stringToStoneList(inputArray);
 				} catch (InvalidStoneException e) {
 					serverBroken();
 				}

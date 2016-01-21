@@ -6,7 +6,7 @@ import shared.Position;
 /**
  * Created by jjk on 1/13/16.
  */
-public class testBoard {
+public class TestBoard {
 	public static void main(String[] args) {
 		Board b = new Board();
 		PossibleMove p = b.getPossibleMoves().get(new Position(0, 0));
