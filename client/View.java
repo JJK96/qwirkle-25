@@ -233,9 +233,11 @@ public class View {
 				lastStone = b.getStones().get(pos);
 				stones.add(stone);
 			} else {
+				client.getGame().getCurrentPlayer().removeBackup();
 				client.place(stones);
 			}
 		}
+		client.getGame().getCurrentPlayer().removeBackup();
 		client.place(stones);
 	}
 

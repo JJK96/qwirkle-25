@@ -57,6 +57,10 @@ public class Player {
 		}
 	}
 
+	public void removeBackup() {
+		backupStones.clear();
+	}
+
 	/**
 	 * Checks if the player has a stone that can be placed on the specified
 	 * possiblemove.

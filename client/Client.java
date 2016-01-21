@@ -185,9 +185,9 @@ public class Client extends Thread {
 				}
 			} else if (inputArray[0].equals(Protocol.PLAYERS)) {
 				if (inputArray.length >= 2) {
-					String message = "These players are online:\n";
-					for (int i=1; i<inputArray.length;i++) {
-						message += inputArray[i];
+					String message = Protocol.BORDER + "These players are online:\n";
+					for (int i = 1; i < inputArray.length; i++) {
+						message += inputArray[i] + "\n";
 					}
 					view.print(message);
 				}
