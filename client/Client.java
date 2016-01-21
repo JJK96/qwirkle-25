@@ -185,6 +185,7 @@ public class Client extends Thread {
 				}
 			}
 		} catch (InvalidCommandException e) {
+			e.printStackTrace();
 			serverBroken();
 		}
 		shutdown();

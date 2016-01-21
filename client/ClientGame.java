@@ -125,7 +125,7 @@ public class ClientGame extends Observable {
 	}
 	public void setCurrentPlayer(String name) throws InvalidCommandException {
 		Player p = findPlayer(name);
-		if (currentPlayer != null) {
+		if (p != null) {
 			currentPlayer = p;
 		} else {
 			throw new InvalidCommandException();
