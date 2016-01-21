@@ -6,7 +6,7 @@ public class Stone extends Space {
 	};
 
 	public enum Shape {
-        o, d, v, c, x, s
+		o, d, v, c, x, s
 	};
 
 	private Shape shape;
@@ -14,20 +14,20 @@ public class Stone extends Space {
 	private boolean isOnBoard;
 
 	/**
-	 * Creates a stone with the specified shape and color
+	 * Creates a stone with the specified shape and color.
 	 * 
 	 * @param shape
 	 * @param color
 	 */
 	public Stone(Shape shape, Color color) {
-        super();
+		super();
 		this.shape = shape;
 		this.color = color;
 		isOnBoard = false;
 	}
 
 	/**
-	 * Checks if the stone is on the board
+	 * Checks if the stone is on the board.
 	 * 
 	 * @return true if the stone is on the board, otherwise false
 	 */
@@ -36,7 +36,7 @@ public class Stone extends Space {
 	}
 
 	/**
-	 * Gets the shape of the stone
+	 * Gets the shape of the stone.
 	 * 
 	 * @return shape
 	 */
@@ -45,7 +45,7 @@ public class Stone extends Space {
 	}
 
 	/**
-	 * Gets the color of the stone
+	 * Gets the color of the stone.
 	 * 
 	 * @return color
 	 */
@@ -54,7 +54,7 @@ public class Stone extends Space {
 	}
 
 	/**
-	 * If the stone gets placed the boolean isOnBoard is set to true
+	 * If the stone gets placed the boolean isOnBoard is set to true.
 	 */
 	public void place() {
 		isOnBoard = true;
@@ -64,13 +64,14 @@ public class Stone extends Space {
 	public String toString() {
 		return "[" + shape.ordinal() + "," + color.ordinal() + "]";
 	}
-	
+
 	public String toUsableString() {
 		return shape.ordinal() + "," + color.ordinal();
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		return (((Stone) obj).getColor() == this.getColor()) && (((Stone) obj).getShape() == this.getShape());
+		return (((Stone) obj).getColor() == this.getColor()) 
+				&& (((Stone) obj).getShape() == this.getShape());
 	}
 }

@@ -3,7 +3,6 @@ package client;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Scanner;
 
@@ -14,7 +13,7 @@ public class View {
 	private Client client;
 
 	/**
-	 * Creates a view for the specified client
+	 * Creates a view for the specified client.
 	 * 
 	 * @param
 	 */
@@ -24,7 +23,7 @@ public class View {
 
 	public InetAddress getHostName() throws UnknownHostException {
 		String hostname = readString("Enter hostname of the server:");
-        InetAddress result = InetAddress.getByName(hostname);
+		InetAddress result = InetAddress.getByName(hostname);
 		return result;
 	}
 
@@ -41,8 +40,8 @@ public class View {
 	 *         humanplayer himself.
 	 */
 	public boolean askHumanOrComputerPlayer() {
-		String prompt = Protocol.BORDER + "Do you want to play as human or shall a computerplayer play?"
-				+ "\n0 : HumanPlayer.\n1 : ComputerPlayer.";
+		String prompt = Protocol.BORDER + "Do you want to play as human or shall "
+						+ "a computerplayer play?\n0 : HumanPlayer.\n1 : ComputerPlayer.";
 		while (true) {
 			int bool = readInt(prompt);
 
@@ -50,8 +49,9 @@ public class View {
 				System.out.println("invalid choice");
 			} else if (bool == 0) {
 				return false;
-			} else
+			} else {
 				return true;
+			}
 		}
 	}
 
@@ -62,7 +62,8 @@ public class View {
 	 */
 	public Strategy getStrategyFromInput() {
 		String prompt = Protocol.BORDER
-				+ "Which strategy shall the ComputerPlayer have?\n0 : BadStrategy.\n\nMore options will follow.";
+						+ "Which strategy shall the ComputerPlayer have?\n0 : BadStrategy."
+						+ "\n\nMore options will follow.";
 		int strat = 0;
 		while (true) {
 			strat = readInt(prompt);
@@ -81,14 +82,16 @@ public class View {
 	 */
 	public int startGame() {
 		String prompt = Protocol.BORDER
-				+ "With how many players do you want to start a game?\nYou can choose: 2, 3 or 4.";
+						+ "With how many players do you want to start a game?"
+						+ "\nYou can choose: 2, 3 or 4.";
 		int aantal = 0;
 		while (true) {
 			aantal = readInt(prompt);
 			if (aantal == 2 || aantal == 3 || aantal == 4) {
 				return aantal;
-			} else
+			} else {
 				System.out.println("invalid number.");
+			}
 		}
 	}
 
@@ -108,15 +111,17 @@ public class View {
 	 */
 	public void determineMove() {
 		String prompt = Protocol.BORDER + client.getGame().getBoard();
-				prompt += "\nIf you choose one of these places you will go to the place view, where you can place stones"
+		prompt += "\nIf you choose one of these places you will go to the place view, "
+				+ "where you can place stones"
 				+ "\nThe number doesn't matter now you can choose your first stone later"
 				+ "\n-1 : Swap stones\n-> What is your choice?\n\nThese are your stones:\n"
 				+ client.getGame().getCurrentPlayer().stonesToString();
 		int choice = intOutPromptMinus1TillPossibleMovesRange(prompt, client.getGame().getBoard());
 		if (choice == -1) {
 			swapStones();
-		} else
+		} else {
 			placeStones();
+		}
 	}
 
 	/**
@@ -181,17 +186,20 @@ public class View {
 	 */
 	private void swapStones() {
 		List<Stone> stones = new ArrayList<Stone>();
-		String swapPrompt = Protocol.BORDER + "These are your stones, which stone do you want to swap?\n"
-				+ client.getGame().getCurrentPlayer().stonesToString()
-				+ "\nChoose 1 stone now and then you will get the chance to pick more stones or end the swap.";
+		String swapPrompt = Protocol.BORDER + "These are your stones, "
+						+ "which stone do you want to swap?\n"
+						+ client.getGame().getCurrentPlayer().stonesToString()
+						+ "\nChoose 1 stone now and then you will get the chance "
+						+ "to pick more stones or end the swap.";
 		int choice = intOutPromptFrom0ToStonesRange(swapPrompt);
 		Stone chosen1 = client.getGame().getCurrentPlayer().getStones().get(choice);
 		client.getGame().getCurrentPlayer().removeStone(chosen1);
 		stones.add(chosen1);
 		for (int i = 1; i < 7; i++) {
-			String swapPromptSecond = Protocol.BORDER + "These are your stones, which stone do you want to swap?\n"
-					+ client.getGame().getCurrentPlayer().stonesToString()
-					+ "\nOr choose:\n-1 : to end the swap and your turn.";
+			String swapPromptSecond = Protocol.BORDER + "These are your stones, "
+							+ "which stone do you want to swap?\n"
+								+ client.getGame().getCurrentPlayer().stonesToString()
+									+ "\nOr choose:\n-1 : to end the swap and your turn.";
 			int choiceSecond = intOutPromptMinus1TillStonesRange(swapPromptSecond);
 			if (choiceSecond == -1) {
 				client.trade(stones);
@@ -220,10 +228,12 @@ public class View {
 		int choice;
 		for (int i = 0; i < 7; i++) {
 			String prompt = Protocol.BORDER + client.getGame().getBoard()
-					+ "\nThis is the board with all you can choose." + "\nThese are your stones:\n"
-					+ client.getGame().getCurrentPlayer().stonesToString() + "\nCHOOSE CAREFULL:\n"
-					+ "If you choose a possiblemove and you can't place 1 of your stones there you "
-					+ "have to start over with placing stones!!";
+							+ "\nThis is the board with all you can choose." 
+								+ "\nThese are your stones:\n"
+								+ client.getGame().getCurrentPlayer().stonesToString() 
+								+ "\nCHOOSE CAREFULL:\n"
+								+ "If you choose a possiblemove and you can't place 1 of your"
+								+ " stones there you have to start over with placing stones!!";
 			if (stones.size() > 0) {
 				prompt += "\nIf you want to end your turn choose -1.";
 				choice = intOutPromptMinus1TillPossibleMovesRange(prompt, b);
@@ -231,7 +241,8 @@ public class View {
 				choice = intOutPromptPossibleMovesRange(prompt);
 			}
 			if (choice != -1) {
-				Stone stone = client.getGame().getCurrentPlayer().possibleMoveToStone(choice, b, lastStone);
+				Stone stone = client.getGame().getCurrentPlayer().
+								possibleMoveToStone(choice, b, lastStone);
 				if (stone == null) {
 					client.getGame().getCurrentPlayer().setStonesFromBackup();
 					placeStones();
@@ -277,7 +288,7 @@ public class View {
 	public int readInt(String prompt) {
 		int value = 0;
 		boolean intRead = false;
-		//@SuppressWarnings("resource")
+		// @SuppressWarnings("resource")
 		Scanner line = new Scanner(System.in);
 		do {
 			System.out.print(prompt);
@@ -288,6 +299,7 @@ public class View {
 				}
 			}
 		} while (!intRead);
+		line.close();
 		return value;
 	}
 
@@ -301,7 +313,7 @@ public class View {
 	public String readString(String prompt) {
 		String input = "";
 		boolean stringRead = false;
-		//@SuppressWarnings("resource")
+		// @SuppressWarnings("resource")
 		Scanner line = new Scanner(System.in);
 		do {
 			System.out.print(prompt);
@@ -312,6 +324,7 @@ public class View {
 				}
 			}
 		} while (!stringRead);
+		line.close();
 		return input;
 
 	}
