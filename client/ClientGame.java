@@ -21,7 +21,6 @@ public class ClientGame extends Observable {
 	 * @param names
 	 */
 	public ClientGame(String[] names, Client client) {
-		bag = 3*(Stone.Shape.values().length * Stone.Color.values().length) - 6 * (players.length -1);
 		players = new Player[names.length];
 		this.board = new Board();
 		this.client = client;
@@ -40,6 +39,7 @@ public class ClientGame extends Observable {
 				players[i] = new Player(names[i], this);
 			}
 		}
+		bag = 3*(Stone.Shape.values().length * Stone.Color.values().length) - 6 * (players.length -1);
 	}
 
 	/**

@@ -51,8 +51,8 @@ public class Client extends Thread {
 	}
 
 	public void init() {
-		Socket socket = null;
-		while (socket == null) {
+		sock = null;
+		while (sock== null) {
 			InetAddress hostname = null;
 			while (hostname == null) {
 				try {
@@ -64,14 +64,14 @@ public class Client extends Thread {
 			}
 			int port = view.getPort();
 			try {
-				socket = new Socket(hostname, port);
+				sock = new Socket(hostname, port);
 			} catch (IOException e) {
 				view.print("Could not connect to server");
 			}
 		}
 		try {
-			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+			in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
+			out = new BufferedWriter(new OutputStreamWriter(sock.getOutputStream()));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -306,7 +306,7 @@ public class Client extends Thread {
 
 	public void join(int amount) {
 		sendMessage(Protocol.JOINAANTAL + Protocol.SPLIT + amount);
-		view.print("waiting for other players:");
+		view.print("waiting for other players...");
 	}
 
 	public void chat(String msg) {
