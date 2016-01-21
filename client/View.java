@@ -59,9 +59,8 @@ public class View implements Observer {
 	 * @return the strategy chosen.
 	 */
 	public Strategy getStrategyFromInput() {
-		String prompt = Protocol.BORDER
-						+ "Which strategy shall the ComputerPlayer have?\n0 : BadStrategy."
-						+ "\n\nMore options will follow.";
+		String prompt = Protocol.BORDER + "Which strategy shall the ComputerPlayer have?"
+						+ "\n0 : BadStrategy.\n\nMore options will follow.";
 		int strat = 0;
 		while (true) {
 			strat = readInt(prompt);
@@ -79,8 +78,7 @@ public class View implements Observer {
 	 * @return the amount of players he wants to have in his game: 2, 3 or 4
 	 */
 	public int startGame() {
-		String prompt = Protocol.BORDER
-						+ "With how many players do you want to start a game?"
+		String prompt = Protocol.BORDER + "With how many players do you want to start a game?"
 						+ "\nYou can choose: 2, 3 or 4.";
 		int aantal = 0;
 		while (true) {
@@ -109,7 +107,7 @@ public class View implements Observer {
 	 */
 	public void determineMove() {
 		String prompt = Protocol.BORDER + client.getGame().getBoard();
-		prompt += "\nIf you choose one of these places you will go to the place view, "
+		prompt += "\nIf you choose one of these places you will go to the place view, " 
 				+ "where you can place stones"
 				+ "\nThe number doesn't matter now you can choose your first stone later"
 				+ "\n-1 : Swap stones\n-> What is your choice?\n\nThese are your stones:\n"
@@ -184,20 +182,20 @@ public class View implements Observer {
 	 */
 	private void swapStones() {
 		List<Stone> stones = new ArrayList<Stone>();
-		String swapPrompt = Protocol.BORDER + "These are your stones, "
+		String swapPrompt = Protocol.BORDER + "These are your stones, " 
 						+ "which stone do you want to swap?\n"
 						+ client.getGame().getCurrentPlayer().stonesToString()
-						+ "\nChoose 1 stone now and then you will get the chance "
+						+ "\nChoose 1 stone now and then you will get the chance " 
 						+ "to pick more stones or end the swap.";
 		int choice = intOutPromptFrom0ToStonesRange(swapPrompt);
 		Stone chosen1 = client.getGame().getCurrentPlayer().getStones().get(choice);
 		client.getGame().getCurrentPlayer().removeStone(chosen1);
 		stones.add(chosen1);
 		for (int i = 1; i < 7; i++) {
-			String swapPromptSecond = Protocol.BORDER + "These are your stones, "
+			String swapPromptSecond = Protocol.BORDER + "These are your stones, " 
 							+ "which stone do you want to swap?\n"
-								+ client.getGame().getCurrentPlayer().stonesToString()
-									+ "\nOr choose:\n-1 : to end the swap and your turn.";
+							+ client.getGame().getCurrentPlayer().stonesToString()
+							+ "\nOr choose:\n-1 : to end the swap and your turn.";
 			int choiceSecond = intOutPromptMinus1TillStonesRange(swapPromptSecond);
 			if (choiceSecond == -1) {
 				client.trade(stones);
@@ -227,11 +225,11 @@ public class View implements Observer {
 		for (int i = 0; i < 7; i++) {
 			String prompt = Protocol.BORDER + client.getGame().getBoard()
 							+ "\nThis is the board with all you can choose." 
-								+ "\nThese are your stones:\n"
-								+ client.getGame().getCurrentPlayer().stonesToString() 
-								+ "\nCHOOSE CAREFULL:\n"
-								+ "If you choose a possiblemove and you can't place 1 of your"
-								+ " stones there you have to start over with placing stones!!";
+							+ "\nThese are your stones:\n"
+							+ client.getGame().getCurrentPlayer().stonesToString()
+							+ "\nCHOOSE CAREFULL:\n"
+							+ "If you choose a possiblemove and you can't place 1 of your"
+							+ " stones there you have to start over with placing stones!!";
 			if (stones.size() > 0) {
 				prompt += "\nIf you want to end your turn choose -1.";
 				choice = intOutPromptMinus1TillPossibleMovesRange(prompt, b);
@@ -339,8 +337,7 @@ public class View implements Observer {
 		System.out.println("in update of view");
 		if (observable instanceof HumanPlayer) {
 			determineMove();
-		}
-		else if (observable instanceof ClientGame) {
+		} else if (observable instanceof ClientGame) {
 			print(((ClientGame) observable).getBoard().toString());
 		}
 	}

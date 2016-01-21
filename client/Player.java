@@ -17,7 +17,7 @@ public class Player extends Observable {
 	private List<Stone> backupStones;
 
 	/**
-	 * Create a player with specified name and game
+	 * Create a player with specified name and game.
 	 * 
 	 * @param name
 	 */
@@ -31,7 +31,7 @@ public class Player extends Observable {
 	}
 
 	/**
-	 * The move the player makes
+	 * The move the player makes.
 	 */
 	public void makeMove() {
 
@@ -80,7 +80,7 @@ public class Player extends Observable {
 	}
 
 	/**
-	 * Get the game the player plays
+	 * Get the game the player plays.
 	 * 
 	 * @return game
 	 */
@@ -89,7 +89,7 @@ public class Player extends Observable {
 	}
 
 	/**
-	 * Get the name of the player
+	 * Get the name of the player.
 	 * 
 	 * @return name
 	 */
@@ -98,7 +98,7 @@ public class Player extends Observable {
 	}
 
 	/**
-	 * Get the stones the player has
+	 * Get the stones the player has.
 	 * 
 	 * @return stones
 	 */
@@ -126,12 +126,12 @@ public class Player extends Observable {
 	}
 
 	/**
-	 * Take stones out of the bag after the player has made his move
+	 * Take stones out of the bag after the player has made his move.
 	 * 
 	 * @param stones
 	 */
-	public void takeStones(List<Stone> stones) {
-		this.stones.addAll(stones);
+	public void takeStones(List<Stone> stonesToTake) {
+		this.stones.addAll(stonesToTake);
 	}
 
 	/**
@@ -144,16 +144,16 @@ public class Player extends Observable {
 	}
 
 	/**
-	 * Add the points the player earned by his last move to his points
+	 * Add the points the player earned by his last move to his points.
 	 * 
 	 * @param points
 	 */
-	public void addPoints(int points) {
-		this.points = this.points + points;
+	public void addPoints(int pointsToAdd) {
+		this.points = this.points + pointsToAdd;
 	}
 
 	/**
-	 * Get the points of the player
+	 * Get the points of the player.
 	 * 
 	 * @return points
 	 */
@@ -174,7 +174,7 @@ public class Player extends Observable {
 	public Stone possibleMoveToStone(int choice, Board b, Stone lastStone) {
 		Map<Position, PossibleMove> moves = b.getPossibleMoves();
 		PossibleMove p = (PossibleMove) moves.values().toArray()[choice];
-		List<Position> PList = new ArrayList<Position>();
+		List<Position> pList = new ArrayList<Position>();
 		if (lastStone == null) {
 			for (int i = 0; i < stones.size(); i++) {
 				if (b.isValidMove(p.getPosition(), stones.get(i))) {
@@ -188,10 +188,10 @@ public class Player extends Observable {
 			}
 		} else if (secondLastStone.equals(lastStone)) {
 			Position pos = lastStone.getPosition();
-			PList.add(pos);
-			PList.add(p.getPosition());
-			PList.add(secondLastStone.getPosition());
-			if (b.allStonesOneRow(PList)) {
+			pList.add(pos);
+			pList.add(p.getPosition());
+			pList.add(secondLastStone.getPosition());
+			if (b.allStonesOneRow(pList)) {
 				for (int i = 0; i < stones.size(); i++) {
 					if (b.isValidMove(p.getPosition(), stones.get(i))) {
 						Stone stone = stones.get(i);
@@ -205,10 +205,10 @@ public class Player extends Observable {
 			}
 		} else {
 			Position pos = lastStone.getPosition();
-			PList.add(pos);
-			PList.add(p.getPosition());
-			PList.add(secondLastStone.getPosition());
-			if (b.allStonesOneRow(PList)) {
+			pList.add(pos);
+			pList.add(p.getPosition());
+			pList.add(secondLastStone.getPosition());
+			if (b.allStonesOneRow(pList)) {
 				for (int i = 0; i < stones.size(); i++) {
 					if (b.isValidMove(p.getPosition(), stones.get(i))) {
 						Stone stone = stones.get(i);

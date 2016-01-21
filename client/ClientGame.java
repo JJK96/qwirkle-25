@@ -39,11 +39,12 @@ public class ClientGame extends Observable {
 				players[i] = new Player(names[i], this);
 			}
 		}
-		bag = 3*(Stone.Shape.values().length * Stone.Color.values().length) - 6 * (players.length -1);
+		bag = 3 * (Stone.Shape.values().length 
+				* Stone.Color.values().length) - 6 * (players.length - 1);
 	}
 
 	/**
-	 * Get all the PossibleMoves
+	 * Get all the PossibleMoves.
 	 * 
 	 * @return map of PossibleMoves
 	 */
@@ -56,7 +57,7 @@ public class ClientGame extends Observable {
 	}
 
 	/**
-	 * Get the board which is currently used
+	 * Get the board which is currently used.
 	 * 
 	 * @return board
 	 */
@@ -69,28 +70,28 @@ public class ClientGame extends Observable {
 	}
 
 	/**
-	 * Checks if the choice the humanplayer made is a valid possiblemove
+	 * Checks if the choice the humanplayer made is a valid possiblemove.
 	 * 
 	 * @return true if choice is valid, false otherwise
 	 */
 	public boolean isValidInt(int choice, Board b) {
-		return (choice < b.getPossibleMoves().size() && choice >= -1);
+		return choice < b.getPossibleMoves().size() && choice >= -1;
 	}
 
 	public boolean isValidIntNotMinusOne(int choice) {
-		return (choice < getPossibleMoves().size() && choice >= 0);
+		return choice < getPossibleMoves().size() && choice >= 0;
 	}
 
 	public boolean isValidIntStonesRange(int choice) {
-		return (choice < getCurrentPlayer().getStones().size() && choice >= -1);
+		return choice < getCurrentPlayer().getStones().size() && choice >= -1;
 	}
 
 	public boolean isValidIntStonesRangeFrom0(int choice) {
-		return (choice < getCurrentPlayer().getStones().size() && choice >= 0);
+		return choice < getCurrentPlayer().getStones().size() && choice >= 0;
 	}
 
 	/**
-	 * Get the player whose turn it is
+	 * Get the player whose turn it is.
 	 * 
 	 * @return currentplayer
 	 */
@@ -122,7 +123,9 @@ public class ClientGame extends Observable {
 	public void removeFromBag(int num) throws InvalidMoveException {
 		if (bag >= num) {
 			bag -= num;
-		} else throw new InvalidMoveException();
+		} else {
+			throw new InvalidMoveException();
+		}
 	}
 	public void setCurrentPlayer(String name) throws InvalidCommandException {
 		Player p = findPlayer(name);

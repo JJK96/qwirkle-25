@@ -118,7 +118,9 @@ public class Board {
 	}
 
 	/**
-	 * makes the given moves on the board, if an invalid move is found, the board should be replaced by it's deepcopy.
+	 * makes the given moves on the board, if an invalid move is found, 
+	 * the board should be replaced by it's deepcopy.
+	 * 
 	 * @param positions
 	 * @param
 	 * @throws InvalidMoveException
@@ -274,7 +276,7 @@ public class Board {
 			res += "  " + k + "  ";
 		}
 		res += "\n" + boundaries[1];
-		res += (boundaries[1] <0) ? " " : "  ";
+		res += (boundaries[1] < 0) ? " " : "  ";
 		for (int i = boundaries[1]; i <= boundaries[3]; i++) {
 			for (int j = boundaries[0]; j <= boundaries[2]; j++) {
 				Stone s = null;
@@ -284,9 +286,9 @@ public class Board {
 					res += "     ";
 				}
 			}
-			int nextnumber = i+1;
+			int nextnumber = i + 1;
 			res += "\n" + nextnumber;
-			res += (nextnumber <0) ? " " : "  ";
+			res += (nextnumber < 0) ? " " : "  ";
 		}
 		res += "\nPossible moves: ";
 		Object[] possibleMovesArray = possibleMoves.values().toArray();

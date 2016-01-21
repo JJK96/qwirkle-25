@@ -16,18 +16,12 @@ import shared.*;
 
 public class Client extends Thread {
 
-	private static void printStatic(String message) {
-		System.out.println(message);
-	}
-
 	/** Start een Client-applicatie op. */
 	public static void main(String[] args) {
-        Client client = new Client();
-        client.start();
-        client.startGame();
+		Client client = new Client();
+		client.start();
+		client.startGame();
 	}
-
-	// hello_from_the_other_side
 
 	private String clientName;
 	private Socket sock;
@@ -52,7 +46,7 @@ public class Client extends Thread {
 
 	public void init() {
 		sock = null;
-		while (sock== null) {
+		while (sock == null) {
 			InetAddress hostname = null;
 			while (hostname == null) {
 				try {
@@ -143,9 +137,9 @@ public class Client extends Thread {
 						view.print("Speler heeft functie niet: 4");
 					}
 				} else if (inputArray[0].equals(Protocol.PLACED)) {
-					String[] newArray = new String[inputArray.length -2];
-					for (int i=2; i<inputArray.length;i++) {
-						newArray[i-2] = inputArray[i];
+					String[] newArray = new String[inputArray.length - 2];
+					for (int i = 2; i < inputArray.length; i++) {
+						newArray[i - 2] = inputArray[i];
 					}
 					placed(newArray);
 				} else if (inputArray[0].equals(Protocol.NEWSTONES)) {
@@ -163,7 +157,9 @@ public class Client extends Thread {
 				} else if (inputArray[0].equals(Protocol.TURN)) {
 					if (inputArray.length == 2) {
 						turn(inputArray);
-					} else throw new InvalidCommandException();
+					} else {
+						throw new InvalidCommandException();
+					}
 				} else if (inputArray[0].equals(Protocol.PLAYERS)) {
 					if (inputArray.length >= 2) {
 						players = new ArrayList<String>();
@@ -174,14 +170,16 @@ public class Client extends Thread {
 				} else if (inputArray[0].equals(Protocol.JOINLOBBY)) {
 					if (inputArray.length >= 2) {
 						String message = "Player " + inputArray[1] + " joined the room";
-						//view.print(message);
+						// view.print(message);
 					}
 				} else if (inputArray[0].equals(Protocol.START)) {
 					if (inputArray.length >= 3) {
 						if (input.contains(clientName)) {
 							initGame(inputArray);
 						}
-					} else throw new InvalidCommandException();
+					} else {
+						throw new InvalidCommandException();
+					}
 				}
 			}
 		} catch (InvalidCommandException e) {
@@ -190,18 +188,19 @@ public class Client extends Thread {
 		}
 		shutdown();
 	}
+
 	public void endgame() {
-		String message = "Game ended, player " + game.getWinner() + " has won.\n" +
-				"with " + game.getWinner().getPoints() + " points.";
+		String message = "Game ended, player " + game.getWinner() + " has won.\n" + "with "
+						+ game.getWinner().getPoints() + " points.";
 		view.print(message);
 		playagain();
 	}
+
 	public void playagain() {
 		String playagain = view.readString("Do you want to play another game? y/n: ");
 		if (playagain.equals("y")) {
 			init();
-		}
-		else {
+		} else {
 			shutdown();
 		}
 
@@ -218,21 +217,22 @@ public class Client extends Thread {
 	}
 
 	//@ requires inputArray.length == 2;
-	public void turn(String[] inputArray) throws InvalidCommandException{
-        game.setCurrentPlayer(inputArray[1]);
-        if (inputArray[1].equals(clientName)) {
+	public void turn(String[] inputArray) throws InvalidCommandException {
+		game.setCurrentPlayer(inputArray[1]);
+		if (inputArray[1].equals(clientName)) {
 			System.out.println("current player making move");
 			game.getCurrentPlayer().makeMove();
-        } else {
+		} else {
 			view.print("waiting for player: " + inputArray[1] + " to make a move");
 		}
 	}
+
 	public void initGame(String[] inputArray) {
-		String[] players = new String[inputArray.length - 1];
+		String[] newPlayers = new String[inputArray.length - 1];
 		for (int i = 1; i < inputArray.length; i++) {
-			players[i - 1] = inputArray[i];
+			newPlayers[i - 1] = inputArray[i];
 		}
-		this.game = new ClientGame(players, this);
+		this.game = new ClientGame(newPlayers, this);
 	}
 
 	public ClientGame getGame() {
@@ -253,7 +253,9 @@ public class Client extends Thread {
 		}
 	}
 
-	/** close the socket connection. */
+	/**
+	 *  close the socket connection. 
+	 */
 	public void shutdown() {
 		view.print("Closing socket connection...");
 		try {
@@ -266,7 +268,9 @@ public class Client extends Thread {
 		}
 	}
 
-	/** returns the client name */
+	/** 
+	 * returns the client name.
+	 */
 	public String getClientName() {
 		return clientName;
 	}
@@ -286,7 +290,8 @@ public class Client extends Thread {
 			if (you.getStones().contains(s)) {
 				you.removeStone(s);
 			}
-			msg = msg + Protocol.SPLIT + s.toUsableString() + Protocol.SPLIT + s.getPosition().toUsableString();
+			msg = msg + Protocol.SPLIT + s.toUsableString() + Protocol.SPLIT 
+					+ s.getPosition().toUsableString();
 		}
 		sendMessage(msg);
 	}
@@ -322,6 +327,7 @@ public class Client extends Thread {
 	public void askPlayers() {
 		sendMessage(Protocol.WHICHPLAYERS);
 	}
+
 	public void serverBroken() {
 		System.out.println("Server is broken, OK DOEI! (client might also be broken)");
 		shutdown();
