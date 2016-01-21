@@ -221,7 +221,8 @@ public class Client extends Thread {
 	public void turn(String[] inputArray) throws InvalidCommandException{
         game.setCurrentPlayer(inputArray[1]);
         if (inputArray[1].equals(clientName)) {
-            you.makeMove();
+			System.out.println("current player making move");
+			game.getCurrentPlayer().makeMove();
         } else {
 			view.print("waiting for player: " + inputArray[1] + " to make a move");
 		}

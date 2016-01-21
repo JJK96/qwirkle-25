@@ -9,6 +9,7 @@ public class HumanPlayer extends Player {
 
 	@Override
 	public void makeMove() {
+		System.out.println("in humanplayer makemove");
 		notifyObservers();
 	}
 }

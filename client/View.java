@@ -336,6 +336,7 @@ public class View implements Observer{
 
 	@Override
 	public void update(Observable observable, Object o) {
+		System.out.println("in update of view");
 		if (observable instanceof HumanPlayer) {
 			determineMove();
 		}
