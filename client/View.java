@@ -299,7 +299,6 @@ public class View {
 				}
 			}
 		} while (!intRead);
-		line.close();
 		return value;
 	}
 
@@ -324,7 +323,6 @@ public class View {
 				}
 			}
 		} while (!stringRead);
-		line.close();
 		return input;
 
 	}
