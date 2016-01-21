@@ -22,6 +22,7 @@ public class Player {
 	 */
 	public Player(String name, ClientGame game) {
 		stones = new ArrayList<Stone>();
+		backupStones = new ArrayList<Stone>();
 		points = 0;
 		this.name = name;
 		this.game = game;

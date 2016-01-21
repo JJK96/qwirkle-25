@@ -1,13 +1,13 @@
 package client;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Scanner;
 
-import shared.Protocol;
-import shared.Stone;
-import shared.Board;
-import shared.Position;
+import shared.*;
 
 public class View {
 
@@ -20,6 +20,17 @@ public class View {
 	 */
 	public View(Client client) {
 		this.client = client;
+	}
+
+	public InetAddress getHostName() throws UnknownHostException {
+		String hostname = readString("Enter hostname of the server:");
+        InetAddress result = InetAddress.getByName(hostname);
+		return result;
+	}
+
+	public int getPort() {
+		int port = readInt("Enter port number:");
+		return port;
 	}
 
 	/**
@@ -75,7 +86,6 @@ public class View {
 		while (true) {
 			aantal = readInt(prompt);
 			if (aantal == 2 || aantal == 3 || aantal == 4) {
-				client.join(aantal);
 				return aantal;
 			} else
 				System.out.println("invalid number.");
@@ -97,8 +107,8 @@ public class View {
 	 * it is a swap or a place and calls those methods respectively.
 	 */
 	public void determineMove() {
-		String prompt = Protocol.BORDER + client.getGame().getPossibleMoves().toString()
-				+ "\nIf you choose one of these places you will go to the place view, where you can place stones"
+		String prompt = Protocol.BORDER + client.getGame().getBoard();
+				prompt += "\nIf you choose one of these places you will go to the place view, where you can place stones"
 				+ "\nThe number doesn't matter now you can choose your first stone later"
 				+ "\n-1 : Swap stones\n-> What is your choice?\n\nThese are your stones:\n"
 				+ client.getGame().getCurrentPlayer().stonesToString();
@@ -202,7 +212,6 @@ public class View {
 	 * firstChoice is the first stone to be placed. The first input cant be -1
 	 * since otherwise it was possible to place no stones ;)
 	 * 
-	 * @param firstChoice
 	 */
 	private void placeStones() {
 		Board b = client.getGame().getBoard().deepCopy();
@@ -210,7 +219,7 @@ public class View {
 		Stone lastStone = null;
 		int choice;
 		for (int i = 0; i < 7; i++) {
-			String prompt = Protocol.BORDER + b.getPossibleMoves().toString()
+			String prompt = Protocol.BORDER + client.getGame().getBoard()
 					+ "\nThis is the board with all you can choose." + "\nThese are your stones:\n"
 					+ client.getGame().getCurrentPlayer().stonesToString() + "\nCHOOSE CAREFULL:\n"
 					+ "If you choose a possiblemove and you can't place 1 of your stones there you "
@@ -268,7 +277,7 @@ public class View {
 	public int readInt(String prompt) {
 		int value = 0;
 		boolean intRead = false;
-		@SuppressWarnings("resource")
+		//@SuppressWarnings("resource")
 		Scanner line = new Scanner(System.in);
 		do {
 			System.out.print(prompt);
@@ -292,7 +301,7 @@ public class View {
 	public String readString(String prompt) {
 		String input = "";
 		boolean stringRead = false;
-		@SuppressWarnings("resource")
+		//@SuppressWarnings("resource")
 		Scanner line = new Scanner(System.in);
 		do {
 			System.out.print(prompt);

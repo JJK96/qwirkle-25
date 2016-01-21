@@ -9,6 +9,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import shared.InvalidCommandException;
@@ -18,44 +19,15 @@ import shared.Stone;
 
 public class Client extends Thread {
 
-	private static final String USAGE = "usage: Client <address> <port>";
-
 	private static void printStatic(String message) {
 		System.out.println(message);
 	}
 
 	/** Start een Client-applicatie op. */
 	public static void main(String[] args) {
-		if (args.length != 2) {
-			System.out.println(USAGE);
-			System.exit(0);
-		}
-
-		InetAddress host = null;
-		int port = 0;
-
-		try {
-			host = InetAddress.getByName(args[0]);
-		} catch (UnknownHostException e) {
-			printStatic("ERROR: no valid hostname!");
-			System.exit(0);
-		}
-
-		try {
-			port = Integer.parseInt(args[1]);
-		} catch (NumberFormatException e) {
-			printStatic("ERROR: no valid portnummer!");
-			System.exit(0);
-		}
-
-		try {
-			Client client = new Client(host, port);
-			client.start();
-			client.startGame();
-		} catch (IOException e) {
-			printStatic("ERROR: couldn't construct a client object!");
-			System.exit(0);
-		}
+        Client client = new Client();
+        client.start();
+        client.startGame();
 	}
 
 	// hello_from_the_other_side
@@ -71,17 +43,45 @@ public class Client extends Thread {
 	private boolean registerSuccesfull = false;
 	private boolean computerPlayerBool;
 	private Strategy strategy;
+	private List<String> players;
 	private Player you;
 
-	public Client(InetAddress host, int port) throws IOException {
-		this.sock = new Socket(host, port);
-		this.in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
-		this.out = new BufferedWriter(new OutputStreamWriter(sock.getOutputStream()));
+	public Client() {
 		this.view = new View(this);
+		players = new LinkedList<String>();
 		init();
+		logIn();
 	}
 
 	public void init() {
+		Socket socket = null;
+		while (socket == null) {
+			InetAddress hostname = null;
+			while (hostname == null) {
+				try {
+					hostname = view.getHostName();
+
+				} catch (UnknownHostException e) {
+					view.print("Invalid hostname");
+				}
+			}
+			int port = view.getPort();
+			try {
+				socket = new Socket(hostname, port);
+			} catch (IOException e) {
+				view.print("Could not connect to server");
+			}
+		}
+		try {
+			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	public void logIn() {
 		while (!registerSuccesfull) {
 			clientName = view.getClientName();
 			sendMessage(Protocol.REGISTER + Protocol.SPLIT + getClientName());
@@ -108,7 +108,7 @@ public class Client extends Thread {
 			this.strategy = view.getStrategyFromInput();
 		}
 		this.aantal = view.startGame();
-
+		join(aantal);
 	}
 
 	public void setYou(Player player) {
@@ -127,12 +127,6 @@ public class Client extends Thread {
 		String input = null;
 		while ((input = readString()) != null) {
 			String[] inputArray = input.split(Protocol.SPLIT);
-			if (inputArray[0].equals(Protocol.ACKNOWLEDGE)) {
-				registerSuccesfull = true;
-			}
-			if (!registerSuccesfull) {
-				break;
-			}
 			if (inputArray[0].equals(Protocol.ENDGAME)) {
 				// implement
 			} else if (inputArray[0].equals(Protocol.ERROR)) {
@@ -155,7 +149,7 @@ public class Client extends Thread {
 				try {
 					stones = Protocol.StringToPlacedStonelist(inputArray);
 				} catch (InvalidCommandException e) {
-					System.out.println("server is broken stones command invalid");
+					serverBroken();
 				}
 				int[] x = Protocol.convertPlacedX(inputArray);
 				int[] y = Protocol.convertPlacedY(inputArray);
@@ -167,7 +161,7 @@ public class Client extends Thread {
 				try {
 					stones = Protocol.StringToStonelist(inputArray);
 				} catch (InvalidStoneException e) {
-
+					serverBroken();
 				}
 				you.takeStones(stones);
 			} else if (inputArray[0].equals(Protocol.TRADED)) {
@@ -185,11 +179,10 @@ public class Client extends Thread {
 				}
 			} else if (inputArray[0].equals(Protocol.PLAYERS)) {
 				if (inputArray.length >= 2) {
-					String message = Protocol.BORDER + "These players are online:\n";
-					for (int i = 1; i < inputArray.length; i++) {
-						message += inputArray[i] + "\n";
+					players = new ArrayList<String>();
+					for (int i=1; i<inputArray.length;i++) {
+						players.add(inputArray[i]);
 					}
-					view.print(message);
 				}
 			} else if (inputArray[0].equals(Protocol.JOINLOBBY)) {
 				if (inputArray.length >= 2) {
@@ -197,31 +190,24 @@ public class Client extends Thread {
 					view.print(message);
 				}
 			} else if (inputArray[0].equals(Protocol.START)) {
-				String[] players = new String[inputArray.length - 1];
-				if (players.length == aantal) {
-					for (int i = 1; i < inputArray.length; i++) {
-						players[i - 1] = inputArray[i];
+				if (inputArray.length >= 3 ) {
+					if (input.contains(clientName)) {
+						initGame(inputArray);
 					}
-					this.game = new ClientGame(players, this);
-				} else {
-					view.print(Protocol.BORDER + "Server is broken OK DOEI!\n\nThis server doesnt even "
-							+ "check with how many players I want to Play pffffff");
-					shutdown();
 				}
-			} else if (inputArray[0].equals(Protocol.MSG)) {
-
-			} else if (inputArray[0].equals(Protocol.MSGPM)) {
-
-			} else if (inputArray[0].equals(Protocol.NEWCHALLENGE)) {
-
-			} else if (inputArray[0].equals(Protocol.ACCEPT)) {
-
-			} else if (inputArray[0].equals(Protocol.DECLINE)) {
-
-			} else
-				;
+				else {
+					serverBroken();
+				}
+			}
 		}
 		shutdown();
+	}
+	public void initGame(String[] inputArray) {
+		String[] players = new String[inputArray.length - 1];
+		for (int i = 1; i < inputArray.length; i++) {
+			players[i - 1] = inputArray[i];
+		}
+		this.game = new ClientGame(players, this);
 	}
 
 	public ClientGame getGame() {
@@ -297,6 +283,7 @@ public class Client extends Thread {
 
 	public void join(int amount) {
 		sendMessage(Protocol.JOINAANTAL + Protocol.SPLIT + amount);
+		view.print("waiting for other players:");
 	}
 
 	public void chat(String msg) {
@@ -309,5 +296,9 @@ public class Client extends Thread {
 
 	public void askPlayers() {
 		sendMessage(Protocol.WHICHPLAYERS);
+	}
+	public void serverBroken() {
+		System.out.println("Server is broken, OK DOEI!");
+		shutdown();
 	}
 }

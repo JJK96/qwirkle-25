@@ -9,6 +9,7 @@ public class ClientGame {
 	private Player currentPlayer;
 	private Board board;
 	private Client client;
+	private int bag;
 
 	/**
 	 * Creates a game with the names of the players.
@@ -16,20 +17,20 @@ public class ClientGame {
 	 * @param names
 	 */
 	public ClientGame(String[] names, Client client) {
+		bag = 108;
 		players = new Player[names.length];
 		this.board = new Board();
 		this.client = client;
 		for (int i = 0; i < names.length; i++) {
 			if (names[i].equals(client.getClientName())) {
+				Player p;
 				if (client.getComputerPlayerBool()) {
-					Player p = new ComputerPlayer(names[i], this, client.getStrategy());
-					players[i] = p;
-					client.setYou(p);
+					p = new ComputerPlayer(names[i], this, client.getStrategy());
 				} else {
-					Player p1 = new HumanPlayer(names[i], this);
-					players[i] = p1;
-					client.setYou(p1);
+					p = new HumanPlayer(names[i], this);
 				}
+				players[i] = p;
+				client.setYou(p);
 			} else {
 				players[i] = new Player(names[i], this);
 			}

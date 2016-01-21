@@ -51,8 +51,6 @@ public class ServerGame extends Thread{
                 }
             }
         }
-        bag = bag.subList(0,12);
-        System.out.println(bag.size());
     }
 
     @Override
@@ -194,8 +192,8 @@ public class ServerGame extends Thread{
                 currentplayer.addpoints(points);
                 placed(stones, positions, points);
                 if (currentplayer.getStones().isEmpty()) {
-                    winner = currentplayer;
                     currentplayer.addpoints(6);
+                    winner = getWinner();
                 }
                 playerDone.signal();
             } catch (InvalidMoveException e) {
@@ -208,6 +206,15 @@ public class ServerGame extends Thread{
         } else {
             throw new InvalidMoveException();
         }
+    }
+    public ServerPlayer getWinner() {
+        ServerPlayer newWinner = players[0];
+        for (ServerPlayer p : players) {
+            if (p.getPoints() > newWinner.getPoints()) {
+                newWinner = p;
+            }
+        }
+        return newWinner;
     }
     public int calculatePoints(List<Stone> stonelist, List<Position> positionlist) {
         int points =0;

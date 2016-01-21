@@ -159,37 +159,4 @@ public class Server {
         broadcast(Protocol.START + Protocol.SPLIT + game.getPlayerNames());
         game.start();
     }
-
-    /*
-     public void notifyAllPlayerPointsPlacedMoves(Player player, int points, List<Stone> stones) {
-		String msg = "placed " + player.getName() + " " + points;
-		for (Stone s : stones) {
-			msg = msg + " " + s.getShape().ordinal() + "," + s.getColor().ordinal() + " " + s.getPosition();
-		}
-		broadcast(msg);
-	}
-
-	public void newStones(List<Stone> stones, Player player) {
-		String msg = "newstones";
-		for (Stone s : stones) {
-			msg = msg + " " + s.getShape().ordinal() + "," + s.getColor().ordinal();
-		}
-		for (ClientHandlerExample ch : threads) {
-			if (ch.getClientName().equals(player.getName())) {
-				ch.sendMessage(msg);
-				break;
-			}
-		}
-	}
-
-	public void playerTraded(Player player, int amount) {
-		String msg = "traded " + player.getName() + " " + amount;
-		broadcast(msg);
-	}
-
-	public void notifyAllCurrentPlayer(Player player) {
-		String msg = "turn " + player.getName();
-		broadcast(msg);
-	}
-     */
 }
