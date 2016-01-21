@@ -12,10 +12,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import shared.InvalidCommandException;
-import shared.InvalidStoneException;
-import shared.Protocol;
-import shared.Stone;
+import shared.*;
 
 public class Client extends Thread {
 
@@ -125,82 +122,85 @@ public class Client extends Thread {
 
 	public void run() {
 		String input = null;
-		while ((input = readString()) != null) {
-			String[] inputArray = input.split(Protocol.SPLIT);
-			if (inputArray[0].equals(Protocol.ENDGAME)) {
-				// implement
-			} else if (inputArray[0].equals(Protocol.ERROR)) {
-				if (inputArray.length == 1) {
-					System.out.println("error");
-					view.print("Geen foutcode meegegeven foei foei foei");
-				} else if (inputArray[1].equals("0")) {
-					view.print("Fout commando: 0");
-				} else if (inputArray[1].equals("1")) {
-					view.print("Foute beurt: 1");
-				} else if (inputArray[1].equals("2")) {
-					view.print("Niet unieke naam of onjuiste naam: 2");
-				} else if (inputArray[1].equals("3")) {
-					view.print("Speler disconnected: 3");
-				} else if (inputArray[1].equals("4")) {
-					view.print("Speler heeft functie niet: 4");
-				}
-			} else if (inputArray[0].equals(Protocol.PLACED)) {
-				List<Stone> stones = new ArrayList<Stone>();
-				try {
-					stones = Protocol.stringToPlacedStoneList(inputArray);
-				} catch (InvalidCommandException e) {
-					serverBroken();
-				}
-				int[] x = Protocol.convertPlacedX(inputArray);
-				int[] y = Protocol.convertPlacedY(inputArray);
-				for (int i = 0; i < stones.size(); i++) {
-					game.getBoard().makeMove(x[i], y[i], stones.get(i));
-				}
-			} else if (inputArray[0].equals(Protocol.NEWSTONES)) {
-				List<Stone> stones = null;
-				try {
-					stones = Protocol.stringToStoneList(inputArray);
-				} catch (InvalidStoneException e) {
-					serverBroken();
-				}
-				you.takeStones(stones);
-			} else if (inputArray[0].equals(Protocol.TRADED)) {
-				view.print("Speler " + inputArray[1] + " " + inputArray[0] + " " + inputArray[2] + " stones.");
-			} else if (inputArray[0].equals(Protocol.TURN)) {
-				Player[] players = game.getPlayers();
-				for (int i = 0; i < game.getPlayers().length; i++) {
-					if (players[i].getName().equals(inputArray[1])) {
-						game.setCurrentPlayer(players[i]);
-						if (inputArray[1].equals(you.getName())) {
-							you.makeMove();
+		try {
+			while ((input = readString()) != null) {
+				String[] inputArray = input.split(Protocol.SPLIT);
+				if (inputArray[0].equals(Protocol.ENDGAME)) {
+					// implement
+				} else if (inputArray[0].equals(Protocol.ERROR)) {
+					if (inputArray.length == 1) {
+						System.out.println("error");
+						view.print("Geen foutcode meegegeven foei foei foei");
+					} else if (inputArray[1].equals("0")) {
+						view.print("Fout commando: 0");
+					} else if (inputArray[1].equals("1")) {
+						view.print("Foute beurt: 1");
+					} else if (inputArray[1].equals("2")) {
+						view.print("Niet unieke naam of onjuiste naam: 2");
+					} else if (inputArray[1].equals("3")) {
+						view.print("Speler disconnected: 3");
+					} else if (inputArray[1].equals("4")) {
+						view.print("Speler heeft functie niet: 4");
+					}
+				} else if (inputArray[0].equals(Protocol.PLACED)) {
+					placed(inputArray);
+				} else if (inputArray[0].equals(Protocol.NEWSTONES)) {
+					List<Stone> stones = null;
+					try {
+						stones = Protocol.stringToStoneList(inputArray);
+						game.giveStones(stones, clientName);
+					} catch (InvalidStoneException e) {
+						throw new InvalidCommandException();
+					} catch (InvalidMoveException e) {
+						throw new InvalidCommandException();
+					}
+				} else if (inputArray[0].equals(Protocol.TRADED)) {
+					view.print("Speler " + inputArray[1] + " " + inputArray[0] + " " + inputArray[2] + " stones.");
+				} else if (inputArray[0].equals(Protocol.TURN)) {
+					if (inputArray.length == 2) {
+						turn(inputArray);
+					} else throw new InvalidCommandException();
+				} else if (inputArray[0].equals(Protocol.PLAYERS)) {
+					if (inputArray.length >= 2) {
+						players = new ArrayList<String>();
+						for (int i = 1; i < inputArray.length; i++) {
+							players.add(inputArray[i]);
 						}
-						break;
 					}
-				}
-			} else if (inputArray[0].equals(Protocol.PLAYERS)) {
-				if (inputArray.length >= 2) {
-					players = new ArrayList<String>();
-					for (int i=1; i<inputArray.length;i++) {
-						players.add(inputArray[i]);
+				} else if (inputArray[0].equals(Protocol.JOINLOBBY)) {
+					if (inputArray.length >= 2) {
+						String message = "Player " + inputArray[1] + " joined the room";
+						//view.print(message);
 					}
-				}
-			} else if (inputArray[0].equals(Protocol.JOINLOBBY)) {
-				if (inputArray.length >= 2) {
-					String message = "Player " + inputArray[1] + " joined the room";
-					view.print(message);
-				}
-			} else if (inputArray[0].equals(Protocol.START)) {
-				if (inputArray.length >= 3 ) {
-					if (input.contains(clientName)) {
-						initGame(inputArray);
-					}
-				}
-				else {
-					serverBroken();
+				} else if (inputArray[0].equals(Protocol.START)) {
+					if (inputArray.length >= 3) {
+						if (input.contains(clientName)) {
+							initGame(inputArray);
+						}
+					} else throw new InvalidCommandException();
 				}
 			}
+		} catch (InvalidCommandException e) {
+			serverBroken();
 		}
 		shutdown();
+	}
+
+	public void placed(String[] inputArray) throws InvalidCommandException {
+		List<Stone> stones = Protocol.stringToPlacedStoneList(inputArray);
+		List<Position> positions = Protocol.stringToPlacePositionList(inputArray);
+		try {
+			game.makeMove(positions, stones);
+		} catch (InvalidMoveException e) {
+			throw new InvalidCommandException();
+		}
+	}
+	//@ requires inputArray.length == 2;
+	public void turn(String[] inputArray) throws InvalidCommandException{
+        game.setCurrentPlayer(inputArray[1]);
+        if (inputArray[1].equals(clientName)) {
+            you.makeMove();
+        }
 	}
 	public void initGame(String[] inputArray) {
 		String[] players = new String[inputArray.length - 1];
@@ -298,7 +298,7 @@ public class Client extends Thread {
 		sendMessage(Protocol.WHICHPLAYERS);
 	}
 	public void serverBroken() {
-		System.out.println("Server is broken, OK DOEI!");
+		System.out.println("Server is broken, OK DOEI! (client might also be broken)");
 		shutdown();
 	}
 }

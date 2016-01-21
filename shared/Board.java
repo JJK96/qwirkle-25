@@ -117,6 +117,12 @@ public class Board {
 		makeMove(stone, possibleMoves.get(p));
 	}
 
+	/**
+	 * makes the given moves on the board, if an invalid move is found, the board should be replaced by it's deepcopy.
+	 * @param positions
+	 * @param stones
+	 * @throws InvalidMoveException
+     */
 	//@ requires stones.size() == positions.size();
 	public void makeMoves(List<Position> positions, List<Stone> stonesList)
 			throws InvalidMoveException {

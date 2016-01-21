@@ -1,6 +1,8 @@
 package client;
 
 import shared.*;
+
+import java.util.List;
 import java.util.Map;
 
 public class ClientGame {
@@ -17,7 +19,7 @@ public class ClientGame {
 	 * @param names
 	 */
 	public ClientGame(String[] names, Client client) {
-		bag = 108;
+		bag = 3*(Stone.Shape.values().length * Stone.Color.values().length) - 6 * (players.length -1);
 		players = new Player[names.length];
 		this.board = new Board();
 		this.client = client;
@@ -93,8 +95,45 @@ public class ClientGame {
 		return currentPlayer;
 	}
 
-	public void setCurrentPlayer(Player player) {
-		currentPlayer = player;
+	public Player findPlayer(String name) {
+		for (Player p : players) {
+			if (p.getName().equals(name)) {
+				return p;
+			}
+		}
+		return null;
+	}
+
+	public void makeMove(List<Position> positions, List<Stone> stones) throws InvalidMoveException {
+		try {
+			board.makeMoves(positions, stones);
+		} catch (InvalidMoveException e) {
+			board = board.deepCopy();
+			throw e;
+		}
+		bag -= positions.size();
+	}
+
+	public void removeFromBag(int num) throws InvalidMoveException {
+		if (bag >= num) {
+			bag -= num;
+		} else throw new InvalidMoveException();
+	}
+	public void setCurrentPlayer(String name) throws InvalidCommandException {
+		Player p = findPlayer(name);
+		if (currentPlayer != null) {
+			currentPlayer = p;
+		} else {
+			throw new InvalidCommandException();
+		}
+	}
+	public void giveStones(List<Stone> stonelist, String playername) throws InvalidMoveException {
+		for (Player p : players) {
+			if (p.getName().equals(playername)) {
+				p.takeStones(stonelist);
+				removeFromBag(stonelist.size());
+			}
+		}
 	}
 
 }
