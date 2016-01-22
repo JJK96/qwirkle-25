@@ -259,7 +259,7 @@ public class View implements Observer {
 		List<Stone> playerStones = p.getStones();
 
 
-
+		//change
 		/*Stone lastStone = null;
 		int choice;
 		for (int i = 0; i < 7; i++) {
@@ -294,7 +294,7 @@ public class View implements Observer {
 			}
 		}
 		client.getGame().getCurrentPlayer().removeBackup();
-		client.place(stones);
+		client.place(stones);*/
 	}
 
 	/**
