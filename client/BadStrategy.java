@@ -14,6 +14,12 @@ public class BadStrategy implements Strategy {
 	@Override
 	public void determineMove(ClientGame game, List<Stone> stones) {
 		Board b = game.getBoard().deepCopy();
+		String pointsPlayers = "PLAYERPOINTS:\n\n";
+		for (Player p : game.getPlayers()) {
+			pointsPlayers += p.getName() + ": " + p.getPoints() + "\n";
+		}
+		pointsPlayers += "-------------------------------------------------------";
+		game.getClient().getView().print(pointsPlayers);
 		game.getClient().getView().print(b.toString());
 		int size = stones.size();
 		List<PossibleMove> adaptedPossibleMoves = new ArrayList<PossibleMove>();
@@ -36,7 +42,7 @@ public class BadStrategy implements Strategy {
 			game.getClient().place(stonesPlaced);
 		} else {
 			if (game.getBag() < size) {
-				for (int j = 0; j < game.getBag(); j ++) {
+				for (int j = 0; j < game.getBag(); j++) {
 					stonesPlaced.add(stones.get(j));
 				}
 				game.getClient().trade(stonesPlaced);
