@@ -137,6 +137,7 @@ public class ClientGame extends Observable {
 		if (bag >= num) {
 			bag -= num;
 		} else {
+			System.out.println(getBag());
 			throw new InvalidMoveException();
 		}
 	}
