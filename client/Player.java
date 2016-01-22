@@ -133,6 +133,12 @@ public class Player extends Observable {
 	public void takeStones(List<Stone> stonesToTake) {
 		this.stones.addAll(stonesToTake);
 	}
+	
+	public void removeStones(List<Stone> stoneList) {
+		for (Stone s : stoneList) {
+			stones.remove(s);
+		}
+	}
 
 	/**
 	 * Removes the specified stone from the players stones.

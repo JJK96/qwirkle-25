@@ -272,8 +272,7 @@ public class View implements Observer {
 							+ " stones there you have to start over with placing stones!!";
 			if (stones.size() > 0) {
 				prompt += "\nIf you want to end your turn choose -1.";
-				//choice = getChoice(-1,possibleMoves.size());
-				choice = -1;
+				choice = getChoice(-1,possibleMoves.size());
 			} else {
 				choice = intOutPromptPossibleMovesRange(prompt);
 			}
@@ -282,7 +281,7 @@ public class View implements Observer {
 								possibleMoveToStone(choice, b, lastStone);
 				if (stone == null) {
 					client.getGame().getCurrentPlayer().setStonesFromBackup();
-					//placeStones(b);
+					placeStones(b);
 					return;
 				}
 				Position pos = client.getGame().getCurrentPlayer().getPosition();
@@ -295,7 +294,7 @@ public class View implements Observer {
 			}
 		}
 		client.getGame().getCurrentPlayer().removeBackup();
-		client.place(stones);*/
+		client.place(stones);
 	}
 
 	/**
