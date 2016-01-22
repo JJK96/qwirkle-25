@@ -122,11 +122,11 @@ public class View implements Observer {
 					swapStones();
 				} else {
 					//while (movesLeft)
-					placeStone(b, possibleMoves.get(choice), player);
+					stonesplaced.add(placeStone(b, possibleMoves.get(choice), player));
 				}
 			} else {
 				int choice = getChoice(0, possibleMoves.size());
-				placeStone(b, possibleMoves.get(choice), player);
+				stonesplaced.add(placeStone(b, possibleMoves.get(choice), player));
 			}
 			possibleMoves = player.adaptPossibleMoves(possibleMoves, stones, stonesplaced);
 		}
@@ -238,7 +238,7 @@ public class View implements Observer {
 	 * since otherwise it was possible to place no stones ;)
 	 * 
 	 */
-	private void placeStone(Board b , PossibleMove place, Player p) {
+	private Stone placeStone(Board b , PossibleMove place, Player p) {
 		List<Stone> playerStones = p.getStones();
 
 
@@ -278,6 +278,7 @@ public class View implements Observer {
 		}
 		client.getGame().getCurrentPlayer().removeBackup();
 		client.place(stones);*/
+		return null;
 	}
 
 	/**

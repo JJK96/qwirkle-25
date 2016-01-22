@@ -245,5 +245,14 @@ public class Player extends Observable {
 		return game.getMoveCount() != 1 && stonesplaced == 0;
 	}
 
+	public List<Stone> adaptStones(List<Stone> stonelist, PossibleMove place) {
+		List<Stone> acceptableStones = new ArrayList<>();
+		for (Stone s : stonelist) {
+			if (place.acceptable(s)) {
+				acceptableStones.add(s);
+			}
+		}
+		return acceptableStones;
+	}
 
 }
