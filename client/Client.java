@@ -9,6 +9,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -287,9 +288,6 @@ public class Client extends Thread {
 	public void place(List<Stone> stones) {
 		String msg = Protocol.PLACE;
 		for (Stone s : stones) {
-			if (you.getStones().contains(s)) {
-				you.removeStone(s);
-			}
 			msg = msg + Protocol.SPLIT + s.toUsableString() + Protocol.SPLIT 
 					+ s.getPosition().toUsableString();
 		}
@@ -298,11 +296,8 @@ public class Client extends Thread {
 
 	public void trade(List<Stone> stones) {
 		String msg = Protocol.TRADE;
-		for (int i= 0; i<stones.size();i++) {
+		for (int i = 0; i < stones.size(); i++) {
 			Stone s = stones.get(i);
-			if (you.getStones().contains(s)) {
-				you.removeStone(s);
-			}
 			msg = msg + Protocol.SPLIT + s.toUsableString();
 		}
 		sendMessage(msg);

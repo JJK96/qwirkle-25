@@ -245,7 +245,7 @@ public class View implements Observer {
 							+ " stones there you have to start over with placing stones!!";
 			if (stones.size() > 0) {
 				prompt += "\nIf you want to end your turn choose -1.";
-				choice = getChoice(-1,possibleMoves.size());
+				choice = getChoice(-1, possibleMoves.size());
 			} else {
 				choice = intOutPromptPossibleMovesRange(prompt);
 			}
