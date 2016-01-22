@@ -134,7 +134,6 @@ public class View implements Observer {
 			possibleMoves = player.adaptPossibleMoves(possibleMoves, stones, stonesplaced);
 		}
 		if (!stonesplaced.isEmpty()) {
-			player.removeStones(stonesplaced);
 			client.place(stonesplaced);
 		}
 	}
@@ -260,6 +259,7 @@ public class View implements Observer {
 		int choice = getChoice(0,acceptableStones.size());
 		Stone s = acceptableStones.get(choice);
 		b.makeMove(s, place);
+		p.removeStone(s);
 		return s;
 	}
 
