@@ -19,7 +19,7 @@ public class ServerGame extends Thread {
 	private int playernum;
 	private boolean running;
 	private Board board;
-	private List<Stone> bag;
+	public List<Stone> bag;
 	private Server server;
 	private ServerPlayer currentplayer;
 	private Lock lock;

@@ -110,19 +110,19 @@ public class View implements Observer {
 		List<Stone> stones = player.getStones();
 		List<PossibleMove> possibleMoves = new ArrayList<>(b.getPossibleMoves().values());
 		List<Stone> stonesplaced  = new ArrayList<>();
+		possibleMoves = player.adaptPossibleMoves(possibleMoves, stones, stonesplaced);
 		while (!possibleMoves.isEmpty() || player.canTrade(stonesplaced.size())) {
-			String message = b.toString() + "\n" + possibleMovesToString(possibleMoves) + "\n"
+			String message = b.toString(possibleMoves) + "\n"
 					+ "Stones: \n" + player.stonesToString(stones) + "\n"
-					+ "Choose a place to play: ";
+					+ "Choose a place to play ";
 			print(message);
 			if (player.canTrade(stonesplaced.size())) {
-				print("or -1 to swap: ");
+				print("-1: swap");
 				int choice = getChoice(-1, possibleMoves.size());
 				if (choice == -1) {
 					swapStones();
 					break;
 				} else {
-					//while (movesLeft)
 					stonesplaced.add(placeStone(b, possibleMoves.get(choice), player));
 				}
 			} else {
@@ -158,7 +158,13 @@ public class View implements Observer {
 		boolean valid = false;
 		int choice;
 		do {
-			choice = readInt("Enter you choice: ");
+			print("-2: hint");
+			choice = readInt("Enter you choice (" + low + " - " + (high -1) + "): ");
+			if (choice == -2) {
+				int hintchoice = (int) Math.floor(Math.random() * (high -low) + low);
+				print("I suggest you take: " + hintchoice);
+				choice = readInt("Enter you choice: ");
+			}
 			valid = choice >= low && choice < high;
 			if (!valid) System.out.println("ERROR: number " + choice + " is not a valid choice.");
 		} while (!valid);
@@ -334,7 +340,6 @@ public class View implements Observer {
 
 	@Override
 	public void update(Observable observable, Object o) {
-		System.out.println("in update of view");
 		if (observable instanceof HumanPlayer) {
 			determineMove((HumanPlayer) observable);
 		} else if (observable instanceof ClientGame) {

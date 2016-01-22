@@ -84,17 +84,19 @@ public class ServerPlayer extends Thread {
 
 	public void register() throws IOException, InvalidCommandException {
 		String line = in.readLine();
-		String[] words = line.split(Protocol.SPLIT);
-		if (words.length >= 2 && words[0].equals(Protocol.REGISTER)) {
-			name = words[1];
-			if (words.length > 2) {
-				for (int i = 2; i < words.length; i++) {
-					options += words[i] + Protocol.SPLIT;
+		if (line != null) {
+			String[] words = line.split(Protocol.SPLIT);
+			if (words.length >= 2 && words[0].equals(Protocol.REGISTER)) {
+				name = words[1];
+				if (words.length > 2) {
+					for (int i = 2; i < words.length; i++) {
+						options += words[i] + Protocol.SPLIT;
+					}
 				}
+			} else {
+				throw new InvalidCommandException(line);
 			}
-		} else {
-			throw new InvalidCommandException(line);
-		}
+		} else throw new InvalidCommandException();
 	}
 
 	public void trade(String[] inputArray) {
@@ -143,6 +145,7 @@ public class ServerPlayer extends Thread {
 			stoneString += s.toUsableString() + Protocol.SPLIT;
 		}
 		sendMessage(Protocol.NEWSTONES + Protocol.SPLIT + stoneString);
+		System.out.println("Bag size: "+ game.bag.size());
 	}
 
 	public void acknowledge() {

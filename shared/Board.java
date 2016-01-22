@@ -1,5 +1,7 @@
 package shared;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.*;
 
 public class Board {
@@ -277,25 +279,45 @@ public class Board {
 	 * possiblemoves numbered from 0.
 	 */
 	public String toString() {
-		int[] boundaries = getBoundaries();
-		String res = "   ";
+		return toString(new ArrayList<PossibleMove>());
+	}
+
+	public String toString(List<PossibleMove> pmlist) {
+		int WIDTH = 5;
+        int[] boundaries = getBoundaries();
+		boundaries[0] -= 1;
+		boundaries[1] -= 1;
+		boundaries[2] += 1;
+		boundaries[3] += 1;
+		String res = "     ";
 		for (int k = boundaries[0]; k <= boundaries[2]; k++) {
-			res += "  " + k + "  ";
+			res += StringUtils.center(Integer.toString(k), WIDTH);
 		}
-		res += "\n" + boundaries[1];
-		res += (boundaries[1] < 0) ? " " : "  ";
+		res += "\n";
 		for (int i = boundaries[1]; i <= boundaries[3]; i++) {
+			res += StringUtils.left(Integer.toString(i), WIDTH);
 			for (int j = boundaries[0]; j <= boundaries[2]; j++) {
-				Stone s = null;
-				if ((s = stones.get(new Position(j, i))) != null) {
+				boolean placeEmpty = true;
+				Position pos = new Position(j, i);
+				Stone s = stones.get(pos);
+				if (s != null) {
 					res += s;
+					placeEmpty = false;
 				} else {
+					for (int pmIt = 0; pmIt < pmlist.size(); pmIt++) {
+						PossibleMove p = pmlist.get(pmIt);
+						if (p.getPosition().equals(pos)) {
+							res += StringUtils.center("("+pmIt+")", WIDTH);
+							placeEmpty = false;
+							break;
+						}
+					}
+				}
+				if (placeEmpty) {
 					res += "     ";
 				}
 			}
-			int nextnumber = i + 1;
-			res += "\n" + nextnumber;
-			res += (nextnumber < 0) ? " " : "  ";
+			res += "\n";
 		}
 		return res;
 	}

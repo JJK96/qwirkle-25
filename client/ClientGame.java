@@ -12,7 +12,6 @@ public class ClientGame extends Observable {
 	private Player currentPlayer;
 	private Board board;
 	private Client client;
-	private Player winner;
 	private int moveCount = 0;
 	private int bag;
 
@@ -40,8 +39,8 @@ public class ClientGame extends Observable {
 				players[i] = new Player(names[i], this);
 			}
 		}
-		bag = 3 * (Stone.Shape.values().length 
-				* Stone.Color.values().length) - 6 * (players.length - 1);
+		bag = 3 * (Stone.Shape.values().length
+				* Stone.Color.values().length) - 6 * (players.length);
 	}
 
 	/**
@@ -132,15 +131,6 @@ public class ClientGame extends Observable {
 		setChanged();
 		notifyObservers();
 	}
-
-	public void removeFromBag(int num) throws InvalidMoveException {
-		if (bag >= num) {
-			bag -= num;
-		} else {
-			System.out.println(getBag());
-			throw new InvalidMoveException();
-		}
-	}
 	public void setCurrentPlayer(String name) throws InvalidCommandException {
 		Player p = findPlayer(name);
 		if (p != null) {
@@ -153,12 +143,21 @@ public class ClientGame extends Observable {
 		for (Player p : players) {
 			if (p.getName().equals(playername)) {
 				p.takeStones(stonelist);
-				removeFromBag(stonelist.size());
 			}
 		}
 	}
 
 	public Player getWinner() {
+		Player winner = players[0];
+		for(Player p : players) {
+			if (p.getPoints() > winner.getPoints()) {
+				winner = p;
+			}
+		}
 		return winner;
+	}
+
+	public void addPoints(String s) {
+		currentPlayer.addPoints(Integer.parseInt(s));
 	}
 }
