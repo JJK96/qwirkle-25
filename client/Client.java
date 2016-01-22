@@ -9,7 +9,6 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -170,8 +169,8 @@ public class Client extends Thread {
 					}
 				} else if (inputArray[0].equals(Protocol.JOINLOBBY)) {
 					if (inputArray.length >= 2) {
-						String message = "Player " + inputArray[1] + " joined the room";
-						// view.print(message);
+						String message = "\n\nPlayer " + inputArray[1] + " joined the room";
+						view.print(message);
 					}
 				} else if (inputArray[0].equals(Protocol.START)) {
 					if (inputArray.length >= 3) {
