@@ -29,8 +29,10 @@ public class ClientGame extends Observable {
 				Player p;
 				if (client.getComputerPlayerBool()) {
 					p = new ComputerPlayer(names[i], this, client.getStrategy());
+					client.setYou(p);
 				} else {
 					p = new HumanPlayer(names[i], this);
+					client.setYou(p);
 					p.addObserver(client.getView());
 				}
 				players[i] = p;
