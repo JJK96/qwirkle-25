@@ -196,6 +196,7 @@ public class Board {
      */
 	//@ requires allOneRow(spaces);
 	public boolean connectedRow(List<Position> positions) {
+		int y = positions.get(0).getY();
 		int low = positions.get(0).getX();
 		int high = low;
 		for (Position p: positions) {
@@ -203,9 +204,16 @@ public class Board {
 			if (x < low) low = x;
 			if (x > high) high = x;
 		}
-		return (high-low) == positions.size() -1;
+		for (int i = low; i<=high;i++) {
+			Position p = new Position(i,y);
+			if (!(positions.contains(p) || stones.get(p) != null)) {
+				return false;
+			}
+		}
+		return true;
 	}
 	public boolean connectedColumn(List<Position> positions) {
+		int x = positions.get(0).getX();
 		int low = positions.get(0).getY();
 		int high = low;
 		for (Position p: positions) {
@@ -213,7 +221,13 @@ public class Board {
 			if (y < low) low = y;
 			if (y > high) high = y;
 		}
-		return (high-low) == positions.size() -1;
+		for (int i = low; i<=high;i++) {
+			Position p = new Position(x,i);
+			if (!(positions.contains(p) || stones.get(p) != null)) {
+				return false;
+			}
+		}
+		return true;
 	}
 	/**
 	 * Places the stone on the position of the possiblemove on the board.
@@ -224,7 +238,7 @@ public class Board {
 	//@ requires possibleMoves.contains(place) && place.acceptable(stone));
 	public void makeMove(Stone stone, PossibleMove place) {
 		Stone stoneToMove = stone;
-		stoneToMove = place.fill(stone);
+		stoneToMove = place.fill(stoneToMove);
 		stones.put(stoneToMove.getPosition(), stoneToMove);
 		possibleMoves.remove(place.getPosition());
 		for (Position p : possibleMoves.keySet()) {

@@ -97,11 +97,11 @@ public class Client extends Thread {
 	}
 
 	public void startGame() {
-		this.computerPlayerBool = view.askHumanOrComputerPlayer();
+		this.computerPlayerBool = true;//view.askHumanOrComputerPlayer();
 		if (computerPlayerBool == true) {
-			this.strategy = view.getStrategyFromInput();
+			this.strategy = new BadStrategy();//view.getStrategyFromInput();
 		}
-		this.aantal = view.startGame();
+		this.aantal = 2;//view.startGame();
 		join(aantal);
 	}
 
@@ -216,12 +216,13 @@ public class Client extends Thread {
 	}
 
 	public void playagain() {
-		String playagain = view.readString("Do you want to play another game? y/n: ");
-		if (playagain.equals("y")) {
+		//String playagain = view.readString("Do you want to play another game? y/n: ");
+		startGame();
+		/*if (playagain.equals("y")) {
 			startGame();
 		} else {
 			shutdown();
-		}
+		}*/
 
 	}
 

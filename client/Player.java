@@ -129,7 +129,9 @@ public class Player extends Observable {
 	 * @param
 	 */
 	public void takeStones(List<Stone> stonesToTake) {
-		this.stones.addAll(stonesToTake);
+		for(Stone s : stonesToTake) {
+			stones.add(s);
+		}
 	}
 	
 	public void removeStones(List<Stone> stoneList) {

@@ -145,7 +145,6 @@ public class ServerPlayer extends Thread {
 			stoneString += s.toUsableString() + Protocol.SPLIT;
 		}
 		sendMessage(Protocol.NEWSTONES + Protocol.SPLIT + stoneString);
-		System.out.println("Bag size: "+ game.bag.size());
 	}
 
 	public void acknowledge() {

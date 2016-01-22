@@ -64,6 +64,7 @@ public class ServerGame extends Thread {
 		int currentplayernum = (int) Math.floor(Math.random() * playernum);
 		currentplayer = players[currentplayernum];
 		while (!hasWinner() && isRunning() && !this.isInterrupted() && movesLeft) {
+			System.out.println(currentplayer.getThisName() + " has stones: " + currentplayer.getStones());
 			sendTurn();
 			try {
 				playerDone.await();
@@ -172,8 +173,7 @@ public class ServerGame extends Thread {
 	}
 
 	public void placed(List<Stone> stones, List<Position> positions, int points) {
-		currentplayer.removeStones(stones);
-		String message = Protocol.PLACED + Protocol.SPLIT + currentplayer.getThisName() 
+		String message = Protocol.PLACED + Protocol.SPLIT + currentplayer.getThisName()
 						+ Protocol.SPLIT;
 		message += points + Protocol.SPLIT;
 		for (int i = 0; i < stones.size(); i++) {
@@ -198,6 +198,7 @@ public class ServerGame extends Thread {
 				board.makeMoves(positions, stones);
 				System.out.println("currentplayer placed stones");
 				System.out.println(board);
+				currentplayer.removeStones(stones);
 				currentplayer.giveStones(takeSomeStones(stones.size()));
 				int points = board.calculatePoints(stones, positions);
 				currentplayer.addpoints(points);

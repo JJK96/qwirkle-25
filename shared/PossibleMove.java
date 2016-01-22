@@ -36,14 +36,14 @@ public class PossibleMove extends Space {
 		stone.setRow(getRow());
 		stone.setPosition(getPosition());
 		stone.place();
-		for (Space s : stone.getColumn()) {
-			s.addColumn(stone);
-		}
-		for (Space s : stone.getRow()) {
-			s.addRow(stone);
-		}
 		stone.addColumn(stone);
 		stone.addRow(stone);
+		for (Stone s : stone.getColumn()) {
+			s.setColumn(stone.getColumn());
+		}
+		for (Stone s : stone.getRow()) {
+			s.setRow(stone.getRow());
+		}
 		return stone;
 	}
 
@@ -53,7 +53,7 @@ public class PossibleMove extends Space {
 	 * @return ??
 	 */
 	public int updatePossibilities() {
-		if (getColumn().size() == 6 || getRow().size() == 6) {
+		if (getColumn().size() >= 6 || getRow().size() >= 6) {
 			return 0;
 		}
 		return 1;
@@ -114,6 +114,7 @@ public class PossibleMove extends Space {
 			if ((commonColor(getColumn(), stone) && noCommonShape(getColumn(), stone))
 								|| (commonShape(getColumn(), stone) 
 										&& noCommonColor(getColumn(), stone))) {
+				System.out.println("PossibleMove: " + this + " Stone: " +stone + "Column: " + this.getColumn() + "is acceptable");
 				return true;
 			}
 		}

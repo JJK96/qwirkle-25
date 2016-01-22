@@ -26,16 +26,20 @@ public class Space {
 		this.column = column;
 	}
 
-	public void addColumn(List<Stone> columns) {
-		this.column.addAll(columns);
+	public void addColumn(List<Stone> stoneList) {
+		for (Stone s : stoneList) {
+			addColumn(s);
+		}
 	}
 
 	public void addColumn(Stone s) {
 		this.column.add(s);
 	}
 
-	public void addRow(List<Stone> rows) {
-		this.row.addAll(rows);
+	public void addRow(List<Stone> stoneList) {
+		for (Stone s : stoneList) {
+			addRow(s);
+		}
 	}
 
 	public void addRow(Stone s) {

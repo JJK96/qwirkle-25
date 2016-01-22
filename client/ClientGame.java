@@ -142,11 +142,8 @@ public class ClientGame extends Observable {
 		}
 	}
 	public void giveStones(List<Stone> stonelist, String playername) throws InvalidMoveException {
-		for (Player p : players) {
-			if (p.getName().equals(playername)) {
-				p.takeStones(stonelist);
-			}
-		}
+		Player p = findPlayer(playername);
+        p.takeStones(stonelist);
 	}
 
 	public Player getWinner() {

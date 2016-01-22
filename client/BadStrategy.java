@@ -29,7 +29,7 @@ public class BadStrategy implements Strategy {
 			adaptedPossibleMoves = game.getCurrentPlayer().adaptPossibleMoves(allPossibleMoves, stones, stonesPlaced);
 			end: for (PossibleMove p : adaptedPossibleMoves) {
 				for (Stone s : stones) {
-					if (b.isValidMove(p, s)) {
+					if (p.acceptable(s)) {
 						b.makeMove(s, p);
 						stonesPlaced.add(s);
 						game.getCurrentPlayer().removeStone(s);
@@ -45,6 +45,8 @@ public class BadStrategy implements Strategy {
 				for (int j = 0; j < game.getBag(); j++) {
 					stonesPlaced.add(stones.get(j));
 				}
+				System.out.println("adapted possible moves: " + adaptedPossibleMoves);
+				System.out.println("stones: " + stones);
 				game.getClient().trade(stonesPlaced);
 				List<Stone> toRemove = new ArrayList<>();
 				toRemove.addAll(stonesPlaced);
