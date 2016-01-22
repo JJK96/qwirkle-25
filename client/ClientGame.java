@@ -56,6 +56,10 @@ public class ClientGame extends Observable {
 	public void incMoveCount() {
 		moveCount++;
 	}
+	
+	public int getBag() {
+		return bag;
+	}
 
 	public int getMoveCount() {
 		return moveCount;

@@ -35,10 +35,20 @@ public class BadStrategy implements Strategy {
 		if (stonesPlaced.size() > 0) {
 			game.getClient().place(stonesPlaced);
 		} else {
-			game.getClient().trade(stones);
-			List<Stone> toRemove = new ArrayList<>();
-			toRemove.addAll(stones);
-			game.getCurrentPlayer().removeStones(toRemove);
+			if (game.getBag() < size) {
+				for (int j = 0; j < game.getBag(); j ++) {
+					stonesPlaced.add(stones.get(j));
+				}
+				game.getClient().trade(stonesPlaced);
+				List<Stone> toRemove = new ArrayList<>();
+				toRemove.addAll(stonesPlaced);
+				game.getCurrentPlayer().removeStones(toRemove);
+			} else {
+				game.getClient().trade(stones);
+				List<Stone> toRemove = new ArrayList<>();
+				toRemove.addAll(stones);
+				game.getCurrentPlayer().removeStones(toRemove);
+			}
 		}
 	}
 }
