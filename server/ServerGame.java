@@ -266,12 +266,14 @@ public class ServerGame extends Thread {
 	}
 
 	public boolean gotAllStones(List<Stone> stonelist) {
+		System.out.println("stones: " + currentplayer.getStones());
 		return currentplayer.getStones().containsAll(stonelist);
 	}
 
 	public void trade(List<Stone> stones) throws InvalidMoveException {
-		if (gotAllStones(stones) && bag.size() >= stones.size() && !board.getStones().isEmpty()) {
+		if (gotAllStones(stones) && bag.size() >= stones.size()) { // && !board.getStones().isEmpty()) {
 			lock.lock();
+			currentplayer.removeStones(stones);
 			currentplayer.giveStones(takeSomeStones(stones.size()));
 			bag.addAll(stones);
 			traded(stones);

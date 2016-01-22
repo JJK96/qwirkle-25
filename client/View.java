@@ -109,28 +109,54 @@ public class View implements Observer {
 		Board b = player.getGame().getBoard().deepCopy();
 		List<Stone> stones = player.getStones();
 		List<PossibleMove> possibleMoves = new ArrayList<>(b.getPossibleMoves().values());
-		String message = Protocol.BORDER + b;
-		message += "\nIf you choose one of these places you will go to the place view, "
-				+ "where you can place stones"
-				+ "\nThe number doesn't matter now you can choose your first stone later"
-				+ "\n-1 : Swap stones\n-> What is your choice?\n\nThese are your stones:\n"
-				+ client.getGame().getCurrentPlayer().stonesToString();
-		print(message);
-		int choice = getChoice(-1, possibleMoves.size());
-		if (choice == -1) {
-			swapStones();
-		} else {
-			placeStones(b);
+		List<Stone> stonesplaced  = new ArrayList<>();
+		while (!possibleMoves.isEmpty() || canTrade(player, stonesplaced.size())) {
+			String message = b.toString() + "\n" + possibleMovesToString(possibleMoves) + "\n"
+					+ "Stones: \n" + player.stonesToString() + "\n"
+					+ "Choose a place to play: ";
+			print(message);
+			if (canTrade(player, stonesplaced.size())) {
+				print("or -1 to swap: ");
+				int choice = getChoice(-1, possibleMoves.size());
+				if (choice == -1) {
+					swapStones();
+				} else {
+					//while (movesLeft)
+					placeStone(b, possibleMoves.get(choice), player);
+				}
+			} else {
+				int choice = getChoice(0, possibleMoves.size());
+				placeStone(b, possibleMoves.get(choice), player);
+			}
+			possibleMoves = adaptPossibleMoves(possibleMoves, stones, stonesplaced);
 		}
 	}
+	public boolean canTrade(Player p, int stonesplaced) {
+		ClientGame game = p.getGame();
+		return game.getMoveCount() != 1 && stonesplaced == 0;
+	}
 
-	public List<PossibleMove> adaptPossibleMoves(List<PossibleMove> pmlist, List<Stone> stones) {
+	public List<PossibleMove> adaptPossibleMoves(List<PossibleMove> pmlist, List<Stone> stones, List<Stone> stonesplaced) {
+		List<PossibleMove> newpmlist = new ArrayList<>();
 		Iterator<PossibleMove> pmit = pmlist.iterator();
 		while (pmit.hasNext()) {
 			PossibleMove p = pmit.next();
-
+			for (Stone s : stones) {
+				if (p.acceptable(s)) {
+					newpmlist.add(p);
+					break;
+				}
+			}
 		}
-		return null;
+		return newpmlist;
+	}
+
+	public String possibleMovesToString(List<PossibleMove> pmlist) {
+		String result = "Possible Places to play: ";
+		for (int i = 0; i < pmlist.size(); i++) {
+			result += i + " " + pmlist.get(i) + "\n";
+		}
+		return result;
 	}
 
 	/**
@@ -229,11 +255,12 @@ public class View implements Observer {
 	 * since otherwise it was possible to place no stones ;)
 	 * 
 	 */
-	private void placeStones(Board b) {
-		List<Stone> stones = new ArrayList<Stone>();
-		List<PossibleMove> possibleMoves = new ArrayList<PossibleMove>(b.getPossibleMoves().values());
-		List<Stone> playerStones = client.getGame().getCurrentPlayer().getStones();
-		Stone lastStone = null;
+	private void placeStone(Board b , PossibleMove place, Player p) {
+		List<Stone> playerStones = p.getStones();
+
+
+
+		/*Stone lastStone = null;
 		int choice;
 		for (int i = 0; i < 7; i++) {
 			String prompt = Protocol.BORDER + client.getGame().getBoard()
@@ -245,7 +272,8 @@ public class View implements Observer {
 							+ " stones there you have to start over with placing stones!!";
 			if (stones.size() > 0) {
 				prompt += "\nIf you want to end your turn choose -1.";
-				choice = getChoice(-1,possibleMoves.size());
+				//choice = getChoice(-1,possibleMoves.size());
+				choice = -1;
 			} else {
 				choice = intOutPromptPossibleMovesRange(prompt);
 			}
@@ -254,7 +282,7 @@ public class View implements Observer {
 								possibleMoveToStone(choice, b, lastStone);
 				if (stone == null) {
 					client.getGame().getCurrentPlayer().setStonesFromBackup();
-					placeStones(b);
+					//placeStones(b);
 					return;
 				}
 				Position pos = client.getGame().getCurrentPlayer().getPosition();
@@ -267,7 +295,7 @@ public class View implements Observer {
 			}
 		}
 		client.getGame().getCurrentPlayer().removeBackup();
-		client.place(stones);
+		client.place(stones);*/
 	}
 
 	/**

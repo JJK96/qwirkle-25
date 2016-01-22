@@ -221,6 +221,7 @@ public class Client extends Thread {
 		game.setCurrentPlayer(inputArray[1]);
 		if (inputArray[1].equals(clientName)) {
 			System.out.println("current player making move");
+			game.incMoveCount();
 			game.getCurrentPlayer().makeMove();
 		} else {
 			view.print("waiting for player: " + inputArray[1] + " to make a move");

@@ -41,6 +41,7 @@ public class ServerPlayer extends Thread {
 		String line = null;
 		try {
 			while ((line = in.readLine()) != null) {
+				System.out.println(line);
 				String[] words = line.split(Protocol.SPLIT);
 				if (words[0].equals(Protocol.JOINAANTAL)) {
 					if (words.length >= 2) {
@@ -149,6 +150,7 @@ public class ServerPlayer extends Thread {
 	}
 
 	public void sendMessage(String msg) {
+		System.out.println(msg);
 		try {
 			out.write(msg);
 			out.newLine();

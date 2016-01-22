@@ -13,6 +13,7 @@ public class ClientGame extends Observable {
 	private Board board;
 	private Client client;
 	private Player winner;
+	private int moveCount = 0;
 	private int bag;
 
 	/**
@@ -50,6 +51,14 @@ public class ClientGame extends Observable {
 	 */
 	public Map<Position, PossibleMove> getPossibleMoves() {
 		return board.getPossibleMoves();
+	}
+
+	public void incMoveCount() {
+		moveCount++;
+	}
+
+	public int getMoveCount() {
+		return moveCount;
 	}
 
 	public Client getClient() {
