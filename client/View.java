@@ -112,7 +112,7 @@ public class View implements Observer {
 		List<Stone> stonesplaced  = new ArrayList<>();
 		while (!possibleMoves.isEmpty() || player.canTrade(stonesplaced.size())) {
 			String message = b.toString() + "\n" + possibleMovesToString(possibleMoves) + "\n"
-					+ "Stones: \n" + player.thisStonesToString() + "\n"
+					+ "Stones: \n" + player.stonesToString(stones) + "\n"
 					+ "Choose a place to play: ";
 			print(message);
 			if (player.canTrade(stonesplaced.size())) {
@@ -129,6 +129,8 @@ public class View implements Observer {
 				int choice = getChoice(0, possibleMoves.size());
 				stonesplaced.add(placeStone(b, possibleMoves.get(choice), player));
 			}
+			stones = player.getStones();
+			possibleMoves = new ArrayList<>(b.getPossibleMoves().values());
 			possibleMoves = player.adaptPossibleMoves(possibleMoves, stones, stonesplaced);
 		}
 		if (!stonesplaced.isEmpty()) {
@@ -208,6 +210,7 @@ public class View implements Observer {
 	private void swapStones() {
 		List<Stone> stones = new ArrayList<Stone>();
 		List<Stone> playerStones = client.getGame().getCurrentPlayer().getStones();
+		int sizeMin1 = playerStones.size()-1;
 		String swapPrompt = Protocol.BORDER + "These are your stones, "
 						+ "which stone do you want to swap?\n"
 						+ client.getGame().getCurrentPlayer().thisStonesToString()
@@ -218,7 +221,7 @@ public class View implements Observer {
 		Stone chosen1 = playerStones.get(choice);
 		client.getGame().getCurrentPlayer().removeStone(chosen1);
 		stones.add(chosen1);
-		for (int i = 1; i < 7; i++) {
+		for (int i = 1; i <= sizeMin1 && i<= client.getGame().getBag(); i++) {
 			String swapPromptSecond = Protocol.BORDER + "These are your stones, "
 							+ "which stone do you want to swap?\n"
 							+ client.getGame().getCurrentPlayer().thisStonesToString()
@@ -241,7 +244,7 @@ public class View implements Observer {
 	 * stones selected will be send to the server to be placed. The int
 	 * firstChoice is the first stone to be placed. The first input cant be -1
 	 * since otherwise it was possible to place no stones ;)
-	 * 
+	 *
 	 */
 	private Stone placeStone(Board b , PossibleMove place, Player p) {
 		List<Stone> acceptableStones = p.adaptStones(p.getStones(), place);
@@ -252,42 +255,6 @@ public class View implements Observer {
 		Stone s = acceptableStones.get(choice);
 		b.makeMove(s, place);
 		return s;
-		//change
-		/*Stone lastStone = null;
-		int choice;
-		for (int i = 0; i < 7; i++) {
-			String prompt = Protocol.BORDER + client.getGame().getBoard()
-							+ "\nThis is the board with all you can choose." 
-							+ "\nThese are your stones:\n"
-							+ client.getGame().getCurrentPlayer().stonesToString()
-							+ "\nCHOOSE CAREFULL:\n"
-							+ "If you choose a possiblemove and you can't place 1 of your"
-							+ " stones there you have to start over with placing stones!!";
-			if (stones.size() > 0) {
-				prompt += "\nIf you want to end your turn choose -1.";
-				choice = getChoice(-1,possibleMoves.size());
-			} else {
-				choice = intOutPromptPossibleMovesRange(prompt);
-			}
-			if (choice != -1) {
-				Stone stone = client.getGame().getCurrentPlayer().
-								possibleMoveToStone(choice, b, lastStone);
-				if (stone == null) {
-					client.getGame().getCurrentPlayer().setStonesFromBackup();
-					placeStones(b);
-					return;
-				}
-				Position pos = client.getGame().getCurrentPlayer().getPosition();
-				b.makeMove(pos, stone);
-				lastStone = b.getStones().get(pos);
-				stones.add(stone);
-			} else {
-				client.getGame().getCurrentPlayer().removeBackup();
-				client.place(stones);
-			}
-		}
-		client.getGame().getCurrentPlayer().removeBackup();
-		client.place(stones);*/
 	}
 
 	/**
