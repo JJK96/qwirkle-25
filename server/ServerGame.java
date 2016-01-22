@@ -274,6 +274,7 @@ public class ServerGame extends Thread {
 			lock.lock();
 			currentplayer.giveStones(takeSomeStones(stones.size()));
 			bag.addAll(stones);
+			traded(stones);
 			playerDone.signal();
 			lock.unlock();
 		} else {
