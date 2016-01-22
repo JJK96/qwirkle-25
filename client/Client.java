@@ -150,7 +150,7 @@ public class Client extends Thread {
 					} catch (InvalidStoneException e) {
 						throw new InvalidCommandException();
 					} catch (InvalidMoveException e) {
-						System.out.println(inputArray);
+						System.out.println(input);
 						throw new InvalidCommandException();
 					}
 				} else if (inputArray[0].equals(Protocol.TRADED)) {
