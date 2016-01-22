@@ -254,7 +254,7 @@ public class View implements Observer {
 	 */
 	private Stone placeStone(Board b , PossibleMove place, Player p) {
 		List<Stone> acceptableStones = p.adaptStones(p.getStones(), place);
-		String message = "You can place these stones here: " + p.stonesToString(acceptableStones) + "\n"
+		String message = "You can place these stones here: \n" + p.stonesToString(acceptableStones) + "\n"
 				+ "which stone do you want to place?: ";
 		print(message);
 		int choice = getChoice(0,acceptableStones.size());

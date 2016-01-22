@@ -295,7 +295,7 @@ public class Board {
 		}
 		res += "\n";
 		for (int i = boundaries[1]; i <= boundaries[3]; i++) {
-			res += StringUtils.left(Integer.toString(i), WIDTH);
+			res += StringUtils.rightPad(Integer.toString(i), WIDTH);
 			for (int j = boundaries[0]; j <= boundaries[2]; j++) {
 				boolean placeEmpty = true;
 				Position pos = new Position(j, i);
