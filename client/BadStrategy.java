@@ -2,7 +2,6 @@ package client;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import shared.*;
 
@@ -15,26 +14,30 @@ public class BadStrategy implements Strategy {
 	@Override
 	public void determineMove(ClientGame game, List<Stone> stones) {
 		Board b = game.getBoard().deepCopy();
-		System.out.println(b.toString());
-		List<Stone> stonesPlace = new ArrayList<Stone>();
-		Map<Position, PossibleMove> moves = b.getPossibleMoves();
-		for (int i = 0; i < moves.size(); i++) {
-			for (int j = 0; j < stones.size(); j++) {
-				if (b.isValidMove(moves.get(i), stones.get(j))) {
-					Stone stone = stones.get(j);
-					b.makeMove(stone, moves.get(i));
-					stonesPlace.add(stone);
-					game.getClient().place(stonesPlace);
-					List<Stone> toRemove = new ArrayList<>();
-					toRemove.addAll(stonesPlace);
-					game.getCurrentPlayer().removeStones(toRemove);
-					return;
+		int size = stones.size();
+		List<PossibleMove> adaptedPossibleMoves = new ArrayList<PossibleMove>();
+		List<Stone> stonesPlaced = new ArrayList<Stone>();
+		for (int i = 0; i < size; i++) {
+			List<PossibleMove> allPossibleMoves = new ArrayList<PossibleMove>(b.getPossibleMoves().values());
+			adaptedPossibleMoves = game.getCurrentPlayer().adaptPossibleMoves(allPossibleMoves, stones, stonesPlaced);
+			end: for (PossibleMove p : adaptedPossibleMoves) {
+				for (Stone s : stones) {
+					if (b.isValidMove(p, s)) {
+						b.makeMove(s, p);
+						stonesPlaced.add(s);
+						game.getCurrentPlayer().removeStone(s);
+						break end;
+					}
 				}
 			}
 		}
-		game.getClient().trade(stones);
-		List<Stone> toRemove = new ArrayList<>();
-		toRemove.addAll(stones);
-		game.getCurrentPlayer().removeStones(toRemove);
+		if (stonesPlaced.size() > 0) {
+			game.getClient().place(stonesPlaced);
+		} else {
+			game.getClient().trade(stones);
+			List<Stone> toRemove = new ArrayList<>();
+			toRemove.addAll(stones);
+			game.getCurrentPlayer().removeStones(toRemove);
+		}
 	}
 }
