@@ -1,10 +1,8 @@
 package client;
 
-import java.util.ArrayList;
+import java.util.*;
+
 import shared.*;
-import java.util.List;
-import java.util.Map;
-import java.util.Observable;
 
 public class Player extends Observable {
 
@@ -128,7 +126,7 @@ public class Player extends Observable {
 	/**
 	 * Take stones out of the bag after the player has made his move.
 	 * 
-	 * @param stones
+	 * @param
 	 */
 	public void takeStones(List<Stone> stonesToTake) {
 		this.stones.addAll(stonesToTake);
@@ -152,7 +150,7 @@ public class Player extends Observable {
 	/**
 	 * Add the points the player earned by his last move to his points.
 	 * 
-	 * @param points
+	 * @param
 	 */
 	public void addPoints(int pointsToAdd) {
 		this.points = this.points + pointsToAdd;
@@ -229,4 +227,23 @@ public class Player extends Observable {
 		}
 		return null;
 	}
+	public List<PossibleMove> adaptPossibleMoves(List<PossibleMove> pmlist, List<Stone> stones, List<Stone> stonesplaced) {
+		List<PossibleMove> newpmlist = new ArrayList<>();
+		Iterator<PossibleMove> pmit = pmlist.iterator();
+		while (pmit.hasNext()) {
+			PossibleMove p = pmit.next();
+			for (Stone s : stones) {
+				if (p.acceptable(s)) {
+					newpmlist.add(p);
+					break;
+				}
+			}
+		}
+		return newpmlist;
+	}
+	public boolean canTrade(int stonesplaced) {
+		return game.getMoveCount() != 1 && stonesplaced == 0;
+	}
+
+
 }

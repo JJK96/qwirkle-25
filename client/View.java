@@ -110,12 +110,12 @@ public class View implements Observer {
 		List<Stone> stones = player.getStones();
 		List<PossibleMove> possibleMoves = new ArrayList<>(b.getPossibleMoves().values());
 		List<Stone> stonesplaced  = new ArrayList<>();
-		while (!possibleMoves.isEmpty() || canTrade(player, stonesplaced.size())) {
+		while (!possibleMoves.isEmpty() || player.canTrade(stonesplaced.size())) {
 			String message = b.toString() + "\n" + possibleMovesToString(possibleMoves) + "\n"
 					+ "Stones: \n" + player.stonesToString() + "\n"
 					+ "Choose a place to play: ";
 			print(message);
-			if (canTrade(player, stonesplaced.size())) {
+			if (player.canTrade(stonesplaced.size())) {
 				print("or -1 to swap: ");
 				int choice = getChoice(-1, possibleMoves.size());
 				if (choice == -1) {
@@ -128,28 +128,11 @@ public class View implements Observer {
 				int choice = getChoice(0, possibleMoves.size());
 				placeStone(b, possibleMoves.get(choice), player);
 			}
-			possibleMoves = adaptPossibleMoves(possibleMoves, stones, stonesplaced);
+			possibleMoves = player.adaptPossibleMoves(possibleMoves, stones, stonesplaced);
 		}
-	}
-	public boolean canTrade(Player p, int stonesplaced) {
-		ClientGame game = p.getGame();
-		return game.getMoveCount() != 1 && stonesplaced == 0;
 	}
 
-	public List<PossibleMove> adaptPossibleMoves(List<PossibleMove> pmlist, List<Stone> stones, List<Stone> stonesplaced) {
-		List<PossibleMove> newpmlist = new ArrayList<>();
-		Iterator<PossibleMove> pmit = pmlist.iterator();
-		while (pmit.hasNext()) {
-			PossibleMove p = pmit.next();
-			for (Stone s : stones) {
-				if (p.acceptable(s)) {
-					newpmlist.add(p);
-					break;
-				}
-			}
-		}
-		return newpmlist;
-	}
+
 
 	public String possibleMovesToString(List<PossibleMove> pmlist) {
 		String result = "Possible Places to play: ";
