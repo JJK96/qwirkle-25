@@ -179,6 +179,13 @@ public class Board {
 		return sameRow(positions) || sameColumn(positions);
 	}
 
+	public boolean allOneRow(List<Space> spaces) {
+		List<Position> positionList = new ArrayList<>();
+		for (Space s : spaces) {
+			positionList.add(s.getPosition());
+		}
+		return allStonesOneRow(positionList);
+	}
 	/**
 	 * Places the stone on the position of the possiblemove on the board.
 	 * 

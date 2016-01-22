@@ -111,16 +111,16 @@ public class Player extends Observable {
 	 * @return String representation of the stones with a number for every
 	 *         stone.
 	 */
-	public String stonesToString() {
+	public String stonesToString(List<Stone> stonelist) {
 		String stoneString = "";
-		if (stones.size() == 0) {
-			return stoneString;
-		} else {
-			for (int i = 0; i < stones.size(); i++) {
-				stoneString += i + " " + stones.get(i).toString() + "\n";
-			}
-		}
+        for (int i = 0; i < stonelist.size(); i++) {
+            stoneString += i + " " + stonelist.get(i).toString() + "\n";
+        }
 		return stoneString;
+	}
+
+	public String thisStonesToString() {
+		return stonesToString(stones);
 	}
 
 	/**
@@ -229,20 +229,31 @@ public class Player extends Observable {
 	}
 	public List<PossibleMove> adaptPossibleMoves(List<PossibleMove> pmlist, List<Stone> stones, List<Stone> stonesplaced) {
 		List<PossibleMove> newpmlist = new ArrayList<>();
-		Iterator<PossibleMove> pmit = pmlist.iterator();
-		while (pmit.hasNext()) {
-			PossibleMove p = pmit.next();
-			for (Stone s : stones) {
-				if (p.acceptable(s)) {
-					newpmlist.add(p);
-					break;
-				}
+		for (PossibleMove p : pmlist) {
+			boolean oneRow = true;
+			if (!stonesplaced.isEmpty()) {
+				List<Space> spacelist = new ArrayList<>();
+				spacelist.addAll(stonesplaced);
+				spacelist.add(p);
+				oneRow = game.getBoard().allOneRow(spacelist);
+			}
+			if (oneRow && hasStones(p, stones)) {
+				newpmlist.add(p);
 			}
 		}
 		return newpmlist;
 	}
 	public boolean canTrade(int stonesplaced) {
 		return game.getMoveCount() != 1 && stonesplaced == 0;
+	}
+
+	public boolean hasStones(PossibleMove p, List<Stone> stones) {
+        for (Stone s : stones) {
+            if (p.acceptable(s)) {
+				return true;
+            }
+        }
+		return false;
 	}
 
 	public List<Stone> adaptStones(List<Stone> stonelist, PossibleMove place) {
