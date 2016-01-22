@@ -199,7 +199,7 @@ public class ServerGame extends Thread {
 				System.out.println("currentplayer placed stones");
 				System.out.println(board);
 				currentplayer.giveStones(takeSomeStones(stones.size()));
-				int points = calculatePoints(stones, positions);
+				int points = board.calculatePoints(stones, positions);
 				currentplayer.addpoints(points);
 				placed(stones, positions, points);
 				if (currentplayer.getStones().isEmpty()) {
@@ -227,42 +227,6 @@ public class ServerGame extends Thread {
 			}
 		}
 		return newWinner;
-	}
-
-	public int calculatePoints(List<Stone> stonelist, List<Position> positionlist) {
-		int points = 0;
-		if (board.sameRow(positionlist)) {
-			int rowsize = stonelist.get(0).getRow().size();
-			if (rowsize == Stone.Color.values().length) {
-				points += 2 * rowsize;
-			} else if (rowsize > 1) {
-				points += rowsize;
-			}
-			for (Stone s : stonelist) {
-				int columnsize = s.getColumn().size();
-				if (columnsize == Stone.Color.values().length) {
-					points += 2 * columnsize;
-				} else if (columnsize > 1) {
-					points += columnsize;
-				}
-			}
-		} else if (board.sameColumn(positionlist)) {
-			int columnsize = stonelist.get(0).getColumn().size();
-			if (columnsize == Stone.Color.values().length) {
-				points += 2 * columnsize;
-			} else if (columnsize > 1) {
-				points += columnsize;
-			}
-			for (Stone s : stonelist) {
-				int rowsize = s.getRow().size();
-				if (rowsize == Stone.Color.values().length) {
-					points += 2 * rowsize;
-				} else if (rowsize > 1) {
-					points += rowsize;
-				}
-			}
-		}
-		return points;
 	}
 
 	public boolean gotAllStones(List<Stone> stonelist) {

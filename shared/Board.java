@@ -155,7 +155,7 @@ public class Board {
 		}
 	}
 
-	public boolean sameRow(List<Position> positions) {
+	public boolean sameColumn(List<Position> positions) {
 		boolean allX = true;
 		int x = positions.get(0).getX();
 		for (Position p : positions) {
@@ -163,10 +163,10 @@ public class Board {
 				allX = false;
 			}
 		}
-		return allX;
+		return allX && connectedColumn(positions);
 	}
 
-	public boolean sameColumn(List<Position> positions) {
+	public boolean sameRow(List<Position> positions) {
 		boolean allY = true;
 		int y = positions.get(0).getY();
 		for (Position p : positions) {
@@ -174,7 +174,7 @@ public class Board {
 				allY = false;
 			}
 		}
-		return allY;
+		return allY && connectedRow(positions);
 	}
 
 	public boolean allStonesOneRow(List<Position> positions) {
@@ -188,9 +188,36 @@ public class Board {
 		}
 		return allStonesOneRow(positionList);
 	}
+
+	/**
+	 * checks if the spaces in the row are connected
+	 * @param
+	 * @return
+     */
+	//@ requires allOneRow(spaces);
+	public boolean connectedRow(List<Position> positions) {
+		int low = positions.get(0).getX();
+		int high = low;
+		for (Position p: positions) {
+			int x = p.getX();
+			if (x < low) low = x;
+			if (x > high) high = x;
+		}
+		return (high-low) == positions.size() -1;
+	}
+	public boolean connectedColumn(List<Position> positions) {
+		int low = positions.get(0).getY();
+		int high = low;
+		for (Position p: positions) {
+			int y = p.getY();
+			if (y < low) low = y;
+			if (y > high) high = y;
+		}
+		return (high-low) == positions.size() -1;
+	}
 	/**
 	 * Places the stone on the position of the possiblemove on the board.
-	 * 
+	 *
 	 * @param stone
 	 * @param place
 	 */
@@ -320,5 +347,41 @@ public class Board {
 			res += "\n";
 		}
 		return res;
+	}
+
+	public int calculatePoints(List<Stone> stonelist, List<Position> positionlist) {
+		int points = 0;
+		if (sameRow(positionlist)) {
+			int rowsize = stonelist.get(0).getRow().size();
+			if (rowsize == Stone.Color.values().length) {
+				points += 2 * rowsize;
+			} else if (rowsize > 1) {
+				points += rowsize;
+			}
+			for (Stone s : stonelist) {
+				int columnsize = s.getColumn().size();
+				if (columnsize == Stone.Color.values().length) {
+					points += 2 * columnsize;
+				} else if (columnsize > 1) {
+					points += columnsize;
+				}
+			}
+		} else if (sameColumn(positionlist)) {
+			int columnsize = stonelist.get(0).getColumn().size();
+			if (columnsize == Stone.Color.values().length) {
+				points += 2 * columnsize;
+			} else if (columnsize > 1) {
+				points += columnsize;
+			}
+			for (Stone s : stonelist) {
+				int rowsize = s.getRow().size();
+				if (rowsize == Stone.Color.values().length) {
+					points += 2 * rowsize;
+				} else if (rowsize > 1) {
+					points += rowsize;
+				}
+			}
+		}
+		return points;
 	}
 }
