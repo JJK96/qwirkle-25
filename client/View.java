@@ -105,36 +105,47 @@ public class View implements Observer {
 	 * Prints the prompt and waits for the user to give input, then decides if
 	 * it is a swap or a place and calls those methods respectively.
 	 */
-	public void determineMove() {
-		String prompt = Protocol.BORDER + client.getGame().getBoard();
-		prompt += "\nIf you choose one of these places you will go to the place view, " 
+	public void determineMove(HumanPlayer player) {
+		Board b = player.getGame().getBoard().deepCopy();
+		List<Stone> stones = player.getStones();
+		List<PossibleMove> possibleMoves = new ArrayList<>(b.getPossibleMoves().values());
+		String message = Protocol.BORDER + b;
+		message += "\nIf you choose one of these places you will go to the place view, "
 				+ "where you can place stones"
 				+ "\nThe number doesn't matter now you can choose your first stone later"
 				+ "\n-1 : Swap stones\n-> What is your choice?\n\nThese are your stones:\n"
 				+ client.getGame().getCurrentPlayer().stonesToString();
-		int choice = intOutPromptMinus1TillPossibleMovesRange(prompt, client.getGame().getBoard());
+		print(message);
+		int choice = getChoice(-1, possibleMoves.size());
 		if (choice == -1) {
 			swapStones();
 		} else {
-			placeStones();
+			placeStones(b);
 		}
 	}
 
+	public List<PossibleMove> adaptPossibleMoves(List<PossibleMove> pmlist, List<Stone> stones) {
+		Iterator<PossibleMove> pmit = pmlist.iterator();
+		while (pmit.hasNext()) {
+			PossibleMove p = pmit.next();
+
+		}
+		return null;
+	}
+
 	/**
-	 * Checks if the given input is in the range of -1 till the amount of
-	 * possiblemoves.
-	 * 
-	 * @param prompt
+	 * returns int in range between low (inclusive) and high (exclusive).
+	 *
 	 * @return A valid integer
 	 */
-	private int intOutPromptMinus1TillPossibleMovesRange(String prompt, Board b) {
-		int choice = readInt(prompt);
-		boolean valid = client.getGame().isValidInt(choice, b);
-		while (!valid) {
-			System.out.println("ERROR: number " + choice + " is no valid choice.");
-			choice = readInt(prompt);
-			valid = client.getGame().isValidInt(choice, b);
-		}
+	private int getChoice(int low, int high) {
+		boolean valid = false;
+		int choice;
+		do {
+			choice = readInt("Enter you choice: ");
+			valid = choice >= low && choice < high;
+			if (!valid) System.out.println("ERROR: number " + choice + " is not a valid choice.");
+		} while (!valid);
 		return choice;
 	}
 
@@ -182,26 +193,27 @@ public class View implements Observer {
 	 */
 	private void swapStones() {
 		List<Stone> stones = new ArrayList<Stone>();
-		String swapPrompt = Protocol.BORDER + "These are your stones, " 
+		List<Stone> playerStones = client.getGame().getCurrentPlayer().getStones();
+		String swapPrompt = Protocol.BORDER + "These are your stones, "
 						+ "which stone do you want to swap?\n"
 						+ client.getGame().getCurrentPlayer().stonesToString()
-						+ "\nChoose 1 stone now and then you will get the chance " 
+						+ "\nChoose 1 stone now and then you will get the chance "
 						+ "to pick more stones or end the swap.";
-		int choice = intOutPromptFrom0ToStonesRange(swapPrompt);
-		Stone chosen1 = client.getGame().getCurrentPlayer().getStones().get(choice);
+		print(swapPrompt);
+		int choice = getChoice(0, playerStones.size());
+		Stone chosen1 = playerStones.get(choice);
 		client.getGame().getCurrentPlayer().removeStone(chosen1);
 		stones.add(chosen1);
 		for (int i = 1; i < 7; i++) {
-			String swapPromptSecond = Protocol.BORDER + "These are your stones, " 
+			String swapPromptSecond = Protocol.BORDER + "These are your stones, "
 							+ "which stone do you want to swap?\n"
 							+ client.getGame().getCurrentPlayer().stonesToString()
 							+ "\nOr choose:\n-1 : to end the swap and your turn.";
 			int choiceSecond = intOutPromptMinus1TillStonesRange(swapPromptSecond);
 			if (choiceSecond == -1) {
-				client.trade(stones);
-				return;
+				break;
 			} else {
-				Stone chosen2 = client.getGame().getCurrentPlayer().getStones().get(choice);
+				Stone chosen2 = playerStones.get(choice);
 				client.getGame().getCurrentPlayer().removeStone(chosen2);
 				stones.add(chosen2);
 			}
@@ -217,9 +229,10 @@ public class View implements Observer {
 	 * since otherwise it was possible to place no stones ;)
 	 * 
 	 */
-	private void placeStones() {
-		Board b = client.getGame().getBoard().deepCopy();
+	private void placeStones(Board b) {
 		List<Stone> stones = new ArrayList<Stone>();
+		List<PossibleMove> possibleMoves = new ArrayList<PossibleMove>(b.getPossibleMoves().values());
+		List<Stone> playerStones = client.getGame().getCurrentPlayer().getStones();
 		Stone lastStone = null;
 		int choice;
 		for (int i = 0; i < 7; i++) {
@@ -232,7 +245,7 @@ public class View implements Observer {
 							+ " stones there you have to start over with placing stones!!";
 			if (stones.size() > 0) {
 				prompt += "\nIf you want to end your turn choose -1.";
-				choice = intOutPromptMinus1TillPossibleMovesRange(prompt, b);
+				choice = getChoice(-1,possibleMoves.size());
 			} else {
 				choice = intOutPromptPossibleMovesRange(prompt);
 			}
@@ -241,7 +254,7 @@ public class View implements Observer {
 								possibleMoveToStone(choice, b, lastStone);
 				if (stone == null) {
 					client.getGame().getCurrentPlayer().setStonesFromBackup();
-					placeStones();
+					placeStones(b);
 					return;
 				}
 				Position pos = client.getGame().getCurrentPlayer().getPosition();
@@ -336,7 +349,7 @@ public class View implements Observer {
 	public void update(Observable observable, Object o) {
 		System.out.println("in update of view");
 		if (observable instanceof HumanPlayer) {
-			determineMove();
+			determineMove((HumanPlayer) observable);
 		} else if (observable instanceof ClientGame) {
 			print(((ClientGame) observable).getBoard().toString());
 		}

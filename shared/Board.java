@@ -290,11 +290,6 @@ public class Board {
 			res += "\n" + nextnumber;
 			res += (nextnumber < 0) ? " " : "  ";
 		}
-		res += "\nPossible moves: ";
-		Object[] possibleMovesArray = possibleMoves.values().toArray();
-		for (int i = 0; i < possibleMovesArray.length; i++) {
-			res += "\n" + i + " : " + possibleMovesArray[i];
-		}
 		return res;
 	}
 }

@@ -298,7 +298,8 @@ public class Client extends Thread {
 
 	public void trade(List<Stone> stones) {
 		String msg = Protocol.TRADE;
-		for (Stone s : stones) {
+		for (int i= 0; i<stones.size();i++) {
+			Stone s = stones.get(i);
 			if (you.getStones().contains(s)) {
 				you.removeStone(s);
 			}
