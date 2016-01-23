@@ -78,7 +78,8 @@ public class Client extends Thread {
 		}
 		sendMessage(Protocol.REGISTER + Protocol.SPLIT + getClientName());
 		String input = null;
-		if ((input = readString()) != null) {
+		input = readString();
+		if (input != null) {
 			System.out.println(input);
 			String[] inputArray = input.split(Protocol.SPLIT);
 			if (inputArray[0].equals(Protocol.ACKNOWLEDGE)) {
@@ -97,11 +98,11 @@ public class Client extends Thread {
 	}
 
 	public void startGame() {
-		this.computerPlayerBool = true;//view.askHumanOrComputerPlayer();
+		this.computerPlayerBool = true; //view.askHumanOrComputerPlayer();
 		if (computerPlayerBool == true) {
-			this.strategy = new BadStrategy();//view.getStrategyFromInput();
+			this.strategy = new BadStrategy(); //view.getStrategyFromInput();
 		}
-		this.aantal = 2;//view.startGame();
+		this.aantal = 2; //view.startGame();
 		join(aantal);
 	}
 
@@ -148,16 +149,17 @@ public class Client extends Thread {
 						placed(newArray);
 						if (you instanceof HumanPlayer) {
 							view.print(game.getBoard().toString());
-							String pointsPlayers = "------------------------------------------------------------\n\n"
-									+ "PLAYERPOINTS:\n\n";
+							String pointsPlayers = "--------------------------------------------"
+											+ "----------------\nPLAYERPOINTS:\n\n";
 							for (Player p : game.getPlayers()) {
 								pointsPlayers += p.getName() + ": " + p.getPoints() + "\n";
 							}
-							pointsPlayers += "-------------------------------------------------------";
+							pointsPlayers += "----------------------------------------------------";
 							game.getClient().getView().print(pointsPlayers);
 						}
-					} else
+					} else {
 						throw new InvalidCommandException();
+					}
 				} else if (inputArray[0].equals(Protocol.NEWSTONES)) {
 					List<Stone> stones = null;
 					try {
@@ -209,8 +211,9 @@ public class Client extends Thread {
 
 	public void endgame() throws GameNotEndedException {
 		Player winner = game.getWinner();
-		String message = "Game ended, player " + winner.getName() + " has won.\n" + "with " + winner.getPoints()
-				+ " points.";
+		String message = "Game ended, player " + winner.getName() 
+						+ " has won.\n" + "with " + winner.getPoints()
+						+ " points.";
 		view.print(message);
 		playagain();
 	}
@@ -237,7 +240,7 @@ public class Client extends Thread {
 		}
 	}
 
-	// @ requires inputArray.length == 2;
+	//@ requires inputArray.length == 2;
 	public void turn(String[] inputArray) throws InvalidCommandException {
 		game.setCurrentPlayer(inputArray[1]);
 		if (inputArray[1].equals(clientName)) {
@@ -309,7 +312,8 @@ public class Client extends Thread {
 	public void place(List<Stone> stones) {
 		String msg = Protocol.PLACE;
 		for (Stone s : stones) {
-			msg = msg + Protocol.SPLIT + s.toUsableString() + Protocol.SPLIT + s.getPosition().toUsableString();
+			msg = msg + Protocol.SPLIT + s.toUsableString() 
+					+ Protocol.SPLIT + s.getPosition().toUsableString();
 		}
 		sendMessage(msg);
 	}

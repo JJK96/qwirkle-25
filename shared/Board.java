@@ -190,7 +190,7 @@ public class Board {
 	}
 
 	/**
-	 * checks if the spaces in the row are connected
+	 * checks if the spaces in the row are connected.
 	 * @param
 	 * @return
      */
@@ -201,11 +201,15 @@ public class Board {
 		int high = low;
 		for (Position p: positions) {
 			int x = p.getX();
-			if (x < low) low = x;
-			if (x > high) high = x;
+			if (x < low) { 
+				low = x;
+			}
+			if (x > high) {
+				high = x;
+			}
 		}
-		for (int i = low; i<=high;i++) {
-			Position p = new Position(i,y);
+		for (int i = low; i <= high; i++) {
+			Position p = new Position(i, y);
 			if (!(positions.contains(p) || stones.get(p) != null)) {
 				return false;
 			}
@@ -218,11 +222,15 @@ public class Board {
 		int high = low;
 		for (Position p: positions) {
 			int y = p.getY();
-			if (y < low) low = y;
-			if (y > high) high = y;
+			if (y < low) {
+				low = y;
+			}
+			if (y > high) {
+				high = y;
+			}
 		}
-		for (int i = low; i<=high;i++) {
-			Position p = new Position(x,i);
+		for (int i = low; i <= high; i++) {
+			Position p = new Position(x, i);
 			if (!(positions.contains(p) || stones.get(p) != null)) {
 				return false;
 			}
@@ -256,7 +264,7 @@ public class Board {
 	}
 
 	/**
-	 * Adds a possiblemove on the specified position ??
+	 * Adds a possiblemove on the specified position.
 	 * 
 	 * @param pos
 	 */
@@ -288,7 +296,7 @@ public class Board {
 
 	/**
 	 * Get the boundaries of the game (the bigness of the board, measured in
-	 * biggest and smalles X and Y coordinates).
+	 * biggest and smallest X and Y coordinates).
 	 * 
 	 * @return Biggest and Smallest X and Y
 	 */
@@ -324,7 +332,7 @@ public class Board {
 	}
 
 	public String toString(List<PossibleMove> pmlist) {
-		int WIDTH = 5;
+		int wIDTH = 5;
         int[] boundaries = getBoundaries();
 		boundaries[0] -= 1;
 		boundaries[1] -= 1;
@@ -332,11 +340,11 @@ public class Board {
 		boundaries[3] += 1;
 		String res = "     ";
 		for (int k = boundaries[0]; k <= boundaries[2]; k++) {
-			res += StringUtils.center(Integer.toString(k), WIDTH);
+			res += StringUtils.center(Integer.toString(k), wIDTH);
 		}
 		res += "\n";
 		for (int i = boundaries[1]; i <= boundaries[3]; i++) {
-			res += StringUtils.rightPad(Integer.toString(i), WIDTH);
+			res += StringUtils.rightPad(Integer.toString(i), wIDTH);
 			for (int j = boundaries[0]; j <= boundaries[2]; j++) {
 				boolean placeEmpty = true;
 				Position pos = new Position(j, i);
@@ -348,7 +356,7 @@ public class Board {
 					for (int pmIt = 0; pmIt < pmlist.size(); pmIt++) {
 						PossibleMove p = pmlist.get(pmIt);
 						if (p.getPosition().equals(pos)) {
-							res += StringUtils.center("("+pmIt+")", WIDTH);
+							res += StringUtils.center("(" + pmIt + ")", wIDTH);
 							placeEmpty = false;
 							break;
 						}

@@ -96,7 +96,9 @@ public class ServerPlayer extends Thread {
 			} else {
 				throw new InvalidCommandException(line);
 			}
-		} else throw new InvalidCommandException();
+		} else {
+			throw new InvalidCommandException();
+		}
 	}
 
 	public void trade(String[] inputArray) {

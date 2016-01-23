@@ -42,6 +42,7 @@ public class Server {
 
 	public void run() {
 		try {
+			@SuppressWarnings("resource")
 			ServerSocket sock = new ServerSocket(port);
 			while (true) {
 				Socket client = sock.accept();
