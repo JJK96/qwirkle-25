@@ -29,6 +29,7 @@ public class Client extends Thread {
 	private int port;
 	private BufferedReader in;
 	private BufferedWriter out;
+	@SuppressWarnings("unused")
 	private String[] options;
 	private ClientGame game;
 	private View view;

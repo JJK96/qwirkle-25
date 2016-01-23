@@ -275,17 +275,20 @@ public class Board {
 			Stone below;
 			Stone right;
 			Stone left;
-			if ((above = stones.get(new Position(pos.getX(), pos.getY() - 1))) != null) {
-				// 
+			above = stones.get(new Position(pos.getX(), pos.getY() - 1));
+			if (above != null) {
 				newPM.addColumn(above.getColumn());
 			}
-			if ((below = stones.get(new Position(pos.getX(), pos.getY() + 1))) != null) {
+			below = stones.get(new Position(pos.getX(), pos.getY() + 1));
+			if (below != null) {
 				newPM.addColumn(below.getColumn());
 			}
-			if ((right = stones.get(new Position(pos.getX() + 1, pos.getY()))) != null) {
+			right = stones.get(new Position(pos.getX() + 1, pos.getY()));
+			if (right != null) {
 				newPM.addRow(right.getRow());
 			}
-			if ((left = stones.get(new Position(pos.getX() - 1, pos.getY()))) != null) {
+			left = stones.get(new Position(pos.getX() - 1, pos.getY()));
+			if (left != null) {
 				newPM.addRow(left.getRow());
 			}
 			if (newPM.updatePossibilities() != 0) {

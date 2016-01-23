@@ -114,7 +114,8 @@ public class PossibleMove extends Space {
 			if ((commonColor(getColumn(), stone) && noCommonShape(getColumn(), stone))
 								|| (commonShape(getColumn(), stone) 
 										&& noCommonColor(getColumn(), stone))) {
-				System.out.println("PossibleMove: " + this + " Stone: " +stone + "Column: " + this.getColumn() + "is acceptable");
+				System.out.println("PossibleMove: " + this + " Stone: " + stone 
+								+ "Column: " + this.getColumn() + "is acceptable");
 				return true;
 			}
 		}

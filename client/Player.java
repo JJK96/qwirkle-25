@@ -129,7 +129,7 @@ public class Player extends Observable {
 	 * @param
 	 */
 	public void takeStones(List<Stone> stonesToTake) {
-		for(Stone s : stonesToTake) {
+		for (Stone s : stonesToTake) {
 			stones.add(s);
 		}
 	}
@@ -229,7 +229,8 @@ public class Player extends Observable {
 		}
 		return null;
 	}
-	public List<PossibleMove> adaptPossibleMoves(List<PossibleMove> pmlist, List<Stone> stones, List<Stone> stonesplaced) {
+	public List<PossibleMove> adaptPossibleMoves(List<PossibleMove> pmlist, 
+					List<Stone> stonesOfPlayer, List<Stone> stonesplaced) {
 		List<PossibleMove> newpmlist = new ArrayList<>();
 		for (PossibleMove p : pmlist) {
 			boolean oneRow = true;
@@ -239,7 +240,7 @@ public class Player extends Observable {
 				spacelist.add(p);
 				oneRow = game.getBoard().allOneRow(spacelist);
 			}
-			if (oneRow && hasStones(p, stones)) {
+			if (oneRow && hasStones(p, stonesOfPlayer)) {
 				newpmlist.add(p);
 			}
 		}
@@ -249,8 +250,8 @@ public class Player extends Observable {
 		return game.getMoveCount() != 1 && stonesplaced == 0;
 	}
 
-	public boolean hasStones(PossibleMove p, List<Stone> stones) {
-        for (Stone s : stones) {
+	public boolean hasStones(PossibleMove p, List<Stone> stonesOfPlayer) {
+        for (Stone s : stonesOfPlayer) {
             if (p.acceptable(s)) {
 				return true;
             }

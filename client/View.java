@@ -113,8 +113,8 @@ public class View implements Observer {
 		possibleMoves = player.adaptPossibleMoves(possibleMoves, stones, stonesplaced);
 		while (!possibleMoves.isEmpty() || player.canTrade(stonesplaced.size())) {
 			String message = b.toString(possibleMoves) + "\n"
-					+ "Stones: \n" + player.stonesToString(stones) + "\n"
-					+ "Choose a place to play ";
+							+ "Stones: \n" + player.stonesToString(stones) + "\n"
+							+ "Choose a place to play ";
 			print(message);
 			if (player.canTrade(stonesplaced.size())) {
 				print("-1: swap");
@@ -158,14 +158,16 @@ public class View implements Observer {
 		int choice;
 		do {
 			print("-2: hint");
-			choice = readInt("Enter you choice (" + low + " - " + (high -1) + "): ");
+			choice = readInt("Enter you choice (" + low + " - " + (high - 1) + ") : ");
 			if (choice == -2) {
-				int hintchoice = (int) Math.floor(Math.random() * (high -low) + low);
+				int hintchoice = (int) Math.floor(Math.random() * (high - low) + low);
 				print("I suggest you take: " + hintchoice);
 				choice = readInt("Enter you choice: ");
 			}
 			valid = choice >= low && choice < high;
-			if (!valid) System.out.println("ERROR: number " + choice + " is not a valid choice.");
+			if (!valid) {
+				System.out.println("ERROR: number " + choice + " is not a valid choice.");
+			}
 		} while (!valid);
 		return choice;
 	}
@@ -189,24 +191,6 @@ public class View implements Observer {
 	}
 
 	/**
-	 * Checks if the given input is in the range of 0 till the amount of stones
-	 * the player has.
-	 * 
-	 * @param prompt
-	 * @return A valid integer
-	 */
-	private int intOutPromptFrom0ToStonesRange(String prompt) {
-		int choice = readInt(prompt);
-		boolean valid = client.getGame().isValidIntStonesRangeFrom0(choice);
-		while (!valid) {
-			System.out.println("ERROR: number " + choice + " is no valid choice.");
-			choice = readInt(prompt);
-			valid = client.getGame().isValidIntStonesRangeFrom0(choice);
-		}
-		return choice;
-	}
-
-	/**
 	 * Asks the humanplayer how many stones he wants to swap, the humanplayer
 	 * has to repeatedly give input and if he gives -1 the turn ends and the
 	 * stones selected will be send to the server to be swapped. The first input
@@ -215,7 +199,7 @@ public class View implements Observer {
 	private void swapStones() {
 		List<Stone> stones = new ArrayList<Stone>();
 		List<Stone> playerStones = client.getGame().getCurrentPlayer().getStones();
-		int sizeMin1 = playerStones.size()-1;
+		int sizeMin1 = playerStones.size() - 1;
 		String swapPrompt = Protocol.BORDER + "These are your stones, "
 						+ "which stone do you want to swap?\n"
 						+ client.getGame().getCurrentPlayer().thisStonesToString()
@@ -226,7 +210,7 @@ public class View implements Observer {
 		Stone chosen1 = playerStones.get(choice);
 		client.getGame().getCurrentPlayer().removeStone(chosen1);
 		stones.add(chosen1);
-		for (int i = 1; i <= sizeMin1 && i<= client.getGame().getBag(); i++) {
+		for (int i = 1; i <= sizeMin1 && i <= client.getGame().getBag(); i++) {
 			String swapPromptSecond = Protocol.BORDER + "These are your stones, "
 							+ "which stone do you want to swap?\n"
 							+ client.getGame().getCurrentPlayer().thisStonesToString()
@@ -251,34 +235,16 @@ public class View implements Observer {
 	 * since otherwise it was possible to place no stones ;)
 	 *
 	 */
-	private Stone placeStone(Board b , PossibleMove place, Player p) {
+	private Stone placeStone(Board b, PossibleMove place, Player p) {
 		List<Stone> acceptableStones = p.adaptStones(p.getStones(), place);
-		String message = "You can place these stones here: \n" + p.stonesToString(acceptableStones) + "\n"
-				+ "which stone do you want to place?: ";
+		String message = "You can place these stones here: \n" + p.stonesToString(acceptableStones)
+						+ "\nwhich stone do you want to place?: ";
 		print(message);
-		int choice = getChoice(0,acceptableStones.size());
+		int choice = getChoice(0, acceptableStones.size());
 		Stone s = acceptableStones.get(choice);
 		b.makeMove(s, place);
 		p.removeStone(s);
 		return s;
-	}
-
-	/**
-	 * Checks if the given input is in the range of 0 till the amount of
-	 * possiblemoves.
-	 * 
-	 * @param prompt
-	 * @return A valid integer
-	 */
-	private int intOutPromptPossibleMovesRange(String prompt) {
-		int choice = readInt(prompt);
-		boolean valid = client.getGame().isValidIntNotMinusOne(choice);
-		while (!valid) {
-			System.out.println("ERROR: number " + choice + " is no valid choice.");
-			choice = readInt(prompt);
-			valid = client.getGame().isValidIntNotMinusOne(choice);
-		}
-		return choice;
 	}
 
 	/**
@@ -290,7 +256,7 @@ public class View implements Observer {
 	public int readInt(String prompt) {
 		int value = 0;
 		boolean intRead = false;
-		// @SuppressWarnings("resource")
+		@SuppressWarnings("resource")
 		Scanner line = new Scanner(System.in);
 		do {
 			System.out.print(prompt);
@@ -314,7 +280,7 @@ public class View implements Observer {
 	public String readString(String prompt) {
 		String input = "";
 		boolean stringRead = false;
-		// @SuppressWarnings("resource")
+		@SuppressWarnings("resource")
 		Scanner line = new Scanner(System.in);
 		do {
 			System.out.print(prompt);

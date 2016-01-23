@@ -148,7 +148,7 @@ public class ClientGame extends Observable {
 
 	public Player getWinner() {
 		Player winner = players[0];
-		for(Player p : players) {
+		for (Player p : players) {
 			if (p.getPoints() > winner.getPoints()) {
 				winner = p;
 			}

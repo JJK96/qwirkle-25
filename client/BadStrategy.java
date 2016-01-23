@@ -14,19 +14,23 @@ public class BadStrategy implements Strategy {
 	@Override
 	public void determineMove(ClientGame game, List<Stone> stones) {
 		Board b = game.getBoard().deepCopy();
-		String pointsPlayers = "PLAYERPOINTS:\n\n";
+		String pointsPlayers = "-------------------------------------------------------"
+						+ "\nPLAYERPOINTS:\n\n";
 		for (Player p : game.getPlayers()) {
 			pointsPlayers += p.getName() + ": " + p.getPoints() + "\n";
 		}
 		pointsPlayers += "-------------------------------------------------------";
 		game.getClient().getView().print(pointsPlayers);
-		game.getClient().getView().print(b.toString());
+		game.getClient().getView().print(b.toString() 
+						+ "\n-------------------------------------------------------");
 		int size = stones.size();
 		List<PossibleMove> adaptedPossibleMoves = new ArrayList<PossibleMove>();
 		List<Stone> stonesPlaced = new ArrayList<Stone>();
 		for (int i = 0; i < size; i++) {
-			List<PossibleMove> allPossibleMoves = new ArrayList<PossibleMove>(b.getPossibleMoves().values());
-			adaptedPossibleMoves = game.getCurrentPlayer().adaptPossibleMoves(allPossibleMoves, stones, stonesPlaced);
+			List<PossibleMove> allPossibleMoves = 
+							new ArrayList<PossibleMove>(b.getPossibleMoves().values());
+			adaptedPossibleMoves = game.getCurrentPlayer()
+					.adaptPossibleMoves(allPossibleMoves, stones, stonesPlaced);
 			end: for (PossibleMove p : adaptedPossibleMoves) {
 				for (Stone s : stones) {
 					if (p.acceptable(s)) {
