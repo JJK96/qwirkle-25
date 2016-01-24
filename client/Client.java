@@ -288,8 +288,9 @@ public class Client extends Thread {
 	}
 
 	/**
-	 * Gets from the server the playername, points and stones of the player who has just made his move
-	 * and updates the playerpoints on the client and the board on the client.
+	 * Gets from the server the playername, points and stones of the player who 
+	 * has just made his move and updates the playerpoints on the client and the
+	 * board on the client.
 	 * 
 	 * @param inputArray
 	 * @throws InvalidCommandException

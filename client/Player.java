@@ -11,8 +11,6 @@ public class Player extends Observable {
 	private List<Stone> stones;
 	private ClientGame game;
 	private Position position;
-	private Stone secondLastStone;
-	private List<Stone> backupStones;
 
 	/**
 	 * Create a player with specified name and game.
@@ -21,7 +19,6 @@ public class Player extends Observable {
 	 */
 	public Player(String name, ClientGame game) {
 		stones = new ArrayList<Stone>();
-		backupStones = new ArrayList<Stone>();
 		points = 0;
 		this.name = name;
 		this.game = game;
@@ -42,23 +39,6 @@ public class Player extends Observable {
 	 */
 	public Position getPosition() {
 		return position;
-	}
-
-	/**
-	 * Sets the stones from the backup back in the stones from the player.
-	 * Deletes all the stones from the backup so its empty again.
-	 */
-	public void setStonesFromBackup() {
-		for (int i = 0; i < backupStones.size(); i++) {
-			if (!stones.contains(backupStones.get(i))) {
-				stones.add(backupStones.get(i));
-			}
-			backupStones.remove(i);
-		}
-	}
-
-	public void removeBackup() {
-		backupStones.clear();
 	}
 
 	/**
@@ -119,6 +99,11 @@ public class Player extends Observable {
 		return stoneString;
 	}
 
+	/**
+	 * Get the string representation of the stones of the player.
+	 * 
+	 * @return stonesToString(stones)
+	 */
 	public String thisStonesToString() {
 		return stonesToString(stones);
 	}
@@ -134,6 +119,11 @@ public class Player extends Observable {
 		}
 	}
 	
+	/**
+	 * Removes the specified stones from the players stones.
+	 * 
+	 * @param stoneList
+	 */
 	public void removeStones(List<Stone> stoneList) {
 		for (Stone s : stoneList) {
 			stones.remove(s);
@@ -166,69 +156,16 @@ public class Player extends Observable {
 	public int getPoints() {
 		return points;
 	}
-
+	
 	/**
-	 * Checks if the possiblemove chosen by the humanplayer can be placed on the
-	 * specified board by all the rules.
+	 * Adapts the possiblemoves on the board to return only the possiblemoves 
+	 * where the player can place 1 of his stones.
 	 * 
-	 * @param choice
-	 * @param b
-	 * @param lastStone
-	 * @return the stone that the player will place or null if the player
-	 *         doesn't have a stone for that place.
+	 * @param pmlist
+	 * @param stonesOfPlayer
+	 * @param stonesplaced
+	 * @return a list of possiblemoves where the player can place a stone.
 	 */
-	public Stone possibleMoveToStone(int choice, Board b, Stone lastStone) {
-		Map<Position, PossibleMove> moves = b.getPossibleMoves();
-		PossibleMove p = (PossibleMove) moves.values().toArray()[choice];
-		List<Position> pList = new ArrayList<Position>();
-		if (lastStone == null) {
-			for (int i = 0; i < stones.size(); i++) {
-				if (b.isValidMove(p.getPosition(), stones.get(i))) {
-					Stone stone = stones.get(i);
-					this.position = p.getPosition();
-					stones.remove(i);
-					backupStones.add(stone);
-					this.secondLastStone = stone;
-					return stone;
-				}
-			}
-		} else if (secondLastStone.equals(lastStone)) {
-			Position pos = lastStone.getPosition();
-			pList.add(pos);
-			pList.add(p.getPosition());
-			pList.add(secondLastStone.getPosition());
-			if (b.allStonesOneRow(pList)) {
-				for (int i = 0; i < stones.size(); i++) {
-					if (b.isValidMove(p.getPosition(), stones.get(i))) {
-						Stone stone = stones.get(i);
-						this.position = p.getPosition();
-						stones.remove(i);
-						backupStones.add(stone);
-						this.secondLastStone = lastStone;
-						return stone;
-					}
-				}
-			}
-		} else {
-			Position pos = lastStone.getPosition();
-			pList.add(pos);
-			pList.add(p.getPosition());
-			pList.add(secondLastStone.getPosition());
-			if (b.allStonesOneRow(pList)) {
-				for (int i = 0; i < stones.size(); i++) {
-					if (b.isValidMove(p.getPosition(), stones.get(i))) {
-						Stone stone = stones.get(i);
-						this.position = p.getPosition();
-						stones.remove(i);
-						backupStones.add(stone);
-						this.secondLastStone = lastStone;
-						return stone;
-					}
-				}
-			}
-		}
-		return null;
-	}
 	public List<PossibleMove> adaptPossibleMoves(List<PossibleMove> pmlist, 
 					List<Stone> stonesOfPlayer, List<Stone> stonesplaced) {
 		List<PossibleMove> newpmlist = new ArrayList<>();
@@ -246,10 +183,25 @@ public class Player extends Observable {
 		}
 		return newpmlist;
 	}
+	
+	/**
+	 * Determines if the player can trade.
+	 * 
+	 * @param stonesplaced
+	 * @return true if ?????
+	 */
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	public boolean canTrade(int stonesplaced) {
 		return game.getMoveCount() != 1 && stonesplaced == 0;
 	}
 
+	/**
+	 * ????
+	 * @param p
+	 * @param stonesOfPlayer
+	 * @return
+	 */
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	public boolean hasStones(PossibleMove p, List<Stone> stonesOfPlayer) {
         for (Stone s : stonesOfPlayer) {
             if (p.acceptable(s)) {
@@ -259,6 +211,13 @@ public class Player extends Observable {
 		return false;
 	}
 
+	/**
+	 * ??
+	 * @param stonelist
+	 * @param place
+	 * @return
+	 */
+	//////////////////////////////////////////////////////////////////////////////////////////////////////
 	public List<Stone> adaptStones(List<Stone> stonelist, PossibleMove place) {
 		List<Stone> acceptableStones = new ArrayList<>();
 		for (Stone s : stonelist) {

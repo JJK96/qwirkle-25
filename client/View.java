@@ -13,18 +13,29 @@ public class View implements Observer {
 	/**
 	 * Creates a view for the specified client.
 	 * 
-	 * @param
+	 * @param client
 	 */
 	public View(Client client) {
 		this.client = client;
 	}
 
+	/**
+	 * Get the hostname of the server from the user.
+	 * 
+	 * @return hostname of server
+	 * @throws UnknownHostException
+	 */
 	public InetAddress getHostName() throws UnknownHostException {
 		String hostname = readString("Enter hostname of the server:");
 		InetAddress result = InetAddress.getByName(hostname);
 		return result;
 	}
 
+	/**
+	 * Get the port of the server from the user.
+	 * 
+	 * @return the port typed by the user.
+	 */
 	public int getPort() {
 		int port = readInt("Enter port number:");
 		return port;
@@ -104,6 +115,8 @@ public class View implements Observer {
 	/**
 	 * Prints the prompt and waits for the user to give input, then decides if
 	 * it is a swap or a place and calls those methods respectively.
+	 * 
+	 * @param player
 	 */
 	public void determineMove(HumanPlayer player) {
 		Board b = player.getGame().getBoard().deepCopy();
@@ -136,16 +149,6 @@ public class View implements Observer {
 		if (!stonesplaced.isEmpty()) {
 			client.place(stonesplaced);
 		}
-	}
-
-
-
-	public String possibleMovesToString(List<PossibleMove> pmlist) {
-		String result = "Possible Places to play: ";
-		for (int i = 0; i < pmlist.size(); i++) {
-			result += i + " " + pmlist.get(i) + "\n";
-		}
-		return result;
 	}
 
 	/**
@@ -194,7 +197,7 @@ public class View implements Observer {
 	 * Asks the humanplayer how many stones he wants to swap, the humanplayer
 	 * has to repeatedly give input and if he gives -1 the turn ends and the
 	 * stones selected will be send to the server to be swapped. The first input
-	 * cant be -1 since otherwise it was possible to swap no stones ;)
+	 * cant be -1.
 	 */
 	private void swapStones() {
 		List<Stone> stones = new ArrayList<Stone>();
@@ -230,10 +233,8 @@ public class View implements Observer {
 	/**
 	 * Asks the humanplayer how many stones he wants to place, the humanplayer
 	 * has to repeatedly give input and if he gives -1 the turn ends and the
-	 * stones selected will be send to the server to be placed. The int
-	 * firstChoice is the first stone to be placed. The first input cant be -1
-	 * since otherwise it was possible to place no stones ;)
-	 *
+	 * stones selected will be send to the server to be placed. The first input 
+	 * cant be -1.
 	 */
 	private Stone placeStone(Board b, PossibleMove place, Player p) {
 		List<Stone> acceptableStones = p.adaptStones(p.getStones(), place);
@@ -304,6 +305,9 @@ public class View implements Observer {
 		System.out.println(message);
 	}
 
+	/**
+	 * //////////////////////////???????????????????????????????????????????????????????????????????????????????
+	 */
 	@Override
 	public void update(Observable observable, Object o) {
 		if (observable instanceof HumanPlayer) {

@@ -54,18 +54,37 @@ public class ClientGame extends Observable {
 		return board.getPossibleMoves();
 	}
 
+	/**
+	 * This is called when a move is made, so the movecount is always
+	 * as big as the amount of moves that are made.
+	 */
 	public void incMoveCount() {
 		moveCount++;
 	}
 	
+	/**
+	 * Get the size of the bag on the server.
+	 * 
+	 * @return size of bag.
+	 */
 	public int getBag() {
 		return bag;
 	}
 
+	/**
+	 * Get the amount of moves that have been made.
+	 * 
+	 * @return amount of moves
+	 */
 	public int getMoveCount() {
 		return moveCount;
 	}
 
+	/**
+	 * Get the client that runs this game.
+	 * 
+	 * @return the client
+	 */
 	public Client getClient() {
 		return client;
 	}
@@ -79,29 +98,24 @@ public class ClientGame extends Observable {
 		return board;
 	}
 
+	/**
+	 * Get the players that play this game.
+	 * 
+	 * @return the players
+	 */
 	public Player[] getPlayers() {
 		return players;
 	}
 
 	/**
-	 * Checks if the choice the humanplayer made is a valid possiblemove.
+	 * Checks if the choice of the humanplayer is a valid stone of the player.
+	 * -1 if the player ends his turn.
 	 * 
+	 * @param choice
 	 * @return true if choice is valid, false otherwise
 	 */
-	public boolean isValidInt(int choice, Board b) {
-		return choice < b.getPossibleMoves().size() && choice >= -1;
-	}
-
-	public boolean isValidIntNotMinusOne(int choice) {
-		return choice < getPossibleMoves().size() && choice >= 0;
-	}
-
 	public boolean isValidIntStonesRange(int choice) {
 		return choice < getCurrentPlayer().getStones().size() && choice >= -1;
-	}
-
-	public boolean isValidIntStonesRangeFrom0(int choice) {
-		return choice < getCurrentPlayer().getStones().size() && choice >= 0;
 	}
 
 	/**
@@ -113,6 +127,13 @@ public class ClientGame extends Observable {
 		return currentPlayer;
 	}
 
+	/**
+	 * Finds the specified player.
+	 * 
+	 * @param name
+	 * @return the player object that has the specified name
+	 * 			or null if there is no player with that name
+	 */
 	public Player findPlayer(String name) {
 		for (Player p : players) {
 			if (p.getName().equals(name)) {
@@ -122,6 +143,14 @@ public class ClientGame extends Observable {
 		return null;
 	}
 
+	/**
+	 * Makes the moves on the board that come from the server when another client has
+	 * made his moves. The board is always updated because of this.
+	 * 
+	 * @param positions
+	 * @param stones
+	 * @throws InvalidMoveException
+	 */
 	public void makeMove(List<Position> positions, List<Stone> stones) throws InvalidMoveException {
 		try {
 			board.makeMoves(positions, stones);
@@ -133,6 +162,13 @@ public class ClientGame extends Observable {
 		setChanged();
 		notifyObservers();
 	}
+	
+	/**
+	 * Sets the player with the specified name as currentplayer.
+	 * 
+	 * @param name
+	 * @throws InvalidCommandException
+	 */
 	public void setCurrentPlayer(String name) throws InvalidCommandException {
 		Player p = findPlayer(name);
 		if (p != null) {
@@ -141,11 +177,24 @@ public class ClientGame extends Observable {
 			throw new InvalidCommandException();
 		}
 	}
+	
+	/**
+	 * Gives the stones that came from the server to the player specified.
+	 * 
+	 * @param stonelist
+	 * @param playername
+	 * @throws InvalidMoveException
+	 */
 	public void giveStones(List<Stone> stonelist, String playername) throws InvalidMoveException {
 		Player p = findPlayer(playername);
         p.takeStones(stonelist);
 	}
 
+	/**
+	 * Gets the winner of the game by determining which player has the most points.
+	 * 
+	 * @return the winner of the game
+	 */
 	public Player getWinner() {
 		Player winner = players[0];
 		for (Player p : players) {
@@ -156,6 +205,11 @@ public class ClientGame extends Observable {
 		return winner;
 	}
 
+	/**
+	 * Adds the points to the currentplayer.
+	 * 
+	 * @param s
+	 */
 	public void addPoints(String s) {
 		currentPlayer.addPoints(Integer.parseInt(s));
 	}
