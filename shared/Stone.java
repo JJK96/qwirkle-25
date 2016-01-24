@@ -60,15 +60,32 @@ public class Stone extends Space {
 		isOnBoard = true;
 	}
 
+	/**
+	 * The tostring function of a stone is like: [2,4].
+	 * 
+	 * @return string representation of a stone
+	 */
 	@Override
 	public String toString() {
 		return "[" + shape.ordinal() + "," + color.ordinal() + "]";
 	}
 
+	/**
+	 * Tostring for a stone without the [].
+	 * 
+	 * @return a stone like: 3,1
+	 */
 	public String toUsableString() {
 		return shape.ordinal() + "," + color.ordinal();
 	}
 
+	/**
+	 * ??
+	 * 
+	 * @param obj
+	 * @return 
+	 */
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	@Override
 	public boolean equals(Object obj) {
 		return (((Stone) obj).getColor() == this.getColor()) 
