@@ -99,11 +99,11 @@ public class Client extends Thread {
 	}
 
 	public void startGame() {
-		this.computerPlayerBool = true; //view.askHumanOrComputerPlayer();
+		this.computerPlayerBool = view.askHumanOrComputerPlayer();
 		if (computerPlayerBool == true) {
-			this.strategy = new BadStrategy(); //view.getStrategyFromInput();
+			this.strategy = view.getStrategyFromInput();
 		}
-		this.aantal = 2; //view.startGame();
+		this.aantal = view.startGame();
 		join(aantal);
 	}
 
