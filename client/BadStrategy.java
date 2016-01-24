@@ -11,6 +11,9 @@ public class BadStrategy implements Strategy {
 
 	}
 
+	/**
+	 * Our AI.
+	 */
 	@Override
 	public void determineMove(ClientGame game, List<Stone> stones) {
 		Board b = game.getBoard().deepCopy();
