@@ -34,7 +34,6 @@ public class LittleBetterStrategy implements Strategy {
             toRemove.addAll(stonesplaced);
             game.getCurrentPlayer().removeStones(toRemove);
         }
-        game.getClient().getView().print(game.toString());
     }
 
     public List<Stone> getMove(ClientGame game, List<Stone> stones) {

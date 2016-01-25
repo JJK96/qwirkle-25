@@ -245,7 +245,6 @@ public class Client extends Thread {
 			}
 		} catch (InvalidCommandException e) {
 			e.printStackTrace();
-			System.out.println(e.getMessage());
 			serverBroken();
 		} catch (GameNotEndedException e) {
 			serverBroken();
@@ -303,6 +302,7 @@ public class Client extends Thread {
 		try {
 			game.makeMove(positions, stones);
 			game.addPoints(inputArray[0]);
+			view.print(game.toString());
 		} catch (InvalidMoveException e) {
 			throw new InvalidCommandException();
 		}

@@ -16,7 +16,6 @@ public class BadStrategy implements Strategy {
 	@Override
 	public void determineMove(ClientGame game, List<Stone> stones) {
 		Board b = game.getBoard().deepCopy();
-		game.getClient().getView().print(game.toString());
 		int size = stones.size();
 		List<PossibleMove> adaptedPossibleMoves = new ArrayList<PossibleMove>();
 		List<Stone> stonesPlaced = new ArrayList<Stone>();

@@ -222,7 +222,7 @@ public class ClientGame extends Observable {
 		for (Player p : getPlayers()) {
 			pointsPlayers += p.getName() + ": " + p.getPoints() + "\n";
 		}
-		pointsPlayers += "-------------------------------------------------------";
+		pointsPlayers += "-------------------------------------------------------\n";
 		return pointsPlayers + board.toString() + "\n-------------------------------------------------------";
 	}
 }

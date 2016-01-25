@@ -46,7 +46,7 @@ public class ServerPlayer extends Thread {
 				if (words[0].equals(Protocol.JOINAANTAL)) {
 					if (words.length >= 2) {
 						int number = Integer.parseInt(words[1]);
-						if (number >= 2 && number <= 4) {
+						if (number >= 1 && number <= 4) {
 							server.joinGame(this, number);
 						}
 					}
