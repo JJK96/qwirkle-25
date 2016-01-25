@@ -278,7 +278,6 @@ public class Client extends Thread {
 	 */
 	public void playagain() {
 		String playagain = view.readString("Do you want to play another game? y/n: ");
-		startGame();
 		if (playagain.equals("y")) {
 			startGame();
 		} else {

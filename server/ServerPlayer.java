@@ -41,7 +41,7 @@ public class ServerPlayer extends Thread {
 		String line = null;
 		try {
 			while ((line = in.readLine()) != null) {
-				System.out.println("From " + name + ": " + line);
+				//System.out.println("From " + name + ": " + line);
 				String[] words = line.split(Protocol.SPLIT);
 				if (words[0].equals(Protocol.JOINAANTAL)) {
 					if (words.length >= 2) {
@@ -146,7 +146,9 @@ public class ServerPlayer extends Thread {
 		for (Stone s : stonesToGive) {
 			stoneString += s.toUsableString() + Protocol.SPLIT;
 		}
-		sendMessage(Protocol.NEWSTONES + Protocol.SPLIT + stoneString);
+		if (!stonesToGive.isEmpty()) {
+			sendMessage(Protocol.NEWSTONES + Protocol.SPLIT + stoneString);
+		}
 	}
 
 	public void acknowledge() {
@@ -154,7 +156,7 @@ public class ServerPlayer extends Thread {
 	}
 
 	public void sendMessage(String msg) {
-		System.out.println("To " + name + ": " + msg);
+		//System.out.println("To " + name + ": " + msg);
 		try {
 			out.write(msg);
 			out.newLine();
@@ -209,5 +211,9 @@ public class ServerPlayer extends Thread {
 			// e.printStackTrace();
 		}
 		server.removePlayer(this);
+	}
+	public void reset() {
+		this.points = 0;
+		this.stones = new ArrayList<>();
 	}
 }

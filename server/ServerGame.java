@@ -64,8 +64,6 @@ public class ServerGame extends Thread {
 		int currentplayernum = (int) Math.floor(Math.random() * playernum);
 		currentplayer = players[currentplayernum];
 		while (!hasWinner() && isRunning() && !this.isInterrupted() && movesLeft) {
-			System.out.println(currentplayer.getThisName() 
-							+ " has stones: " + currentplayer.getStones());
 			sendTurn();
 			try {
 				playerDone.await();
@@ -109,6 +107,7 @@ public class ServerGame extends Thread {
 			playernum += 1;
 		}
 		player.setGame(this);
+		player.reset();
 		return size - playernum;
 	}
 
@@ -197,7 +196,7 @@ public class ServerGame extends Thread {
 			lock.lock();
 			try {
 				board.makeMoves(positions, stones);
-				System.out.println("currentplayer placed stones");
+				//System.out.println("currentplayer placed stones");
 				System.out.println(board);
 				currentplayer.removeStones(stones);
 				currentplayer.giveStones(takeSomeStones(stones.size()));
@@ -232,13 +231,11 @@ public class ServerGame extends Thread {
 	}
 
 	public boolean gotAllStones(List<Stone> stonelist) {
-		System.out.println("stones: " + currentplayer.getStones());
 		return currentplayer.getStones().containsAll(stonelist);
 	}
 
 	public void trade(List<Stone> stones) throws InvalidMoveException {
-		if (gotAllStones(stones) && bag.size() >= stones.size()) {
-			// && !board.getStones().isEmpty()) {
+		if (gotAllStones(stones) && bag.size() >= stones.size() && !board.getStones().isEmpty()) {
 			lock.lock();
 			currentplayer.removeStones(stones);
 			currentplayer.giveStones(takeSomeStones(stones.size()));

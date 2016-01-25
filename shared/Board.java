@@ -249,11 +249,15 @@ public class Board {
 		stoneToMove = place.fill(stoneToMove);
 		stones.put(stoneToMove.getPosition(), stoneToMove);
 		possibleMoves.remove(place.getPosition());
+		List<Position> toAdd = new ArrayList<>();
 		for (Position p : possibleMoves.keySet()) {
 			if (p.getX() == stoneToMove.getPosition().getX() ||
 							p.getY() == stoneToMove.getPosition().getY()) {
-				addPossibleMove(p);
+				toAdd.add(p);
 			}
+		}
+		for (Position p : toAdd) {
+			addPossibleMove(p);
 		}
 		Position pos = stoneToMove.getPosition();
 		addPossibleMove(pos.above());
@@ -293,6 +297,8 @@ public class Board {
 			}
 			if (newPM.updatePossibilities() != 0) {
 				possibleMoves.put(newPM.getPosition(), newPM);
+			} else {
+				possibleMoves.remove(newPM.getPosition());
 			}
 		}
 	}

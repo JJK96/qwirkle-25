@@ -94,7 +94,7 @@ public class View implements Observer {
 		int aantal = 0;
 		while (true) {
 			aantal = readInt(prompt);
-			if (aantal == 2 || aantal == 3 || aantal == 4) {
+			if (aantal >= 2 && aantal <= 4) {
 				return aantal;
 			} else {
 				System.out.println("invalid number.");
