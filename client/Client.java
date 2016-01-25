@@ -39,7 +39,6 @@ public class Client extends Thread {
 	private Strategy strategy;
 	private List<String> players;
 	private Player you;
-	private int playTime;
 
 	/**
 	 * Creates a client through setup.
@@ -119,8 +118,9 @@ public class Client extends Thread {
 	public void startGame() {
 		this.computerPlayerBool = view.askHumanOrComputerPlayer();
 		if (computerPlayerBool == true) {
-			this.strategy = view.getStrategyFromInput();
-			this.playTime = view.getPlayTimeFromInput();
+			int playTime = view.getPlayTimeFromInput();
+			this.strategy = view.getStrategyFromInput(playTime);
+			
 		}
 		this.aantal = view.startGame();
 		join(aantal);

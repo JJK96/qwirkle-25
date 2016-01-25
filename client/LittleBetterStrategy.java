@@ -11,10 +11,17 @@ import java.util.List;
  * Created by jjk on 1/25/16.
  *
  */
-public class LittleBetterStrategy implements Strategy{
+public class LittleBetterStrategy implements Strategy {
+	
+	private int time;
+	
+	public LittleBetterStrategy(int time) {
+		this.time = time;
+	}
+	
     @Override
     public void determineMove(ClientGame game, List<Stone> stones) {
-        List<Stone> stonesplaced = getMove(game,stones);
+        List<Stone> stonesplaced = getMove(game, stones);
         if (stonesplaced.isEmpty()) {
             game.getClient().trade(stones);
             List<Stone> toRemove = new ArrayList<>();

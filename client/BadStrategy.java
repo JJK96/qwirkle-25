@@ -7,8 +7,10 @@ import shared.*;
 
 public class BadStrategy implements Strategy {
 
-	public BadStrategy() {
-
+	private int time;
+	
+	public BadStrategy(int time) {
+		this.time = time;
 	}
 
 	/**

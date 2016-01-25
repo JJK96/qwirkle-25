@@ -69,7 +69,7 @@ public class View implements Observer {
 	 * 
 	 * @return the strategy chosen.
 	 */
-	public Strategy getStrategyFromInput() {
+	public Strategy getStrategyFromInput(int time) {
 		String prompt = Protocol.BORDER + "Which strategy shall the ComputerPlayer have?"
 						+ "\n0 : BadStrategy.\n1 : LittleBetterStrategy"
 						+ "\n\nMore options will follow.";
@@ -79,9 +79,9 @@ public class View implements Observer {
 			if (strat != 0 && strat != 1) {
 				System.out.println("invalid choice");
 			} else if (strat == 0) {
-				return new BadStrategy();
+				return new BadStrategy(time);
 			} else {
-				return new LittleBetterStrategy();
+				return new LittleBetterStrategy(time);
 			}
 		}
 	}
