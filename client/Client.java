@@ -236,7 +236,7 @@ public class Client extends Thread {
 						view.print(message);
 					}
 				} else if (inputArray[0].equals(Protocol.START)) {
-					if (inputArray.length >= 3) {
+					if (inputArray.length >= 2) {
 						if (input.contains(clientName)) {
 							initGame(inputArray);
 						}

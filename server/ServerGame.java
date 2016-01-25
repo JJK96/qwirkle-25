@@ -64,6 +64,7 @@ public class ServerGame extends Thread {
 		int currentplayernum = (int) Math.floor(Math.random() * playernum);
 		currentplayer = players[currentplayernum];
 		while (!hasWinner() && isRunning() && !this.isInterrupted() && movesLeft) {
+			System.out.println("Stones: " +currentplayer.getStones());
 			sendTurn();
 			try {
 				playerDone.await();
@@ -73,11 +74,11 @@ public class ServerGame extends Thread {
 			System.out.println("next player");
 			int loop = 0;
 			do {
+				loop++;
 				currentplayernum = (currentplayernum + 1) % playernum;
 				currentplayer = players[currentplayernum];
-				loop++;
-			} while (bag.isEmpty() && !currentplayer.canPlay(board) && loop < playernum);
-			if (loop == playernum) {
+			} while (bag.isEmpty() && !currentplayer.canPlay(board) && loop <= playernum);
+			if (loop > playernum) {
 				movesLeft = false;
 			}
 		}
