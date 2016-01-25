@@ -36,14 +36,14 @@ public class PossibleMove extends Space {
 		stone.setRow(getRow());
 		stone.setPosition(getPosition());
 		stone.place();
-		for (Stone s : stone.getColumn()) {
-			s.addColumn(stone);
-		}
-		for (Stone s : stone.getRow()) {
-			s.addRow(stone);
-		}
 		stone.addColumn(stone);
 		stone.addRow(stone);
+		for (Stone s : stone.getColumn()) {
+            s.setColumn(stone.getColumn());
+		}
+		for (Stone s : stone.getRow()) {
+			s.setRow(stone.getRow());
+		}
 		return stone;
 	}
 

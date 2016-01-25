@@ -60,6 +60,7 @@ public class Server {
 	}
 
 	public void run() {
+		System.out.println("Server is running :)");
 		try {
 			@SuppressWarnings("resource")
 			ServerSocket sock = new ServerSocket(port);
