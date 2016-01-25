@@ -88,7 +88,8 @@ public class View implements Observer {
 	
 	public int getPlayTimeFromInput() {
 		String prompt = Protocol.BORDER + "How much time shall the computerplayer have to"
-						+ "decide his move?\nFrom 1 second to infinity.. nou nee doe dat maar niet";
+						+ " decide his move?\n1 = a tenth of a second, so 10 is 1 second."
+						+ "\nLess than a tenth of a second is not possible.";
 		int time = 0;
 		while (true) {
 			time = readInt(prompt);

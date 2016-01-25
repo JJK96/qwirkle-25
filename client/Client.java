@@ -222,7 +222,7 @@ public class Client extends Thread {
 				} else if (inputArray[0].equals(Protocol.JOINLOBBY)) {
 					if (inputArray.length >= 2) {
 						String message = Protocol.DELIMITER
-										+ "\nPlayer " + inputArray[1] + " joined the room"
+										+ "Player " + inputArray[1] + " joined the room"
 										+ Protocol.DELIMITER;
 						view.print(message);
 					}
@@ -255,6 +255,9 @@ public class Client extends Thread {
 	 */
 	public void endgame() throws GameNotEndedException {
 		Player winner = game.getWinner();
+		if (winner.getName().equals(you.getName())) {
+			view.print("YOU HAVE WON CONGRATS JEEEEEEEEEEEJ!!!!!!\nWil je nu een koekje?\n");
+		}
 		String message = "Game ended, player " + winner.getName() 
 						+ " has won.\n" + "with " + winner.getPoints()
 						+ " points.";
