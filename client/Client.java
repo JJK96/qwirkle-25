@@ -179,6 +179,7 @@ public class Client extends Thread {
 						view.print("Niet unieke naam of onjuiste naam: 2");
 					} else if (inputArray[1].equals("3")) {
 						view.print("Speler disconnected: 3");
+						this.playagain();
 					} else if (inputArray[1].equals("4")) {
 						view.print("Speler heeft functie niet: 4");
 					}
@@ -229,7 +230,9 @@ public class Client extends Thread {
 					}
 				} else if (inputArray[0].equals(Protocol.JOINLOBBY)) {
 					if (inputArray.length >= 2) {
-						String message = "\n\nPlayer " + inputArray[1] + " joined the room";
+						String message = "\n----------------------------------------------"
+										+ "\nPlayer " + inputArray[1] + " joined the room"
+										+ "\n---------------------------------------------------";
 						view.print(message);
 					}
 				} else if (inputArray[0].equals(Protocol.START)) {
