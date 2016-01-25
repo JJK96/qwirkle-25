@@ -36,22 +36,28 @@ public class LittleBetterStrategy implements Strategy {
     }
 
     public List<Stone> getMove(ClientGame game, List<Stone> stones) {
-        List<Stone> stonesBackup = new ArrayList<>();
-        stonesBackup.addAll(stones);
-        Player player = game.getCurrentPlayer();
-        Board b = game.getBoard().deepCopy();
-        List<PossibleMove> possibleMoves = new ArrayList<>(b.getPossibleMoves().values());
-        List<Stone> stonesplaced  = new ArrayList<>();
-        possibleMoves = game.getCurrentPlayer().adaptPossibleMoves(possibleMoves, stonesBackup, stonesplaced);
-        while (!possibleMoves.isEmpty()) {
-            int choice = (int) Math.floor(Math.random() * possibleMoves.size());
-            Stone placed = placeStone(b, possibleMoves.get(choice), player, stonesBackup);
-            stonesplaced.add(placed);
-            stonesBackup.remove(placed);
-            possibleMoves = new ArrayList<>(b.getPossibleMoves().values());
-            possibleMoves = player.adaptPossibleMoves(possibleMoves, stonesBackup, stonesplaced);
+        List<Stone> move = new ArrayList<>();
+        long start = System.currentTimeMillis();
+        long end = start + time*1000;
+        while (System.currentTimeMillis() < end) {
+            List<Stone> stonesBackup = new ArrayList<>();
+            stonesBackup.addAll(stones);
+            Player player = game.getCurrentPlayer();
+            Board b = game.getBoard().deepCopy();
+            List<PossibleMove> possibleMoves = new ArrayList<>(b.getPossibleMoves().values());
+            List<Stone> stonesplaced = new ArrayList<>();
+            possibleMoves = game.getCurrentPlayer().adaptPossibleMoves(possibleMoves, stonesBackup, stonesplaced);
+            while (!possibleMoves.isEmpty()) {
+                int choice = (int) Math.floor(Math.random() * possibleMoves.size());
+                Stone placed = placeStone(b, possibleMoves.get(choice), player, stonesBackup);
+                stonesplaced.add(placed);
+                stonesBackup.remove(placed);
+                possibleMoves = new ArrayList<>(b.getPossibleMoves().values());
+                possibleMoves = player.adaptPossibleMoves(possibleMoves, stonesBackup, stonesplaced);
+            }
+            move = stonesplaced;
         }
-        return stonesplaced;
+        return move;
     }
 
     public Stone placeStone(Board b, PossibleMove place, Player p, List<Stone> stones) {
@@ -60,5 +66,9 @@ public class LittleBetterStrategy implements Strategy {
 		Stone s = acceptableStones.get(choice);
 		b.makeMove(s, place);
 		return s;
+    }
+
+    public String getHint(ClientGame game, List<Stone> stones) {
+        return "";
     }
 }
