@@ -166,8 +166,8 @@ public class Player extends Observable {
 	 * @param stonesplaced
 	 * @return a list of possiblemoves where the player can place a stone.
 	 */
-	public List<PossibleMove> adaptPossibleMoves(List<PossibleMove> pmlist, 
-					List<Stone> stonesOfPlayer, List<Stone> stonesplaced) {
+	public List<PossibleMove> adaptPossibleMoves(List<PossibleMove> pmlist,
+					List<Stone> stonesOfPlayer, List<Stone> stonesplaced, Board b) {
 		List<PossibleMove> newpmlist = new ArrayList<>();
 		for (PossibleMove p : pmlist) {
 			boolean oneRow = true;
@@ -175,7 +175,7 @@ public class Player extends Observable {
 				List<Space> spacelist = new ArrayList<>();
 				spacelist.addAll(stonesplaced);
 				spacelist.add(p);
-				oneRow = game.getBoard().allOneRow(spacelist);
+				oneRow = b.allOneRow(spacelist);
 			}
 			if (oneRow && hasStones(p, stonesOfPlayer)) {
 				newpmlist.add(p);
@@ -218,7 +218,7 @@ public class Player extends Observable {
 	 * @return
 	 */
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
-	public List<Stone> adaptStones(List<Stone> stonelist, PossibleMove place) {
+	public static List<Stone> adaptStones(List<Stone> stonelist, PossibleMove place) {
 		List<Stone> acceptableStones = new ArrayList<>();
 		for (Stone s : stonelist) {
 			if (place.acceptable(s)) {

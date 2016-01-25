@@ -2,6 +2,7 @@ package client;
 
 import shared.*;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
@@ -212,5 +213,16 @@ public class ClientGame extends Observable {
 	 */
 	public void addPoints(String s) {
 		currentPlayer.addPoints(Integer.parseInt(s));
+	}
+
+	@Override
+	public String toString() {
+		String pointsPlayers = "-------------------------------------------------------"
+						+ "\nPLAYERPOINTS:\n\n";
+		for (Player p : getPlayers()) {
+			pointsPlayers += p.getName() + ": " + p.getPoints() + "\n";
+		}
+		pointsPlayers += "-------------------------------------------------------";
+		return pointsPlayers + board.toString() + "\n-------------------------------------------------------";
 	}
 }

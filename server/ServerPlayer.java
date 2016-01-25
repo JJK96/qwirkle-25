@@ -54,6 +54,7 @@ public class ServerPlayer extends Thread {
 					sendPlayers();
 				} else if (inGame()) {
 					if (words[0].equals(Protocol.PLACE)) {
+						System.out.println("From " + getThisName() + ": " + line);
 						if (game.getCurrentPlayer().equals(this)) {
 							place(words);
 						}

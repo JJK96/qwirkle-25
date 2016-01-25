@@ -34,6 +34,7 @@ public class LittleBetterStrategy implements Strategy {
             toRemove.addAll(stonesplaced);
             game.getCurrentPlayer().removeStones(toRemove);
         }
+        game.getClient().getView().print(game.toString());
     }
 
     public List<Stone> getMove(ClientGame game, List<Stone> stones) {
@@ -43,13 +44,16 @@ public class LittleBetterStrategy implements Strategy {
         long end = start + time * 1000;
         while (System.currentTimeMillis() < end) {
             List<Stone> stonesBackup = new ArrayList<>();
-            stonesBackup.addAll(stones);
+            for (Stone s : stones) {
+                Stone newStone = new Stone(s.getShape(), s.getColor());
+                stonesBackup.add(newStone);
+            }
             Player player = game.getCurrentPlayer();
             Board b = game.getBoard().deepCopy();
             List<PossibleMove> possibleMoves = new ArrayList<>(b.getPossibleMoves().values());
             List<Stone> stonesplaced = new ArrayList<>();
             possibleMoves = game.getCurrentPlayer().adaptPossibleMoves(
-            		possibleMoves, stonesBackup, stonesplaced);
+            		possibleMoves, stonesBackup, stonesplaced, b);
             while (!possibleMoves.isEmpty()) {
                 int choice = (int) Math.floor(Math.random() * possibleMoves.size());
                 Stone placed = placeStone(b, possibleMoves.get(choice), player, stonesBackup);
@@ -57,17 +61,19 @@ public class LittleBetterStrategy implements Strategy {
                 stonesBackup.remove(placed);
                 possibleMoves = new ArrayList<>(b.getPossibleMoves().values());
                 possibleMoves = player.adaptPossibleMoves(
-                		possibleMoves, stonesBackup, stonesplaced);
+                		possibleMoves, stonesBackup, stonesplaced,b);
             }
             List<Position> positions = new ArrayList<>();
-            for (Stone s : stonesplaced) {
-                positions.add(s.getPosition());
+            for (int i=0; i<stonesplaced.size(); i++) {
+                positions.add(stonesplaced.get(i).getPosition());
             }
-            int points = b.calculatePoints(stonesplaced, positions);
-            if (points > movePoints) {
-                move = stonesplaced;
-                movePoints = points;
-            }
+            if (!stonesplaced.isEmpty()) {
+                int points = b.calculatePoints(stonesplaced, positions);
+                if (points > movePoints) {
+                    move = stonesplaced;
+                    movePoints = points;
+                }
+            } else return stonesplaced;
         }
         return move;
     }
@@ -77,7 +83,7 @@ public class LittleBetterStrategy implements Strategy {
 		int choice = (int) Math.floor(Math.random() * acceptableStones.size());
 		Stone s = acceptableStones.get(choice);
 		b.makeMove(s, place);
-		return s;
+        return s;
     }
 
     public String getHint(ClientGame game, List<Stone> stones) {
