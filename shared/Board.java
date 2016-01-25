@@ -379,7 +379,7 @@ public class Board {
 		}
 		return res;
 	}
-
+	//@ requires \forall int i=0; i<stonelist.size() ; stonelist.get(i).isOnBoard();
 	public int calculatePoints(List<Stone> stonelist, List<Position> positionlist) {
 		int points = 0;
 		if (sameRow(positionlist)) {
