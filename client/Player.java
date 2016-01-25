@@ -195,12 +195,13 @@ public class Player extends Observable {
 	}
 
 	/**
-	 * ????
+	 * Determines if a player has one or more stones that can be played 
+	 * on the specified possible move.
+	 * 
 	 * @param p
 	 * @param stonesOfPlayer
-	 * @return
+	 * @return true if the player has such a stone, otherwise false.
 	 */
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	public boolean hasStones(PossibleMove p, List<Stone> stonesOfPlayer) {
         for (Stone s : stonesOfPlayer) {
             if (p.acceptable(s)) {
@@ -211,12 +212,12 @@ public class Player extends Observable {
 	}
 
 	/**
-	 * ??
+	 * Determines which stones the player can lay on the specified possible move.
+	 * 
 	 * @param stonelist
 	 * @param place
-	 * @return
+	 * @return All stones that can be laid on the specified possible move
 	 */
-	//////////////////////////////////////////////////////////////////////////////////////////////////////
 	public static List<Stone> adaptStones(List<Stone> stonelist, PossibleMove place) {
 		List<Stone> acceptableStones = new ArrayList<>();
 		for (Stone s : stonelist) {

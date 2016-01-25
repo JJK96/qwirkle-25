@@ -78,8 +78,7 @@ public class LittleBetterStrategy implements Strategy {
 	}
 
 	public Stone placeStone(Board b, PossibleMove place, Player p, List<Stone> stones) {
-		@SuppressWarnings("static-access")
-		List<Stone> acceptableStones = p.adaptStones(stones, place);
+		List<Stone> acceptableStones = Player.adaptStones(stones, place);
 		int choice = (int) Math.floor(Math.random() * acceptableStones.size());
 		Stone s = acceptableStones.get(choice);
 		b.makeMove(s, place);

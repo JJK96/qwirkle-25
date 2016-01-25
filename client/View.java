@@ -141,7 +141,7 @@ public class View implements Observer {
 		List<Stone> stones = player.getStones();
 		List<PossibleMove> possibleMoves = new ArrayList<>(b.getPossibleMoves().values());
 		List<Stone> stonesplaced  = new ArrayList<>();
-		possibleMoves = player.adaptPossibleMoves(possibleMoves, stones, stonesplaced,b);
+		possibleMoves = player.adaptPossibleMoves(possibleMoves, stones, stonesplaced, b);
 		while (!possibleMoves.isEmpty() || player.canTrade(stonesplaced.size())) {
 			String message = b.toString(possibleMoves) + "\n"
 							+ "Stones: \n" + player.stonesToString(stones) + "\n"
@@ -166,7 +166,7 @@ public class View implements Observer {
 			}
 			stones = player.getStones();
 			possibleMoves = new ArrayList<>(b.getPossibleMoves().values());
-			possibleMoves = player.adaptPossibleMoves(possibleMoves, stones, stonesplaced,b);
+			possibleMoves = player.adaptPossibleMoves(possibleMoves, stones, stonesplaced, b);
 		}
 		if (!stonesplaced.isEmpty()) {
 			client.place(stonesplaced);
@@ -253,7 +253,7 @@ public class View implements Observer {
 	 * cant be -1.
 	 */
 	private Stone placeStone(Board b, PossibleMove place, Player p) {
-		List<Stone> acceptableStones = p.adaptStones(p.getStones(), place);
+		List<Stone> acceptableStones = Player.adaptStones(p.getStones(), place);
 		String message = "You can place these stones here: \n" + p.stonesToString(acceptableStones)
 						+ "\nwhich stone do you want to place?: ";
 		print(message);
@@ -322,7 +322,8 @@ public class View implements Observer {
 	}
 
 	/**
-	 * //////////////////////////???????????????????????????????????????????????????????????????????????????????
+	 * If its the turn of the humanplayer the TUI is updated and the humanplayer
+	 * can start with giving input for his move because determinemove is called.
 	 */
 	@Override
 	public void update(Observable observable, Object o) {
