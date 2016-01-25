@@ -22,7 +22,7 @@ public class LittleBetterStrategy implements Strategy {
 	
     @Override
     public void determineMove(ClientGame game, List<Stone> stones) {
-        List<Stone> stonesplaced = getMove(game, stones);
+        List<Stone> stonesplaced = getMove(game.getCurrentPlayer(), game.getBoard(), stones);
         if (stonesplaced.isEmpty()) {
             game.getClient().trade(stones);
             List<Stone> toRemove = new ArrayList<>();
@@ -36,7 +36,7 @@ public class LittleBetterStrategy implements Strategy {
         }
     }
 
-    public List<Stone> getMove(ClientGame game, List<Stone> stones) {
+    public List<Stone> getMove(Player player, Board board, List<Stone> stones) {
         List<Stone> move = new ArrayList<>();
         int movePoints = 0;
         long start = System.currentTimeMillis();
@@ -47,11 +47,10 @@ public class LittleBetterStrategy implements Strategy {
                 Stone newStone = new Stone(s.getShape(), s.getColor());
                 stonesBackup.add(newStone);
             }
-            Player player = game.getCurrentPlayer();
-            Board b = game.getBoard().deepCopy();
+            Board b = board.deepCopy();
             List<PossibleMove> possibleMoves = new ArrayList<>(b.getPossibleMoves().values());
             List<Stone> stonesplaced = new ArrayList<>();
-            possibleMoves = game.getCurrentPlayer().adaptPossibleMoves(
+            possibleMoves = player.adaptPossibleMoves(
             		possibleMoves, stonesBackup, stonesplaced, b);
             while (!possibleMoves.isEmpty()) {
                 int choice = (int) Math.floor(Math.random() * possibleMoves.size());
@@ -85,9 +84,9 @@ public class LittleBetterStrategy implements Strategy {
         return s;
     }
 
-    public String getHint(ClientGame game, List<Stone> stones) {
+    public String getHint(Player player, Board board, List<Stone> stones) {
         String res = "I suggest you ";
-        List<Stone> stonesplaced = getMove(game, stones);
+        List<Stone> stonesplaced = getMove(player, board, stones);
         if (stonesplaced.isEmpty()) {
             res += "trade";
         } else {

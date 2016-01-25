@@ -35,6 +35,7 @@ public class Protocol {
 	public static final String DECLINE = "decline";
 	public static final String BORDER = "\n\n===================================="
 					+ "=============================\n\n";
+	public static final String DELIMITER = "----------------------------------------------\n";
 
 	public enum ErrorCode {
 		WRONGCOMMAND, WRONGTURN, INVALIDNAME, PLAYERDISCONNECTED, MISSINGOPTION

@@ -341,7 +341,7 @@ public class Board {
 	}
 
 	public String toString(List<PossibleMove> pmlist) {
-		int wIDTH = 5;
+		final int WIDTH = 5;
         int[] boundaries = getBoundaries();
 		boundaries[0] -= 1;
 		boundaries[1] -= 1;
@@ -349,11 +349,11 @@ public class Board {
 		boundaries[3] += 1;
 		String res = "     ";
 		for (int k = boundaries[0]; k <= boundaries[2]; k++) {
-			res += StringUtils.center(Integer.toString(k), wIDTH);
+			res += StringUtils.center(Integer.toString(k), WIDTH);
 		}
 		res += "\n";
 		for (int i = boundaries[1]; i <= boundaries[3]; i++) {
-			res += StringUtils.rightPad(Integer.toString(i), wIDTH);
+			res += StringUtils.rightPad(Integer.toString(i), WIDTH);
 			for (int j = boundaries[0]; j <= boundaries[2]; j++) {
 				boolean placeEmpty = true;
 				Position pos = new Position(j, i);
@@ -365,7 +365,7 @@ public class Board {
 					for (int pmIt = 0; pmIt < pmlist.size(); pmIt++) {
 						PossibleMove p = pmlist.get(pmIt);
 						if (p.getPosition().equals(pos)) {
-							res += StringUtils.center("(" + pmIt + ")", wIDTH);
+							res += StringUtils.center("(" + pmIt + ")", WIDTH);
 							placeEmpty = false;
 							break;
 						}

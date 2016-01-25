@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 
-public class ClientGame extends Observable {
+public class ClientGame {
 
 	private Player[] players;
 	private Player currentPlayer;
@@ -160,8 +160,6 @@ public class ClientGame extends Observable {
 			throw e;
 		}
 		bag -= positions.size();
-		setChanged();
-		notifyObservers();
 	}
 	
 	/**
@@ -217,12 +215,12 @@ public class ClientGame extends Observable {
 
 	@Override
 	public String toString() {
-		String pointsPlayers = "-------------------------------------------------------"
+		String pointsPlayers = Protocol.DELIMITER
 						+ "\nPLAYERPOINTS:\n\n";
 		for (Player p : getPlayers()) {
 			pointsPlayers += p.getName() + ": " + p.getPoints() + "\n";
 		}
-		pointsPlayers += "-------------------------------------------------------\n";
-		return pointsPlayers + board.toString() + "\n-------------------------------------------------------";
+		pointsPlayers += Protocol.DELIMITER;
+		return pointsPlayers + board.toString() + Protocol.DELIMITER;
 	}
 }

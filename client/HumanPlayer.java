@@ -1,7 +1,8 @@
 package client;
 
-public class HumanPlayer extends Player {
+import shared.Board;
 
+public class HumanPlayer extends Player {
 	/**
 	 * Creates a humanplayer.
 	 * 
@@ -10,7 +11,10 @@ public class HumanPlayer extends Player {
 	 */
 	public HumanPlayer(String name, ClientGame game) {
 		super(name, game);
+	}
 
+	public String getHint(Board board) {
+		return new LittleBetterStrategy(1).getHint(this, board, getStones());
 	}
 
 	/**
@@ -22,4 +26,5 @@ public class HumanPlayer extends Player {
 		setChanged();
 		notifyObservers();
 	}
+
 }

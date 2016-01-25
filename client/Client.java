@@ -191,16 +191,6 @@ public class Client extends Thread {
 							newArray[i - 2] = inputArray[i];
 						}
 						placed(newArray);
-						if (you instanceof HumanPlayer) {
-							view.print(game.getBoard().toString());
-							String pointsPlayers = "--------------------------------------------"
-											+ "----------------\nPLAYERPOINTS:\n\n";
-							for (Player p : game.getPlayers()) {
-								pointsPlayers += p.getName() + ": " + p.getPoints() + "\n";
-							}
-							pointsPlayers += "----------------------------------------------------";
-							game.getClient().getView().print(pointsPlayers);
-						}
 					} else {
 						throw new InvalidCommandException();
 					}
@@ -231,9 +221,9 @@ public class Client extends Thread {
 					}
 				} else if (inputArray[0].equals(Protocol.JOINLOBBY)) {
 					if (inputArray.length >= 2) {
-						String message = "\n----------------------------------------------"
-										+ "\nPlayer " + inputArray[1] + " joined the room||||||||"
-										+ "\n----------------------------------------------";
+						String message = Protocol.DELIMITER
+										+ "\nPlayer " + inputArray[1] + " joined the room"
+										+ Protocol.DELIMITER;
 						view.print(message);
 					}
 				} else if (inputArray[0].equals(Protocol.START)) {
@@ -268,13 +258,7 @@ public class Client extends Thread {
 		String message = "Game ended, player " + winner.getName() 
 						+ " has won.\n" + "with " + winner.getPoints()
 						+ " points.";
-		String pointsPlayers = "\n-------------------------------------------------------"
-						+ "\nPLAYERPOINTS:\n\n";
-		for (Player p : game.getPlayers()) {
-			pointsPlayers += p.getName() + ": " + p.getPoints() + "\n";
-		}
-		pointsPlayers += "-------------------------------------------------------\n";
-		view.print(message + pointsPlayers);
+		view.print(message + game.toString());
 		playagain();
 	}
 

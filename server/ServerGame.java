@@ -71,7 +71,6 @@ public class ServerGame extends Thread {
 			} catch (InterruptedException e) {
 				running = false;
 			}
-			System.out.println("next player");
 			int loop = 0;
 			do {
 				loop++;
@@ -197,8 +196,6 @@ public class ServerGame extends Thread {
 			lock.lock();
 			try {
 				board.makeMoves(positions, stones);
-				//System.out.println("currentplayer placed stones");
-				System.out.println(board);
 				currentplayer.removeStones(stones);
 				currentplayer.giveStones(takeSomeStones(stones.size()));
 				int points = board.calculatePoints(stones, positions);

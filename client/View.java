@@ -146,6 +146,10 @@ public class View implements Observer {
 							+ "Stones: \n" + player.stonesToString(stones) + "\n"
 							+ "Choose a place to play ";
 			print(message);
+			String input = readString("do you want a hint? (y/n): ");
+			if (input.equals("y")) {
+				print(player.getHint(b));
+			}
 			if (player.canTrade(stonesplaced.size())) {
 				print("-1: swap");
 				int choice = getChoice(-1, possibleMoves.size());
@@ -177,13 +181,7 @@ public class View implements Observer {
 		boolean valid = false;
 		int choice;
 		do {
-			print("-2: hint");
 			choice = readInt("Enter you choice (" + low + " - " + (high - 1) + ") : ");
-			if (choice == -2) {
-				int hintchoice = (int) Math.floor(Math.random() * (high - low) + low);
-				print("I suggest you take: " + hintchoice);
-				choice = readInt("Enter you choice: ");
-			}
 			valid = choice >= low && choice < high;
 			if (!valid) {
 				System.out.println("ERROR: number " + choice + " is not a valid choice.");
@@ -329,8 +327,6 @@ public class View implements Observer {
 	public void update(Observable observable, Object o) {
 		if (observable instanceof HumanPlayer) {
 			determineMove((HumanPlayer) observable);
-		} else if (observable instanceof ClientGame) {
-			print(((ClientGame) observable).getBoard().toString());
 		}
 	}
 }
