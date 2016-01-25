@@ -9,6 +9,7 @@ import java.util.List;
 
 /**
  * Created by jjk on 1/25/16.
+ *
  */
 public class LittleBetterStrategy implements Strategy{
     @Override
