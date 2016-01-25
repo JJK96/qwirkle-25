@@ -85,8 +85,7 @@ public class LittleBetterStrategy implements Strategy {
         List<Stone> stonesplaced = getMove(game, stones);
         if (stonesplaced.isEmpty()) {
             res += "trade";
-        }
-        else {
+        } else {
             Stone s = stonesplaced.get(0);
             res += "place " + s + " at " + s.getPosition();
         }

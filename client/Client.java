@@ -239,12 +239,14 @@ public class Client extends Thread {
 							initGame(inputArray);
 						}
 					} else {
-						throw new InvalidCommandException();
+						throw new InvalidCommandException("Server starts my game with the"
+								+ " wrong amount of players.");
 					}
 				}
 			}
 		} catch (InvalidCommandException e) {
 			e.printStackTrace();
+			System.out.println(e.getMessage());
 			serverBroken();
 		} catch (GameNotEndedException e) {
 			serverBroken();
