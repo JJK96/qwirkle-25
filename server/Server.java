@@ -57,7 +57,6 @@ public class Server {
 		}
 		Server server = new Server(port);
 		server.run();
-		System.out.println("Server is running :)");
 	}
 
 	public void run() {
