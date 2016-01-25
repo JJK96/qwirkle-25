@@ -42,9 +42,10 @@ public class Server {
 				String input = null;
 				while (input == null) {
 					input = in.readLine();
+					//moet nog beter dat als je letter typt je geen exceptie krijgt.
 				}
 				port = Integer.parseInt(input);
-				if (port > 0 && port <=65535) {
+				if (port > 0 && port <= 65535) {
 					valid = true;
 				} else {
 					System.out.println("Invalid port number");
