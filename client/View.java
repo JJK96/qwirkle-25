@@ -71,15 +71,32 @@ public class View implements Observer {
 	 */
 	public Strategy getStrategyFromInput() {
 		String prompt = Protocol.BORDER + "Which strategy shall the ComputerPlayer have?"
-						+ "\n0 : BadStrategy.\n\nMore options will follow.";
+						+ "\n0 : BadStrategy.\n1 : LittleBetterStrategy"
+						+ "\n\nMore options will follow.";
 		int strat = 0;
 		while (true) {
 			strat = readInt(prompt);
-			if (strat != 0) {
+			if (strat != 0 && strat != 1) {
 				System.out.println("invalid choice");
 			} else if (strat == 0) {
 				return new BadStrategy();
-			} // else als er meer strats zijn enzoooo
+			} else {
+				return new LittleBetterStrategy();
+			}
+		}
+	}
+	
+	public int getPlayTimeFromInput() {
+		String prompt = Protocol.BORDER + "How much time shall the computerplayer have to"
+						+ "decide his move?\nFrom 1 second to infinity.. nou nee doe dat maar niet";
+		int time = 0;
+		while (true) {
+			time = readInt(prompt);
+			if (!(time >= 1)) {
+				System.out.println("invalid choice");
+			} else {
+				return time;
+			} 
 		}
 	}
 
