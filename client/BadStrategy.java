@@ -6,15 +6,12 @@ import java.util.List;
 import shared.*;
 
 public class BadStrategy implements Strategy {
-
-	private int time;
 	
 	public BadStrategy(int time) {
-		this.time = time;
 	}
 
 	/**
-	 * Our AI.
+	 * Our bad AI, does nothing with the time because always faster than 1 second.
 	 */
 	@Override
 	public void determineMove(ClientGame game, List<Stone> stones) {
