@@ -57,10 +57,10 @@ public class Server {
 		}
 		Server server = new Server(port);
 		server.run();
-		System.out.println("Server is running :)");
 	}
 
 	public void run() {
+		System.out.println("Server is running :)");
 		try {
 			@SuppressWarnings("resource")
 			ServerSocket sock = new ServerSocket(port);
