@@ -16,7 +16,6 @@ import shared.Protocol;
  * Created by jjk on 1/14/16.
  */
 public class Server {
-	private static final String USAGE = "usage: " + Server.class.getName() + " <port>";
 	private List<ServerPlayer> players;
 	private int port;
 	private List<ServerGame> games;

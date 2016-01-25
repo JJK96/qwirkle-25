@@ -34,7 +34,7 @@ public class Protocol {
 	public static final String ACCEPT = "accept";
 	public static final String DECLINE = "decline";
 	public static final String BORDER = "\n\n===================================="
-			+ "=============================\n\n";
+					+ "=============================\n\n";
 
 	public enum ErrorCode {
 		WRONGCOMMAND, WRONGTURN, INVALIDNAME, PLAYERDISCONNECTED, MISSINGOPTION
@@ -68,7 +68,7 @@ public class Protocol {
 		int shape = Integer.parseInt(array[0]);
 		int color = Integer.parseInt(array[1]);
 		if (shape >= 0 && shape <= Stone.Shape.values().length && color >= 0
-				&& color <= Stone.Color.values().length) {
+						&& color <= Stone.Color.values().length) {
 			Shape[] shapes = Shape.values();
 			Color[] colors = Color.values();
 			Stone stone = new Stone(shapes[shape], colors[color]);

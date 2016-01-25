@@ -28,6 +28,7 @@ public class Client extends Thread {
 	private int port;
 	private BufferedReader in;
 	private BufferedWriter out;
+	@SuppressWarnings("unused")
 	private String[] options;
 	private ClientGame game;
 	private View view;
@@ -231,8 +232,8 @@ public class Client extends Thread {
 				} else if (inputArray[0].equals(Protocol.JOINLOBBY)) {
 					if (inputArray.length >= 2) {
 						String message = "\n----------------------------------------------"
-										+ "\nPlayer " + inputArray[1] + " joined the room"
-										+ "\n---------------------------------------------------";
+										+ "\nPlayer " + inputArray[1] + " joined the room||||||||"
+										+ "\n----------------------------------------------";
 						view.print(message);
 					}
 				} else if (inputArray[0].equals(Protocol.START)) {

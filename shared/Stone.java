@@ -80,12 +80,11 @@ public class Stone extends Space {
 	}
 
 	/**
-	 * ??
+	 * Override equals of stone.
 	 * 
 	 * @param obj
 	 * @return 
 	 */
-	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	@Override
 	public boolean equals(Object obj) {
 		return (((Stone) obj).getColor() == this.getColor()) 

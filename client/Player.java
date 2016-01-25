@@ -188,9 +188,8 @@ public class Player extends Observable {
 	 * Determines if the player can trade.
 	 * 
 	 * @param stonesplaced
-	 * @return true if ?????
+	 * @return true if 
 	 */
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	public boolean canTrade(int stonesplaced) {
 		return game.getMoveCount() != 1 && stonesplaced == 0;
 	}

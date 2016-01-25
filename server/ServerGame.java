@@ -64,7 +64,7 @@ public class ServerGame extends Thread {
 		int currentplayernum = (int) Math.floor(Math.random() * playernum);
 		currentplayer = players[currentplayernum];
 		while (!hasWinner() && isRunning() && !this.isInterrupted() && movesLeft) {
-			System.out.println("Stones: " +currentplayer.getStones());
+			System.out.println("Stones: " + currentplayer.getStones());
 			sendTurn();
 			try {
 				playerDone.await();

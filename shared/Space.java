@@ -80,7 +80,8 @@ public class Space {
 	}
 
 	/**
-	 * Sets the row of the //////////////////////////////////////////////////////////////////////////
+	 * Sets the row of the space.
+	 * 
 	 * @param row
 	 */
 	public void setRow(List<Stone> row) {
