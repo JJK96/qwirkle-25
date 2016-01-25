@@ -270,7 +270,7 @@ public class Client extends Thread {
 		for (Player p : game.getPlayers()) {
 			pointsPlayers += p.getName() + ": " + p.getPoints() + "\n";
 		}
-		pointsPlayers += "-------------------------------------------------------";
+		pointsPlayers += "-------------------------------------------------------\n";
 		view.print(message + pointsPlayers);
 		playagain();
 	}

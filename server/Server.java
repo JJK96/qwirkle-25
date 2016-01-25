@@ -42,7 +42,6 @@ public class Server {
 				String input = null;
 				while (input == null) {
 					input = in.readLine();
-					//moet nog beter dat als je letter typt je geen exceptie krijgt.
 				}
 				port = Integer.parseInt(input);
 				if (port > 0 && port <= 65535) {
@@ -52,10 +51,13 @@ public class Server {
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
+			} catch (NumberFormatException e) {
+				
 			}
 		}
 		Server server = new Server(port);
 		server.run();
+		System.out.println("Server is running :)");
 	}
 
 	public void run() {
