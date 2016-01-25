@@ -153,7 +153,7 @@ public class ServerPlayer extends Thread {
 	}
 
 	public void acknowledge() {
-		sendMessage(Protocol.ACKNOWLEDGE + Protocol.SPLIT + options);
+		sendMessage(Protocol.ACKNOWLEDGE + Protocol.SPLIT);
 	}
 
 	public void sendMessage(String msg) {

@@ -20,7 +20,6 @@ public class Client extends Thread {
 	public static void main(String[] args) {
 		Client client = new Client();
 		client.start();
-		client.startGame();
 	}
 
 	private String clientName;
@@ -49,6 +48,7 @@ public class Client extends Thread {
 		while (!registerSuccesfull) {
 			login();
 		}
+		startGame();
 	}
 
 	/**

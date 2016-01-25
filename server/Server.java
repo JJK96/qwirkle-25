@@ -1,6 +1,8 @@
 package server;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -31,12 +33,27 @@ public class Server {
 	}
 
 	public static void main(String[] args) {
-		if (args.length != 1) {
-			System.out.println(USAGE);
-			System.exit(0);
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+		boolean valid = false;
+		int port = 0;
+		while (!valid) {
+			System.out.println("enter a port number");
+			try {
+				String input = null;
+				while (input == null) {
+					input = in.readLine();
+				}
+				port = Integer.parseInt(input);
+				if (port > 0 && port <=65535) {
+					valid = true;
+				} else {
+					System.out.println("Invalid port number");
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
-
-		Server server = new Server(Integer.parseInt(args[0]));
+		Server server = new Server(port);
 		server.run();
 	}
 
@@ -61,6 +78,7 @@ public class Server {
 					newplayer.error(Protocol.ErrorCode.WRONGCOMMAND);
 				} catch (InvalidNameException e) {
 					newplayer.error(Protocol.ErrorCode.INVALIDNAME);
+					newplayer.shutdown();
 				}
 			}
 		} catch (IOException e) {
