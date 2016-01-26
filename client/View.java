@@ -158,16 +158,20 @@ public class View implements Observer {
 					print("-3: end turn");
 				}
 				int choice = getChoice(-3, possibleMoves.size());
-				if (choice == -1 && player.canTrade(stonesplaced.size(), moved)) {
-					swapStones();
-					valid = true;
-					moved = true;
+				if (choice == -1) {
+					if (player.canTrade(stonesplaced.size(), moved)) {
+						swapStones();
+						valid = true;
+						moved = true;
+					}
 				} else if (choice == -2) {
 					player.getHint(b);
 					continue;
-				} else if (choice == -3 && player.canEnd(stonesplaced.size())) {
-					moved = true;
-					break;
+				} else if (choice == -3 ) {
+					if (player.canEnd(stonesplaced.size())) {
+						moved = true;
+						break;
+					}
 				} else {
 					stonesplaced.add(placeStone(b, possibleMoves.get(choice), player));
 					valid = true;
@@ -194,8 +198,8 @@ public class View implements Observer {
 		boolean valid = false;
 		int choice;
 		do {
-			choice = readInt("Enter you choice (" + low + " - " + (high - 1) + ") : ");
-			valid = choice >= low && choice < high || choice == -1 || choice == -2;
+			choice = readInt("Enter your choice: ");
+			valid = choice >= low && choice < high;
 			if (!valid) {
 				System.out.println("ERROR: number " + choice + " is not a valid choice.");
 			}
