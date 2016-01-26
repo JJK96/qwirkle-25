@@ -231,6 +231,7 @@ public class BoardTest {
         b.makeMove(1,1, testStone);
         positions.add(testStone.getPosition());
         stones.add(testStone);
+        assert(b.calculatePoints(stones,positions) == 4);
         positions = new ArrayList<>();
         stones = new ArrayList<>();
         Board b = new Board();
