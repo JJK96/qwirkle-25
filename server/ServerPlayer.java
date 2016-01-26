@@ -168,6 +168,7 @@ public class ServerPlayer extends Thread {
 
 	public void error(Protocol.ErrorCode code) {
 		sendMessage(Protocol.ERROR + Protocol.SPLIT + code.ordinal());
+		shutdown();
 	}
 
 	public String getThisName() {

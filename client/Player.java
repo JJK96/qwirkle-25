@@ -164,8 +164,12 @@ public class Player extends Observable {
 	 * @param stonesplaced
 	 * @return true if 
 	 */
-	public boolean canTrade(int stonesplaced) {
-		return game.getMoveCount() != 1 && stonesplaced == 0;
+	public boolean canTrade(int stonesplaced, boolean traded) {
+		return game.getMoveCount() != 1 && stonesplaced == 0 && !traded;
+	}
+
+	public boolean canEnd(int stonesplaced) {
+		return game.getMoveCount() != 1 && stonesplaced != 0;
 	}
 
 	/**

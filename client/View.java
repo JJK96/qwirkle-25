@@ -142,27 +142,39 @@ public class View implements Observer {
 		List<PossibleMove> possibleMoves = new ArrayList<>(b.getPossibleMoves().values());
 		List<Stone> stonesplaced  = new ArrayList<>();
 		possibleMoves = Player.adaptPossibleMoves(possibleMoves, stones, stonesplaced, b);
-		while (!possibleMoves.isEmpty() || player.canTrade(stonesplaced.size())) {
+		boolean moved = false;
+		while (!possibleMoves.isEmpty() || player.canTrade(stonesplaced.size(), moved)) {
 			String message = b.toString(possibleMoves) + "\n"
 							+ "Stones: \n" + player.stonesToString(stones) + "\n"
 							+ "Choose a place to play ";
 			print(message);
-			String input = readString("do you want a hint? (y/n): ");
-			if (input.equals("y")) {
-				print(player.getHint(b));
-			}
-			if (player.canTrade(stonesplaced.size())) {
-				print("-1: swap");
-				int choice = getChoice(-1, possibleMoves.size());
-				if (choice == -1) {
+			boolean valid = false;
+			while (!valid) {
+				if (player.canTrade(stonesplaced.size(), moved)) {
+					print("-1: swap");
+				}
+				print("-2: hint");
+				if (player.canEnd(stonesplaced.size())) {
+					print("-3: end turn");
+				}
+				int choice = getChoice(-3, possibleMoves.size());
+				if (choice == -1 && player.canTrade(stonesplaced.size(), moved)) {
 					swapStones();
+					valid = true;
+					moved = true;
+				} else if (choice == -2) {
+					player.getHint(b);
+					continue;
+				} else if (choice == -3 && player.canEnd(stonesplaced.size())) {
+					moved = true;
 					break;
 				} else {
 					stonesplaced.add(placeStone(b, possibleMoves.get(choice), player));
+					valid = true;
 				}
-			} else {
-				int choice = getChoice(0, possibleMoves.size());
-				stonesplaced.add(placeStone(b, possibleMoves.get(choice), player));
+				if (!valid) {
+					System.out.println("ERROR: number " + choice + " is not a valid choice.");
+				}
 			}
 			stones = player.getStones();
 			possibleMoves = new ArrayList<>(b.getPossibleMoves().values());
@@ -183,7 +195,7 @@ public class View implements Observer {
 		int choice;
 		do {
 			choice = readInt("Enter you choice (" + low + " - " + (high - 1) + ") : ");
-			valid = choice >= low && choice < high;
+			valid = choice >= low && choice < high || choice == -1 || choice == -2;
 			if (!valid) {
 				System.out.println("ERROR: number " + choice + " is not a valid choice.");
 			}

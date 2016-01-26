@@ -104,6 +104,7 @@ public class ServerGame extends Thread {
 		}
 		firstMoveLength = firstMove.size();
 		currentPlayer = players[beginner];
+		System.out.println(firstMove);
 		return beginner;
 	}
 
@@ -211,7 +212,8 @@ public class ServerGame extends Thread {
 		if (gotAllStones(stones)) {
 			lock.lock();
 			try {
-				if (board.getStones().isEmpty() && !(stones.size() == firstMoveLength)) {
+				if (board.getStones().isEmpty() && stones.size() < firstMoveLength) {
+					System.out.println(stones.size());
 					throw new InvalidMoveException();	
 				}
 				board.makeMoves(positions, stones);
