@@ -6,7 +6,8 @@ import java.util.List;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-
+import client.LittleBetterStrategy;
+import client.Player;
 import shared.*;
 
 /**
@@ -61,8 +62,7 @@ public class ServerGame extends Thread {
 		running = true;
 		System.out.println("game started with players: " + getPlayerNames());
 		giveInitialStones();
-		int currentplayernum = (int) Math.floor(Math.random() * playernum);
-		currentplayer = players[currentplayernum];
+		int currentplayernum = determineFirstPlayer();
 		while (!hasWinner() && isRunning() && !this.isInterrupted() && movesLeft) {
 			System.out.println("Stones: " + currentplayer.getStones());
 			sendTurn();
@@ -89,6 +89,20 @@ public class ServerGame extends Thread {
 							+ Protocol.ErrorCode.PLAYERDISCONNECTED.ordinal());
 		}
 		end();
+	}
+
+	public int determineFirstPlayer() {
+		List<Stone> firstMove = new ArrayList<Stone>();
+		LittleBetterStrategy strat = new LittleBetterStrategy(0);
+		int beginner;
+		for (int i = 0; i < players.length; i++) {
+			List<Stone> move = strat.getMove(new Player(null, null), board, players[i].getStones());
+			if (move.size() > firstMove.size()) {
+				firstMove = move;
+				beginner = 
+			}
+		}
+		
 	}
 
 	public void giveInitialStones() {
