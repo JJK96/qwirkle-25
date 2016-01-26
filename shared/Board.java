@@ -155,6 +155,13 @@ public class Board {
 		}
 	}
 
+	/**
+	 * checks if the given positions belong to the same column
+	 * @param positions
+	 * @return true if the stones have the same x value and
+	 * there are no gaps between the stones that are not filled by stones that
+	 * are already on the board.
+     */
 	public boolean sameColumn(List<Position> positions) {
 		boolean allX = true;
 		int x = positions.get(0).getX();
@@ -166,6 +173,13 @@ public class Board {
 		return allX && connectedColumn(positions);
 	}
 
+	/**
+	 * checks if the given positions belong to the same row
+	 * @param positions
+	 * @return true if the stones have the same y value and
+	 * there are no gaps between the stones that are not filled by stones that
+	 * are already on the board.
+	 */
 	public boolean sameRow(List<Position> positions) {
 		boolean allY = true;
 		int y = positions.get(0).getY();
@@ -177,10 +191,21 @@ public class Board {
 		return allY && connectedRow(positions);
 	}
 
+	/**
+	 * checks if the positions are either in the same column
+	 * or the same row.
+	 * @param positions
+	 * @return true if sameRow() or sameColumn() is true
+     */
 	public boolean allStonesOneRow(List<Position> positions) {
 		return sameRow(positions) || sameColumn(positions);
 	}
 
+	/**
+	 * checks if the spaces are in the same row or column.
+	 * @param spaces
+	 * @return true if allStonesOneRow is true;
+     */
 	public boolean allOneRow(List<Space> spaces) {
 		List<Position> positionList = new ArrayList<>();
 		for (Space s : spaces) {
@@ -190,11 +215,12 @@ public class Board {
 	}
 
 	/**
-	 * checks if the spaces in the row are connected.
+	 * checks if the positions in the row have no gaps between them
+	 * that are not filled by the board.
 	 * @param
 	 * @return
      */
-	//@ requires allOneRow(spaces);
+	//@ requires allStonesOneRow(positions);
 	public boolean connectedRow(List<Position> positions) {
 		int y = positions.get(0).getY();
 		int low = positions.get(0).getX();
@@ -216,6 +242,14 @@ public class Board {
 		}
 		return true;
 	}
+
+	/**
+	 * checks if the positions in the column have no gaps between them that
+	 * are not filled by the board.
+	 * @param positions
+	 * @return
+     */
+	//@ requires allStonesOneRow(positions);
 	public boolean connectedColumn(List<Position> positions) {
 		int x = positions.get(0).getX();
 		int low = positions.get(0).getY();
@@ -379,7 +413,7 @@ public class Board {
 		}
 		return res;
 	}
-	//@ requires \forall int i=0; i<stonelist.size() ; stonelist.get(i).isOnBoard();
+	//@ requires \forall int i=0; i<stonelist.size(); stonelist.get(i).isOnBoard();
 	public int calculatePoints(List<Stone> stonelist, List<Position> positionlist) {
 		int points = 0;
 		if (sameRow(positionlist)) {
