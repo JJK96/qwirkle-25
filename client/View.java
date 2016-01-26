@@ -147,7 +147,7 @@ public class View implements Observer {
 			stonesplaced = new LittleBetterStrategy(0).getMove(player.getGame().getBoard(), stones);
 			moved = true;
 		}
-		while (!possibleMoves.isEmpty() || player.canTrade(stonesplaced.size(), moved)) {
+		while (!moved && !possibleMoves.isEmpty() || player.canTrade(stonesplaced.size(), moved)) {
 			String message = b.toString(possibleMoves) + "\n"
 							+ "Stones: \n" + player.stonesToString(stones) + "\n"
 							+ "Choose a place to play ";
@@ -188,6 +188,7 @@ public class View implements Observer {
 			possibleMoves = new ArrayList<>(b.getPossibleMoves().values());
 			possibleMoves = Player.adaptPossibleMoves(possibleMoves, stones, stonesplaced, b);
 		}
+		System.out.println("Stonesplaced" + stonesplaced);
 		if (!stonesplaced.isEmpty()) {
 			client.place(stonesplaced);
 		}
