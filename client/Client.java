@@ -13,7 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import shared.*;
-
+// hoi
 public class Client extends Thread {
 
 	/** Start een Client-applicatie op. */
@@ -272,11 +272,13 @@ public class Client extends Thread {
 	 */
 	public void playagain() {
 		String playagain = view.readString("Do you want to play another game? y/n: ");
+		join(3);
+		/*
 		if (playagain.equals("y")) {
 			startGame();
 		} else {
 			shutdown();
-		}
+		}*/
 
 	}
 
