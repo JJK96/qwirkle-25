@@ -171,7 +171,7 @@ public class View implements Observer {
 				} else if (choice == -2) {
 					print(player.getHint(b));
 					continue;
-				} else if (choice == -3 ) {
+				} else if (choice == -3) {
 					if (player.canEnd(stonesplaced.size())) {
 						moved = true;
 						break;
