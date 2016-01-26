@@ -22,7 +22,7 @@ public class LittleBetterStrategy implements Strategy {
 
 	@Override
 	public void determineMove(ClientGame game, List<Stone> stones) {
-		List<Stone> stonesplaced = getMove( game.getBoard(), stones);
+		List<Stone> stonesplaced = getMove(game.getBoard(), stones);
 		if (stonesplaced.isEmpty()) {
 			game.getClient().trade(stones);
 			List<Stone> toRemove = new ArrayList<>();
@@ -36,7 +36,7 @@ public class LittleBetterStrategy implements Strategy {
 		}
 	}
 
-	public List<Stone> getMove( Board board, List<Stone> stones) {
+	public List<Stone> getMove(Board board, List<Stone> stones) {
 		List<Stone> move = new ArrayList<>();
 		int movePoints = 0;
 		long start = System.currentTimeMillis();
@@ -85,9 +85,9 @@ public class LittleBetterStrategy implements Strategy {
 		return s;
 	}
 
-	public String getHint( Board board, List<Stone> stones) {
+	public String getHint(Board board, List<Stone> stones) {
 		String res = "I suggest you ";
-		List<Stone> stonesplaced = getMove( board, stones);
+		List<Stone> stonesplaced = getMove(board, stones);
 		if (stonesplaced.isEmpty()) {
 			res += "trade";
 		} else {

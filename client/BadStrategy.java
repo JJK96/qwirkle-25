@@ -22,7 +22,8 @@ public class BadStrategy implements Strategy {
 		for (int i = 0; i < size; i++) {
 			List<PossibleMove> allPossibleMoves = 
 							new ArrayList<PossibleMove>(b.getPossibleMoves().values());
-			adaptedPossibleMoves = game.getCurrentPlayer()
+			game.getCurrentPlayer();
+			adaptedPossibleMoves = Player
 					.adaptPossibleMoves(allPossibleMoves, stones, stonesPlaced, b);
 			end: for (PossibleMove p : adaptedPossibleMoves) {
 				for (Stone s : stones) {

@@ -141,7 +141,7 @@ public class View implements Observer {
 		List<Stone> stones = player.getStones();
 		List<PossibleMove> possibleMoves = new ArrayList<>(b.getPossibleMoves().values());
 		List<Stone> stonesplaced  = new ArrayList<>();
-		possibleMoves = player.adaptPossibleMoves(possibleMoves, stones, stonesplaced, b);
+		possibleMoves = Player.adaptPossibleMoves(possibleMoves, stones, stonesplaced, b);
 		while (!possibleMoves.isEmpty() || player.canTrade(stonesplaced.size())) {
 			String message = b.toString(possibleMoves) + "\n"
 							+ "Stones: \n" + player.stonesToString(stones) + "\n"
