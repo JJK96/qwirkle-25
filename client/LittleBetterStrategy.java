@@ -22,7 +22,7 @@ public class LittleBetterStrategy implements Strategy {
 
 	@Override
 	public void determineMove(ClientGame game, List<Stone> stones) {
-		List<Stone> stonesplaced = getMove(game.getCurrentPlayer(), game.getBoard(), stones);
+		List<Stone> stonesplaced = getMove( game.getBoard(), stones);
 		if (stonesplaced.isEmpty()) {
 			game.getClient().trade(stones);
 			List<Stone> toRemove = new ArrayList<>();
@@ -36,7 +36,7 @@ public class LittleBetterStrategy implements Strategy {
 		}
 	}
 
-	public List<Stone> getMove(Player player, Board board, List<Stone> stones) {
+	public List<Stone> getMove( Board board, List<Stone> stones) {
 		List<Stone> move = new ArrayList<>();
 		int movePoints = 0;
 		long start = System.currentTimeMillis();
@@ -50,14 +50,14 @@ public class LittleBetterStrategy implements Strategy {
 			Board b = board.deepCopy();
 			List<PossibleMove> possibleMoves = new ArrayList<>(b.getPossibleMoves().values());
 			List<Stone> stonesplaced = new ArrayList<>();
-			possibleMoves = player.adaptPossibleMoves(possibleMoves, stonesBackup, stonesplaced, b);
+			possibleMoves = Player.adaptPossibleMoves(possibleMoves, stonesBackup, stonesplaced, b);
 			while (!possibleMoves.isEmpty()) {
 				int choice = (int) Math.floor(Math.random() * possibleMoves.size());
-				Stone placed = placeStone(b, possibleMoves.get(choice), player, stonesBackup);
+				Stone placed = placeStone(b, possibleMoves.get(choice), stonesBackup);
 				stonesplaced.add(placed);
 				stonesBackup.remove(placed);
 				possibleMoves = new ArrayList<>(b.getPossibleMoves().values());
-				possibleMoves = player.adaptPossibleMoves(
+				possibleMoves = Player.adaptPossibleMoves(
 						possibleMoves, stonesBackup, stonesplaced, b);
 			}
 			List<Position> positions = new ArrayList<>();
@@ -77,7 +77,7 @@ public class LittleBetterStrategy implements Strategy {
 		return move;
 	}
 
-	public Stone placeStone(Board b, PossibleMove place, Player p, List<Stone> stones) {
+	public Stone placeStone(Board b, PossibleMove place, List<Stone> stones) {
 		List<Stone> acceptableStones = Player.adaptStones(stones, place);
 		int choice = (int) Math.floor(Math.random() * acceptableStones.size());
 		Stone s = acceptableStones.get(choice);
@@ -85,9 +85,9 @@ public class LittleBetterStrategy implements Strategy {
 		return s;
 	}
 
-	public String getHint(Player player, Board board, List<Stone> stones) {
+	public String getHint( Board board, List<Stone> stones) {
 		String res = "I suggest you ";
-		List<Stone> stonesplaced = getMove(player, board, stones);
+		List<Stone> stonesplaced = getMove( board, stones);
 		if (stonesplaced.isEmpty()) {
 			res += "trade";
 		} else {

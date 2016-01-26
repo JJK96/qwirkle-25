@@ -22,7 +22,7 @@ public class HumanPlayer extends Player {
 	 * @return
 	 */
 	public String getHint(Board board) {
-		return new LittleBetterStrategy(1).getHint(this, board, getStones());
+		return new LittleBetterStrategy(1).getHint( board, getStones());
 	}
 
 	/**

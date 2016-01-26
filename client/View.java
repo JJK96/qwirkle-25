@@ -166,7 +166,7 @@ public class View implements Observer {
 			}
 			stones = player.getStones();
 			possibleMoves = new ArrayList<>(b.getPossibleMoves().values());
-			possibleMoves = player.adaptPossibleMoves(possibleMoves, stones, stonesplaced, b);
+			possibleMoves = Player.adaptPossibleMoves(possibleMoves, stones, stonesplaced, b);
 		}
 		if (!stonesplaced.isEmpty()) {
 			client.place(stonesplaced);

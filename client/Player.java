@@ -10,7 +10,6 @@ public class Player extends Observable {
 	private int points;
 	private List<Stone> stones;
 	private ClientGame game;
-	private Position position;
 
 	/**
 	 * Create a player with specified name and game.
@@ -30,31 +29,6 @@ public class Player extends Observable {
 	 */
 	public void makeMove() {
 
-	}
-
-	/**
-	 * Get the position of the last stone that was placed by the humanplayer.
-	 * 
-	 * @return the position of the last stone.
-	 */
-	public Position getPosition() {
-		return position;
-	}
-
-	/**
-	 * Checks if the player has a stone that can be placed on the specified
-	 * possiblemove.
-	 * 
-	 * @param p
-	 * @return true if the player has such a stone, otherwise false.
-	 */
-	public boolean isValidPossiblemove(PossibleMove p) {
-		for (int i = 0; i < stones.size(); i++) {
-			if (getGame().getBoard().isValidMove(p, stones.get(i))) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	/**
@@ -166,7 +140,7 @@ public class Player extends Observable {
 	 * @param stonesplaced
 	 * @return a list of possiblemoves where the player can place a stone.
 	 */
-	public List<PossibleMove> adaptPossibleMoves(List<PossibleMove> pmlist,
+	public static List<PossibleMove> adaptPossibleMoves(List<PossibleMove> pmlist,
 					List<Stone> stonesOfPlayer, List<Stone> stonesplaced, Board b) {
 		List<PossibleMove> newpmlist = new ArrayList<>();
 		for (PossibleMove p : pmlist) {
@@ -202,7 +176,7 @@ public class Player extends Observable {
 	 * @param stonesOfPlayer
 	 * @return true if the player has such a stone, otherwise false.
 	 */
-	public boolean hasStones(PossibleMove p, List<Stone> stonesOfPlayer) {
+	public static boolean hasStones(PossibleMove p, List<Stone> stonesOfPlayer) {
         for (Stone s : stonesOfPlayer) {
             if (p.acceptable(s)) {
 				return true;
