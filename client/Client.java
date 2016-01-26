@@ -247,6 +247,7 @@ public class Client extends Thread {
 	}
 
 	/**
+	 *
 	 * If the game ended on the server this method is called from the run method.
 	 * This method shows on the view which player has won and all points of all 
 	 * the players, then asks if the client wants to play another game.
