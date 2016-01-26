@@ -108,6 +108,7 @@ public class Client extends Thread {
 		}
 		if (!registerSuccesfull) {
 			view.print("username taken");
+			sock=null;
 		}
 	}
 
@@ -312,9 +313,9 @@ public class Client extends Thread {
 	//@ requires inputArray.length == 2;
 	public void turn(String[] inputArray) throws InvalidCommandException {
 		game.setCurrentPlayer(inputArray[1]);
+		game.incMoveCount();
 		if (inputArray[1].equals(clientName)) {
 			System.out.println("current player making move");
-			game.incMoveCount();
 			game.getCurrentPlayer().makeMove();
 		} else {
 			view.print("waiting for " + inputArray[1] + " to make a move");

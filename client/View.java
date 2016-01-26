@@ -139,14 +139,14 @@ public class View implements Observer {
 	public void determineMove(HumanPlayer player) {
 		Board b = player.getGame().getBoard().deepCopy();
 		List<Stone> stones = player.getStones();
-		List<PossibleMove> possibleMoves = new ArrayList<>(b.getPossibleMoves().values());
 		List<Stone> stonesplaced  = new ArrayList<>();
-		possibleMoves = Player.adaptPossibleMoves(possibleMoves, stones, stonesplaced, b);
 		boolean moved = false;
 		if (player.getGame().getMoveCount() == 1) {
-			stonesplaced = new LittleBetterStrategy(0).getMove(player.getGame().getBoard(), stones);
-			moved = true;
+			new LittleBetterStrategy(1).determineMove(player.getGame(), stones);
+			return;
 		}
+		List<PossibleMove> possibleMoves = new ArrayList<>(b.getPossibleMoves().values());
+		possibleMoves = Player.adaptPossibleMoves(possibleMoves, stones, stonesplaced, b);
 		while (!moved && !possibleMoves.isEmpty() || player.canTrade(stonesplaced.size(), moved)) {
 			String message = b.toString(possibleMoves) + "\n"
 							+ "Stones: \n" + player.stonesToString(stones) + "\n"
@@ -171,7 +171,7 @@ public class View implements Observer {
 				} else if (choice == -2) {
 					print(player.getHint(b));
 					continue;
-				} else if (choice == -3 ) {
+				} else if (choice == -3) {
 					if (player.canEnd(stonesplaced.size())) {
 						moved = true;
 						break;
