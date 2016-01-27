@@ -55,8 +55,28 @@ public class PossibleMove extends Space {
 	public int updatePossibilities() {
 		if (getColumn().size() >= 6 || getRow().size() >= 6) {
 			return 0;
+		} else if (doubleRowColumn()) {
+			return 0;
 		}
 		return 1;
+	}
+
+	private boolean doubleRowColumn() {
+		for (Stone s1 : getRow()) {
+			for (Stone s2 : getRow()) {
+				if (s1.equals(s2) && s1 != s2) {
+					return true;
+				}
+			}
+		}
+		for (Stone s1 : getColumn()) {
+			for (Stone s2 : getColumn()) {
+				if (s1.equals(s2) && s1 != s2) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	/**

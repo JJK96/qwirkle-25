@@ -1,5 +1,7 @@
 package client;
 
+//130.89.234.224
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -13,7 +15,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import shared.*;
-// hoi
+
 public class Client extends Thread {
 
 	/** Start een Client-applicatie op. */
@@ -30,7 +32,7 @@ public class Client extends Thread {
 	private BufferedWriter out;
 	@SuppressWarnings("unused")
 	private String[] options;
-	private ClientGame game;
+	private ClientGame game = null;
 	private View view;
 	private int aantal;
 	private boolean registerSuccesfull = false;
@@ -38,6 +40,7 @@ public class Client extends Thread {
 	private Strategy strategy;
 	private List<String> players;
 	private Player you;
+	private String lastMove;
 
 	/**
 	 * Creates a client through setup.
@@ -92,6 +95,9 @@ public class Client extends Thread {
 		String input = null;
 		input = readString();
 		if (input != null) {
+			while (!input.startsWith(Protocol.ERROR) && !input.startsWith(Protocol.ACKNOWLEDGE)) {
+				input = readString();
+			}
 			System.out.println(input);
 			String[] inputArray = input.split(Protocol.SPLIT);
 			if (inputArray[0].equals(Protocol.ACKNOWLEDGE)) {
@@ -106,7 +112,7 @@ public class Client extends Thread {
 		}
 		if (!registerSuccesfull) {
 			view.print("username taken");
-			sock = null;
+			sock=null;
 		}
 	}
 
@@ -167,9 +173,7 @@ public class Client extends Thread {
 		try {
 			while ((input = readString()) != null) {
 				String[] inputArray = input.split(Protocol.SPLIT);
-				if (inputArray[0].equals(Protocol.ENDGAME)) {
-					endgame();
-				} else if (inputArray[0].equals(Protocol.ERROR)) {
+				if (inputArray[0].equals(Protocol.ERROR)) {
 					if (inputArray.length == 1) {
 						System.out.println("error");
 						view.print("Geen foutcode meegegeven foei foei foei");
@@ -177,6 +181,12 @@ public class Client extends Thread {
 						view.print("Fout commando: 0");
 					} else if (inputArray[1].equals("1")) {
 						view.print("Foute beurt: 1");
+						System.out.println(game.getBoard());
+						System.out.println("stones: " + game.getCurrentPlayer().getStones());
+						System.out.println("Move: " + lastMove);
+						for (PossibleMove p : game.getBoard().getPossibleMoves().values()) {
+							System.out.println("Possible Move: Position: " + p.getPosition() + " Column: " + p.getColumn() + " Row: " + p.getRow());
+						}
 					} else if (inputArray[1].equals("2")) {
 						view.print("Niet unieke naam of onjuiste naam: 2");
 					} else if (inputArray[1].equals("3")) {
@@ -185,34 +195,7 @@ public class Client extends Thread {
 					} else if (inputArray[1].equals("4")) {
 						view.print("Speler heeft functie niet: 4");
 					}
-				} else if (inputArray[0].equals(Protocol.PLACED)) {
-					if (inputArray.length >= 5) {
-						String[] newArray = new String[inputArray.length - 2];
-						for (int i = 2; i < inputArray.length; i++) {
-							newArray[i - 2] = inputArray[i];
-						}
-						placed(newArray);
-					} else {
-						throw new InvalidCommandException();
-					}
-				} else if (inputArray[0].equals(Protocol.NEWSTONES)) {
-					List<Stone> stones = null;
-					try {
-						stones = Protocol.stringToStoneList(inputArray);
-						game.giveStones(stones, clientName);
-					} catch (InvalidStoneException e) {
-						throw new InvalidCommandException();
-					} catch (InvalidMoveException e) {
-						throw new InvalidCommandException();
-					}
-				} else if (inputArray[0].equals(Protocol.TRADED)) {
-					view.print("Speler " + inputArray[1] + " traded " + inputArray[2] + " stones.");
-				} else if (inputArray[0].equals(Protocol.TURN)) {
-					if (inputArray.length == 2) {
-						turn(inputArray);
-					} else {
-						throw new InvalidCommandException();
-					}
+
 				} else if (inputArray[0].equals(Protocol.PLAYERS)) {
 					if (inputArray.length >= 2) {
 						players = new ArrayList<String>();
@@ -223,8 +206,8 @@ public class Client extends Thread {
 				} else if (inputArray[0].equals(Protocol.JOINLOBBY)) {
 					if (inputArray.length >= 2) {
 						String message = Protocol.DELIMITER
-										+ "Player " + inputArray[1] + " joined the room"
-										+ Protocol.DELIMITER;
+								+ "Player " + inputArray[1] + " joined the room"
+								+ Protocol.DELIMITER;
 						view.print(message);
 					}
 				} else if (inputArray[0].equals(Protocol.START)) {
@@ -236,6 +219,39 @@ public class Client extends Thread {
 						throw new InvalidCommandException("Server starts my game with the"
 								+ " wrong amount of players.");
 					}
+				}
+				if (game != null) {
+					if (inputArray[0].equals(Protocol.PLACED)) {
+						if (inputArray.length >= 5) {
+							String[] newArray = new String[inputArray.length - 2];
+							for (int i = 2; i < inputArray.length; i++) {
+								newArray[i - 2] = inputArray[i];
+							}
+							placed(newArray);
+						} else {
+							throw new InvalidCommandException();
+						}
+					} else if (inputArray[0].equals(Protocol.NEWSTONES)) {
+						List<Stone> stones = null;
+						try {
+							stones = Protocol.stringToStoneList(inputArray);
+							game.giveStones(stones, clientName);
+						} catch (InvalidStoneException e) {
+							throw new InvalidCommandException();
+						} catch (InvalidMoveException e) {
+							throw new InvalidCommandException();
+						}
+					} else if (inputArray[0].equals(Protocol.TRADED)) {
+						view.print("Speler " + inputArray[1] + " traded " + inputArray[2] + " stones.");
+					} else if (inputArray[0].equals(Protocol.TURN)) {
+						if (inputArray.length == 2) {
+							turn(inputArray);
+						} else {
+							throw new InvalidCommandException();
+						}
+					} else if (inputArray[0].equals(Protocol.ENDGAME)) {
+                        endgame();
+                    }
 				}
 			}
 		} catch (InvalidCommandException e) {
@@ -271,8 +287,8 @@ public class Client extends Thread {
 	 * if he wants a human or computerplayer and so on, if not yes then the client shuts down.
 	 */
 	public void playagain() {
-		String playagain = view.readString("Do you want to play another game? y/n: ");
-		join(3);
+		//String playagain = view.readString("Do you want to play another game? y/n: ");
+		join(2);
 		/*
 		if (playagain.equals("y")) {
 			startGame();
@@ -417,6 +433,7 @@ public class Client extends Thread {
 					+ Protocol.SPLIT + s.getPosition().toUsableString();
 		}
 		sendMessage(msg);
+		lastMove = msg;
 	}
 
 	/**
