@@ -284,6 +284,7 @@ public class Client extends Thread {
 						+ " has won.\n" + "with " + winner.getPoints()
 						+ " points.";
 		view.print(message + game.toString());
+		game = null;
 		playagain();
 	}
 
