@@ -1,7 +1,5 @@
 package client;
 
-//130.89.234.224
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -58,7 +56,7 @@ public class Client extends Thread {
 	/**
 	 * Asks the user to type the hostname of the server and then the portnumber of the server.
 	 */
-	public void init() {
+	private void init() {
 		sock = null;
 		hostname = null;
 		while (hostname == null) {
@@ -76,7 +74,7 @@ public class Client extends Thread {
 	 * and output from and to the server. If the username is already taken the 
 	 * user is asked to type a new one.
 	 */
-	public void login() {
+	private void login() {
 		clientName = view.getClientName();
 		while (sock == null) {
 			try {
@@ -122,7 +120,7 @@ public class Client extends Thread {
 	 * a time in he should make his move for the computerplayer. After that he 
 	 * can choose with how many players he wants to start a game.
 	 */
-	public void startGame() {
+	private void startGame() {
 		this.computerPlayerBool = view.askHumanOrComputerPlayer();
 		if (computerPlayerBool == true) {
 			int playTime = view.getPlayTimeFromInput();
@@ -272,7 +270,7 @@ public class Client extends Thread {
 	 * 
 	 * @throws GameNotEndedException
 	 */
-	public void endgame() throws GameNotEndedException {
+	private void endgame() throws GameNotEndedException {
 		Player winner = game.getWinner();
 		if (winner.getName().equals(you.getName())) {
 			view.print("YOU HAVE WON CONGRATS JEEEEEEEEEEEJ!!!!!!\nWil je nu een koekje?\n");
@@ -288,7 +286,7 @@ public class Client extends Thread {
 	 * Asks the user of the client if he wants to play another game, and if yes the he can choose
 	 * if he wants a human or computerplayer and so on, if not yes then the client shuts down.
 	 */
-	public void playagain() {
+	private void playagain() {
 		String playagain = view.readString("Do you want to play another game? y/n: ");
 		if (playagain.equals("y")) {
 			startGame();
@@ -306,7 +304,7 @@ public class Client extends Thread {
 	 * @param inputArray
 	 * @throws InvalidCommandException
 	 */
-	public void placed(String[] inputArray) throws InvalidCommandException {
+	private void placed(String[] inputArray) throws InvalidCommandException {
 		List<Stone> stones = Protocol.stringToPlacedStoneList(inputArray);
 		List<Position> positions = Protocol.stringToPlacePositionList(inputArray);
 		try {
@@ -327,7 +325,7 @@ public class Client extends Thread {
 	 * @throws InvalidCommandException
 	 */
 	//@ requires inputArray.length == 2;
-	public void turn(String[] inputArray) throws InvalidCommandException {
+	private void turn(String[] inputArray) throws InvalidCommandException {
 		game.setCurrentPlayer(inputArray[1]);
 		game.incMoveCount();
 		if (inputArray[1].equals(clientName)) {
@@ -344,7 +342,7 @@ public class Client extends Thread {
 	 * 
 	 * @param inputArray
 	 */
-	public void initGame(String[] inputArray) {
+	private void initGame(String[] inputArray) {
 		String[] newPlayers = new String[inputArray.length - 1];
 		for (int i = 1; i < inputArray.length; i++) {
 			newPlayers[i - 1] = inputArray[i];
@@ -375,7 +373,7 @@ public class Client extends Thread {
 	 * 
 	 * @param msg
 	 */
-	public void sendMessage(String msg) {
+	private void sendMessage(String msg) {
 		try {
 			out.write(msg);
 			out.newLine();
@@ -388,7 +386,7 @@ public class Client extends Thread {
 	/**
 	 * close the socket connection.
 	 */
-	public void shutdown() {
+	private void shutdown() {
 		view.print("Closing socket connection...");
 		try {
 			in.close();
@@ -411,7 +409,7 @@ public class Client extends Thread {
 	 * 
 	 * @return input from server
 	 */
-	public String readString() {
+	private String readString() {
 		String line = null;
 		try {
 			line = in.readLine();
@@ -456,13 +454,13 @@ public class Client extends Thread {
 	 * 
 	 * @param amount
 	 */
-	public void join(int amount) {
+	private void join(int amount) {
 		sendMessage(Protocol.JOINAANTAL + Protocol.SPLIT + amount);
 		view.print("waiting for other players...");
 	}
 
 	/**
-	 * The chat send function of the protocol, not used because we hadnt time to
+	 * The chat send function of the protocol, not used because we hadn't time to
 	 * make the chat function.
 	 * 
 	 * @param msg
@@ -473,7 +471,7 @@ public class Client extends Thread {
 
 	/**
 	 * The chat to specified player send function of the protocol, not used 
-	 * because we hadnt time to make the chat function.
+	 * because we hadn't time to make the chat function.
 	 * 
 	 * @param msg
 	 * @param player
@@ -493,7 +491,7 @@ public class Client extends Thread {
 	 * If the server gives input that is not according to the protocol the
 	 * client shuts down and the view prints that the server is broken.
 	 */
-	public void serverBroken() {
+	private void serverBroken() {
 		System.out.println("Server is broken. OKDOEI!");
 		shutdown();
 	}

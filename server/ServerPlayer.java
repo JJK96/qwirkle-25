@@ -101,7 +101,7 @@ public class ServerPlayer extends Thread {
 		}
 	}
 
-	public void trade(String[] inputArray) {
+	private void trade(String[] inputArray) {
 		if (inputArray.length >= 2) {
 			try {
 				List<Stone> stonesToTrade = Protocol.stringToStoneList(inputArray);
@@ -116,7 +116,7 @@ public class ServerPlayer extends Thread {
 		}
 	}
 
-	public void place(String[] inputArray) {
+	private void place(String[] inputArray) {
 		if (inputArray.length >= 3 && inputArray.length % 2 == 1) {
 			List<Stone> stonesToPlace = new ArrayList<Stone>();
 			List<Position> positions = new ArrayList<Position>();
@@ -200,7 +200,6 @@ public class ServerPlayer extends Thread {
 	}
 
 	public boolean inGame() {
-
 		return getGame() != null;
 	}
 

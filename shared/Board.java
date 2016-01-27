@@ -156,7 +156,8 @@ public class Board {
 	}
 
 	/**
-	 * checks if the given positions belong to the same column
+	 * checks if the given positions belong to the same column.
+	 * 
 	 * @param positions
 	 * @return true if the stones have the same x value and
 	 * there are no gaps between the stones that are not filled by stones that
@@ -174,7 +175,8 @@ public class Board {
 	}
 
 	/**
-	 * checks if the given positions belong to the same row
+	 * checks if the given positions belong to the same row.
+	 * 
 	 * @param positions
 	 * @return true if the stones have the same y value and
 	 * there are no gaps between the stones that are not filled by stones that
@@ -343,7 +345,7 @@ public class Board {
 	 * 
 	 * @return Biggest and Smallest X and Y
 	 */
-	public int[] getBoundaries() {
+	private int[] getBoundaries() {
 		int smallestX = 0;
 		int biggestX = 0;
 		int smallestY = 0;

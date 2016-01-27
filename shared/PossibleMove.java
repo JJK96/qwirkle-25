@@ -86,7 +86,7 @@ public class PossibleMove extends Space {
 	 * @param list
 	 * @return
 	 */
-	public boolean commonShape(List<Stone> list, Stone stone) {
+	private boolean commonShape(List<Stone> list, Stone stone) {
 		for (Stone s : list) {
 			if (s.getShape() != stone.getShape()) {
 				return false;
@@ -95,7 +95,7 @@ public class PossibleMove extends Space {
 		return true;
 	}
 
-	public boolean noCommonShape(List<Stone> list, Stone stone) {
+	private boolean noCommonShape(List<Stone> list, Stone stone) {
 		for (Stone s : list) {
 			if (s.getShape() == stone.getShape()) {
 				return false;
@@ -104,7 +104,7 @@ public class PossibleMove extends Space {
 		return true;
 	}
 
-	public boolean commonColor(List<Stone> list, Stone stone) {
+	private boolean commonColor(List<Stone> list, Stone stone) {
 		for (Stone s : list) {
 			if (s.getColor() != stone.getColor()) {
 				return false;
@@ -113,7 +113,7 @@ public class PossibleMove extends Space {
 		return true;
 	}
 
-	public boolean noCommonColor(List<Stone> list, Stone stone) {
+	private boolean noCommonColor(List<Stone> list, Stone stone) {
 		for (Stone s : list) {
 			if (s.getColor() == stone.getColor()) {
 				return false;
