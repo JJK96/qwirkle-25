@@ -110,6 +110,7 @@ public class Server {
 			if (player.inGame()) {
 				player.getGame().removePlayer(player);
 			}
+			broadcast(Protocol.DISCONNECT + Protocol.SPLIT + player.getThisName());
 		}
 	}
 

@@ -1,6 +1,8 @@
 package server;
 
 import client.LittleBetterStrategy;
+import com.sun.org.glassfish.external.arc.Taxonomy;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import shared.Protocol;
@@ -21,20 +23,26 @@ public class ServerTest{
     BufferedWriter toServer;
     BufferedReader fromServer;
     Server s;
+    Thread t1;
+    Socket sock;
+    int times = 0;
     @Before
     public void setUp() {
-        Thread t1 = new Thread(new Runnable() {
+        if (times == 0) {
+            t1 = new Thread(new Runnable() {
 
-            @Override
-            public void run() {
-                s = new Server(5000);
-                s.run();
-            }
-        });
-        t1.start();
-        try {
+                @Override
+                public void run() {
+                    s = new Server(5000);
+                    s.run();
+                }
+            });
+            t1.start();
+        }
+        times++;
+       try {
             InetAddress hostname = InetAddress.getByName("localhost");
-            Socket sock = new Socket(hostname, 5000);
+            sock =  new Socket(hostname, 5000);
             toServer = new BufferedWriter(new OutputStreamWriter(sock.getOutputStream()));
             fromServer = new BufferedReader(new InputStreamReader(sock.getInputStream()));
         } catch (UnknownHostException e) {
@@ -68,6 +76,7 @@ public class ServerTest{
         sendMessage(message);
         assertTrue(readMessage().startsWith("newstones"));
         assertEquals(readMessage(), "placed jjk " + move.size() + " " + stoneString);
+        assertEquals("turn jjk", readMessage());
     }
 
     private void sendMessage(String msg) {
@@ -89,4 +98,5 @@ public class ServerTest{
         }
         return message;
     }
+
 }
