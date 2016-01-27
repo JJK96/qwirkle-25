@@ -1,7 +1,8 @@
-package server;
+package test.server;
 
 import org.junit.Before;
 import org.junit.Test;
+import server.*;
 
 import static org.junit.Assert.*;
 
@@ -19,7 +20,7 @@ public class ServerGameTest {
 
     @Test
     public void testInit() throws Exception {
-        assert game.getBag().size() == 3*36;
+        assert game.getBag().size() == 3 * 36;
         assert game.getBoard() != null;
     }
 
