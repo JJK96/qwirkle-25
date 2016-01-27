@@ -185,4 +185,12 @@ public class Server {
 		broadcast(Protocol.START + Protocol.SPLIT + game.getPlayerNames());
 		game.start();
 	}
+
+	public List<ServerPlayer> getPlayers() {
+		return players;
+	}
+
+	public List<ServerGame> getGames() {
+		return games;
+	}
 }
