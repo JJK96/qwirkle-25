@@ -314,9 +314,16 @@ public class Client extends Thread {
 		List<Position> positions = Protocol.stringToPlacePositionList(inputArray);
 		try {
 			game.makeMove(positions, stones);
-			game.addPoints(inputArray[0]);
-			view.print(game.toString());
+			if (game.getBoard().calculatePoints(stones, positions)
+							== Integer.parseInt(inputArray[0])) {
+				game.addPoints(inputArray[0]);
+				view.print(game.toString());
+			} else {
+				serverBroken();
+			}
 		} catch (InvalidMoveException e) {
+			throw new InvalidCommandException();
+		} catch (NumberFormatException e) {
 			throw new InvalidCommandException();
 		}
 	}

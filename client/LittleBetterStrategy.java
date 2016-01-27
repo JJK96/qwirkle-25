@@ -27,7 +27,7 @@ public class LittleBetterStrategy implements Strategy {
 			List<Stone> toTrade;
 			if (game.getBag() < stones.size()) {
 				toTrade = new ArrayList<>();
-				for (int i=0; i<game.getBag();i++) {
+				for (int i = 0; i < game.getBag(); i++) {
 					toTrade.add(stones.get(i));
 				}
 			} else {
