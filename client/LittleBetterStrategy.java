@@ -24,9 +24,18 @@ public class LittleBetterStrategy implements Strategy {
 	public void determineMove(ClientGame game, List<Stone> stones) {
 		List<Stone> stonesplaced = getMove(game.getBoard(), stones);
 		if (stonesplaced.isEmpty()) {
-			game.getClient().trade(stones);
+			List<Stone> toTrade;
+			if (game.getBag() < stones.size()) {
+				toTrade = new ArrayList<>();
+				for (int i=0; i<game.getBag();i++) {
+					toTrade.add(stones.get(i));
+				}
+			} else {
+				toTrade = stones;
+			}
+			game.getClient().trade(toTrade);
 			List<Stone> toRemove = new ArrayList<>();
-			toRemove.addAll(stones);
+			toRemove.addAll(toTrade);
 			game.getCurrentPlayer().removeStones(toRemove);
 		} else {
 			game.getClient().place(stonesplaced);

@@ -271,6 +271,7 @@ public class Client extends Thread {
 	 * @throws GameNotEndedException
 	 */
 	private void endgame() throws GameNotEndedException {
+		game.getCurrentPlayer().addPoints(6);
 		Player winner = game.getWinner();
 		if (winner.getName().equals(you.getName())) {
 			view.print("YOU HAVE WON CONGRATS JEEEEEEEEEEEJ!!!!!!\nWil je nu een koekje?\n");

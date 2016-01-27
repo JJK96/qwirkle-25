@@ -44,7 +44,7 @@ public class ServerPlayer extends Thread {
 				System.out.println("From " + name + ": " + line);
 				String[] words = line.split(Protocol.SPLIT);
 				if (words[0].equals(Protocol.JOINAANTAL)) {
-					if (words.length >= 2) {
+					if (words.length >= 2 && !inGame()) {
 						int number = Integer.parseInt(words[1]);
 						if (number >= 1 && number <= 4) {
 							server.joinGame(this, number);
@@ -168,7 +168,6 @@ public class ServerPlayer extends Thread {
 
 	public void error(Protocol.ErrorCode code) {
 		sendMessage(Protocol.ERROR + Protocol.SPLIT + code.ordinal());
-		shutdown();
 	}
 
 	public String getThisName() {

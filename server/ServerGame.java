@@ -222,7 +222,7 @@ public class ServerGame extends Thread {
 				int points = board.calculatePoints(stones, positions);
 				currentPlayer.addpoints(points);
 				placed(stones, positions, points);
-				if (currentPlayer.getStones().isEmpty()) {
+				if (currentPlayer.getStones().isEmpty() && bag.isEmpty()) {
 					currentPlayer.addpoints(6);
 					winner = getWinner();
 				}
