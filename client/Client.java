@@ -39,6 +39,8 @@ public class Client extends Thread {
 	private List<String> players;
 	private Player you;
 	private String lastMove;
+	private String lastline;
+	private String lastSentLine;
 
 	/**
 	 * Creates a client through setup.
@@ -170,6 +172,7 @@ public class Client extends Thread {
 		String input = null;
 		try {
 			while ((input = readString()) != null) {
+				lastline = input;
 				String[] inputArray = input.split(Protocol.SPLIT);
 				if (inputArray[0].equals(Protocol.ERROR)) {
 					if (inputArray.length == 1) {
@@ -177,6 +180,7 @@ public class Client extends Thread {
 						view.print("Geen foutcode meegegeven foei foei foei");
 					} else if (inputArray[1].equals("0")) {
 						view.print("Fout commando: 0");
+						System.out.println("You sent: " + lastSentLine);
 					} else if (inputArray[1].equals("1")) {
 						view.print("Foute beurt: 1");
 						System.out.println(game.getBoard());
@@ -375,6 +379,7 @@ public class Client extends Thread {
 	 * @param msg
 	 */
 	private void sendMessage(String msg) {
+		lastSentLine = msg;
 		try {
 			out.write(msg);
 			out.newLine();
@@ -494,6 +499,7 @@ public class Client extends Thread {
 	 */
 	private void serverBroken() {
 		System.out.println("Server is broken. OKDOEI!");
+		System.out.println("command: " + lastline);
 		shutdown();
 	}
 }
