@@ -1,8 +1,8 @@
-package server;
+package test.server;
 
 import org.junit.Before;
 import org.junit.Test;
-
+import server.*;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -52,7 +52,7 @@ public class ServerTest{
         assert stones.startsWith("newstones");
         assert stonelist.length == 7;
         assert readMessage().equals("turn jjk");
-        sendMessage("place "+ stonelist[1] + );
+        sendMessage("place " + stonelist[1]);
 
     }
 
