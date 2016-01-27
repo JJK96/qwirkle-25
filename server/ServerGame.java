@@ -14,13 +14,19 @@ import shared.*;
  */
 public class ServerGame extends Thread {
 	public static final int MAXSTONES = 6;
+	//@ invariant players.length >= 1 && players.length <= 4;
 	private ServerPlayer[] players;
+	//@ invariant players.length == size;
 	private int size;
 	private int playernum;
 	private boolean running;
+	//@ invariant board != null;
 	private Board board;
+	//@ invariant bag != null;
 	private List<Stone> bag;
+	//@ invariant server != null;
 	private Server server;
+	//@ currentPlayer != null;
 	private ServerPlayer currentPlayer;
 	private Lock lock;
 	private Condition playerDone;
@@ -31,6 +37,9 @@ public class ServerGame extends Thread {
 	 * Creates a game with the given size.
 	 *
 	 * @param size
+	 */
+	/*@ requires size >= 1 && size <= 4;
+		ensures players.length == size;
 	 */
 	public ServerGame(int size, Server server) {
 		this.size = size;
@@ -47,6 +56,9 @@ public class ServerGame extends Thread {
 	 * Initializes the game.
 	 * Creates a new board.
 	 * Creates a new bag with all stones.
+	 */
+	/*@
+		ensures board.getStones().isEmpty() && board.getPossibleMoves().size() == 1 && bag.size() == 3*36;
 	 */
 	private void init() {
 		board = new Board();
@@ -66,6 +78,9 @@ public class ServerGame extends Thread {
 	 * The first turn goes to the player who can make the best move as determined by LittleBetterStrategy.
 	 * Then the next player is the next in the list that can make a move.
 	 * If no player can make a move or there is a winner the game is ended and the players are properly notified.
+	 */
+	/*@
+		ensures getCurrentPlayer() != null;
 	 */
 	@Override
 	public void run() {
@@ -110,6 +125,9 @@ public class ServerGame extends Thread {
 	 *
 	 * @return the player that can make the best move.
      */
+	/*@
+		ensures beginner >=0 && beginner < players.length;
+	 */
 	private int determineFirstPlayer() {
 		List<Stone> firstMove = new ArrayList<Stone>();
 		LittleBetterStrategy strat = new LittleBetterStrategy(0);
@@ -130,6 +148,7 @@ public class ServerGame extends Thread {
 	/**
 	 * Give all players their initial six stones.
 	 */
+	//@ ensures (\forall int i; i<players.length; players[i].getStones().size() == 6);
 	private void giveInitialStones() {
 		for (ServerPlayer p : players) {
 			List<Stone> stones = new ArrayList<Stone>();
@@ -145,6 +164,10 @@ public class ServerGame extends Thread {
 	 * @param player
 	 * @return the number of players that are still to join before the game can be started.
      */
+	/*@
+		requires player != null && !player.inGame();
+		ensures player.getGame() == this && player.getStones().size() == 0 && player.getPoints() == 0;
+	 */
 	public int addPlayer(ServerPlayer player) {
 		if (playernum < size) {
 			players[playernum] = player;
@@ -160,6 +183,7 @@ public class ServerGame extends Thread {
 	 * Just ends the game.
 	 * @param player
      */
+	//@ ensures isRunning() == false;
 	public void removePlayer(ServerPlayer player) {
 		this.interrupt();
 		running = false;
@@ -168,6 +192,7 @@ public class ServerGame extends Thread {
 	/**
 	 * Ends the game and removes it from the server.
 	 */
+	//@ ensures !server.getGames().contains(this) && (\forall int i; i<players.length; players[i].getGame() == null);
 	private void end() {
 		for (ServerPlayer p : players) {
 			p.setGame(null);
@@ -178,7 +203,7 @@ public class ServerGame extends Thread {
 	/**
 	 * @return whether or not the game has a winner.
      */
-	public Boolean hasWinner() {
+	public /*@ pure */ Boolean hasWinner() {
 		return winner != null;
 	}
 
@@ -186,7 +211,7 @@ public class ServerGame extends Thread {
 	 * Gets the current player.
 	 * @return the player that currently has the turn.
      */
-	public ServerPlayer getCurrentPlayer() {
+	public /*@ pure */ ServerPlayer getCurrentPlayer() {
 		return currentPlayer;
 	}
 
@@ -194,7 +219,7 @@ public class ServerGame extends Thread {
 	 * Gets the number of players the game has.
 	 * @return the size of the game.
      */
-	public int getSize() {
+	public /*@ pure */ int getSize() {
 		return size;
 	}
 
@@ -202,14 +227,14 @@ public class ServerGame extends Thread {
 	 * Gets the number of players currently online.
 	 * @return the number of players.
      */
-	public int getPlayernum() {
+	public /*@ pure */ int getPlayernum() {
 		return playernum;
 	}
 
 	/**
 	 * @return whether or not the game is running.
      */
-	public boolean isRunning() {
+	public /*@ pure */ boolean isRunning() {
 		return running;
 	}
 
@@ -235,7 +260,8 @@ public class ServerGame extends Thread {
 	 * Gets the names of the players in the game.
 	 * @return a string with the names of all players in the game.
      */
-	public String getPlayerNames() {
+	//@ ensures (\forall int i; i<players.length; \result.contains(players[i].getThisName()));
+	public /*@ pure */ String getPlayerNames() {
 		String playernames = "";
 		for (ServerPlayer p : players) {
 			playernames += p.getThisName() + Protocol.SPLIT;
@@ -250,6 +276,10 @@ public class ServerGame extends Thread {
 		broadcast(Protocol.ENDGAME);
 	}
 
+	/**
+	 * Sends the specified message to all players in this game.
+	 * @param msg
+     */
 	private void broadcast(String msg) {
 		for (ServerPlayer p : players) {
 			p.sendMessage(msg);
@@ -263,6 +293,9 @@ public class ServerGame extends Thread {
 	 * @param positions
 	 * @param points
      */
+	/*@
+		requires getBoard().getStones().containsAll(stones);
+	 */
 	private void placed(List<Stone> stones, List<Position> positions, int points) {
 		String message = Protocol.PLACED + Protocol.SPLIT + currentPlayer.getThisName()
 						+ Protocol.SPLIT;
@@ -278,6 +311,7 @@ public class ServerGame extends Thread {
 	 * Sends the traded command to the players in the game.
 	 * @param stones
      */
+	//@ requires gotAllStones(stones) && getBag().size() >= stones.size();
 	private void traded(List<Stone> stones) {
 		String message = Protocol.TRADED + Protocol.SPLIT + currentPlayer.getThisName() 
 						+ Protocol.SPLIT + stones.size();
@@ -331,7 +365,8 @@ public class ServerGame extends Thread {
 	 * Determines which player has the most points and has thus won this game.
 	 * @return
      */
-	public ServerPlayer getWinner() {
+	//@ ensures (\forall int i; i<players.length; players[i].getPoints() <= \result.getPoints());
+	public /*@ pure */ ServerPlayer getWinner() {
 		ServerPlayer newWinner = players[0];
 		for (ServerPlayer p : players) {
 			if (p.getPoints() > newWinner.getPoints()) {
@@ -347,7 +382,7 @@ public class ServerGame extends Thread {
 	 * @return 	true if the player has all specified stones.
 	 * 			false if the player does not have all specified stones.
      */
-	public boolean gotAllStones(List<Stone> stonelist) {
+	public /*@ pure */ boolean gotAllStones(List<Stone> stonelist) {
 		return currentPlayer.getStones().containsAll(stonelist);
 	}
 
@@ -357,6 +392,10 @@ public class ServerGame extends Thread {
 	 * @param stones
 	 * @throws InvalidMoveException
      */
+	/*@ ensures (gotAllStones(stones) && bag.size() >= stones.size() && !getBoard().getStones().isEmpty()) ==>
+				getBag().containsAll(stones) && (\forall int i; i<stones.size();
+					!getCurrentPlayer().getStones().contains(stones.get(i)));
+	*/
 	public void trade(List<Stone> stones) throws InvalidMoveException {
 		if (gotAllStones(stones) && bag.size() >= stones.size() && !board.getStones().isEmpty()) {
 			lock.lock();
@@ -377,6 +416,10 @@ public class ServerGame extends Thread {
 	 * @param stoneNum
 	 * @return the stones taken from the bag.
      */
+	/*@
+		ensures bag.size() + stoneNum == \old (bag.size())
+			&& (\forall int i; i<\result.size(); !getBag().contains(\result.get(i)));
+	 */
 	private List<Stone> takeSomeStones(int stoneNum) {
 		int stoneNumber = stoneNum;
 		if (stoneNum > bag.size()) {
@@ -389,11 +432,11 @@ public class ServerGame extends Thread {
 		return stonelist;
 	}
 
-	public Board getBoard() {
+	public /*@ pure */ Board getBoard() {
 		return board;
 	}
 
-	public List<Stone> getBag() {
+	public /*@ pure */ List<Stone> getBag() {
 		return bag;
 	}
 }
