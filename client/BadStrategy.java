@@ -14,7 +14,7 @@ public class BadStrategy implements Strategy {
 	 * Our bad AI, does nothing with the time because always faster than 1
 	 * second. If the first move has to be played by this strategy it
 	 * makes a new LittleBetterStrategy, because the first move should 
-	 * always be the best move possible, and badstrategy not always makes
+	 * always be the best move possible, and badstrategy does not always makes
 	 * the best move possible.
 	 */
 	@Override

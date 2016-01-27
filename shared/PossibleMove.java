@@ -25,9 +25,9 @@ public class PossibleMove extends Space {
 
 	/**
 	 * edits the stone that is placed at this location so that it has the
-	 * correct row and column. also updates changes it's own possible shapes and
-	 * moves.
-	 * 
+	 * correct row and column.
+	 * And updates the stones that are in the same row or column as the new stone with the correct rows and columns.
+	 *
 	 * @param stone
 	 * @return ??
 	 */
@@ -48,8 +48,8 @@ public class PossibleMove extends Space {
 	}
 
 	/**
-	 * Updates all the possibilities for this possibleMove.
-	 * 
+	 * Checks if there are any possibilities left for this possible move.
+	 *
 	 * @return 0 if there are no possibilities left, or 1 if there are.
 	 */
 	public int updatePossibilities() {
@@ -61,6 +61,11 @@ public class PossibleMove extends Space {
 		return 1;
 	}
 
+	/**
+	 * Checks for duplicate stones in the row/column of this possible move.
+	 * @return 	true if duplicates are found.
+	 * 			false if there are no duplicates.
+     */
 	private boolean doubleRowColumn() {
 		for (Stone s1 : getRow()) {
 			for (Stone s2 : getRow()) {
@@ -95,6 +100,13 @@ public class PossibleMove extends Space {
 		return true;
 	}
 
+	/**
+	 * Checks if there is no common shape in the given stonelist.
+	 * @param list
+	 * @param stone
+     * @return 	true if there is no common shape.
+	 * 			false if there is.
+     */
 	private boolean noCommonShape(List<Stone> list, Stone stone) {
 		for (Stone s : list) {
 			if (s.getShape() == stone.getShape()) {
@@ -104,6 +116,13 @@ public class PossibleMove extends Space {
 		return true;
 	}
 
+	/**
+	 * Checks if there is a common color in the given stonelist.
+	 * @param list
+	 * @param stone
+     * @return 	true if there is a common color.
+	 * 			false if there is not.
+     */
 	private boolean commonColor(List<Stone> list, Stone stone) {
 		for (Stone s : list) {
 			if (s.getColor() != stone.getColor()) {
@@ -113,6 +132,13 @@ public class PossibleMove extends Space {
 		return true;
 	}
 
+	/**
+	 * Checks if there is no common color in the given stonelist.
+	 * @param list
+	 * @param stone
+     * @return 	true if there is no common color.
+	 * 			false if there is.
+     */
 	private boolean noCommonColor(List<Stone> list, Stone stone) {
 		for (Stone s : list) {
 			if (s.getColor() == stone.getColor()) {
@@ -123,8 +149,8 @@ public class PossibleMove extends Space {
 	}
 
 	/**
-	 * ??
-	 * 
+	 * Checks if the given stone is acceptable at this position. According to the rules of the game.
+	 *
 	 * @param stone
 	 * @return
 	 */

@@ -16,7 +16,10 @@ import shared.*;
 
 public class Client extends Thread {
 
-	/** Start een Client-applicatie op. */
+	/**
+	 * Starts the client application.
+	 * @param args
+     */
 	public static void main(String[] args) {
 		Client client = new Client();
 		client.start();
@@ -43,7 +46,9 @@ public class Client extends Thread {
 	private String lastSentLine;
 
 	/**
-	 * Creates a client through setup.
+	 * Initializes the client by requesting the server information
+	 * and asking for a username and information on what type of game to
+	 * start.
 	 */
 	public Client() {
 		this.view = new View(this);
@@ -118,8 +123,8 @@ public class Client extends Thread {
 
 	/**
 	 * Asks the user if he wants to play as humanplayer or let a computerplayer
-	 * play and if he chooses a computerplayer then he can choose a strategy and 
-	 * a time in he should make his move for the computerplayer. After that he 
+	 * play and if he chooses a computerplayer then he can choose a strategy and
+	 * enter the thinking time for the computer player. Then he
 	 * can choose with how many players he wants to start a game.
 	 */
 	private void startGame() {
@@ -134,7 +139,7 @@ public class Client extends Thread {
 	}
 
 	/**
-	 * Sets the field you in client with the player in the clientgame that has
+	 * Sets the field "you " in client with the player in the clientgame that has
 	 * the name of the player that plays on this client.
 	 * 
 	 * @param player
@@ -164,7 +169,7 @@ public class Client extends Thread {
 	}
 
 	/**
-	 * As long as there comes input from the server, after the client started this run method, 
+	 * As long as there is input from the server, after the client started this run method,
 	 * the client will analyze which command came through the input and responds accordingly.
 	 * If no command came through the client will shutdown.
 	 */
@@ -289,8 +294,9 @@ public class Client extends Thread {
 	}
 
 	/**
-	 * Asks the user of the client if he wants to play another game, and if yes the he can choose
-	 * if he wants a human or computerplayer and so on, if not yes then the client shuts down.
+	 * asks the user if he wants to play another game,
+	 * if yes, then call startGame().
+	 * if no, shutDown();
 	 */
 	private void playagain() {
 		String playagain = view.readString("Do you want to play another game? y/n: ");
@@ -303,10 +309,13 @@ public class Client extends Thread {
 	}
 
 	/**
-	 * Gets from the server the playername, points and stones of the player who 
-	 * has just made his move and updates the playerpoints on the client and the
-	 * board on the client.
-	 * 
+	 * This method handles the placed command from the server, it makes the move on the board.
+	 * then checks if the server calculated the points correctly.
+	 * if everything went okay the points are added to the current player and the
+	 * game is printed to the view.
+	 * If the move received is incorrect or the points are incorrectly calculated.
+	 * An InvalidCommandExcception is thrown.
+	 *
 	 * @param inputArray
 	 * @throws InvalidCommandException
 	 */
@@ -330,10 +339,11 @@ public class Client extends Thread {
 	}
 
 	/**
-	 * Gets from the server the player who's turn it is and prints on the view which player
-	 * is making a move. If it is the clientplayers turn it starts the makemove method
-	 * of the clientplayer.
-	 * 
+	 * Handles the turn command.
+	 * the received player is made the currentplayer.
+	 * The move count is incremented. And either the user makes a move or
+	 * a message is printed that the program is waiting for another player to make a move.
+	 *
 	 * @param inputArray
 	 * @throws InvalidCommandException
 	 */
@@ -350,9 +360,9 @@ public class Client extends Thread {
 	}
 
 	/**
+	 * Handles the start command.
 	 * Creates a clientgame with the players the server sends to this method,
-	 * gotten from the run method via the right command from the protocol.
-	 * 
+	 *
 	 * @param inputArray
 	 */
 	private void initGame(String[] inputArray) {
@@ -364,7 +374,7 @@ public class Client extends Thread {
 	}
 
 	/**
-	 * Get the game that is played by this client.
+	 * Gets the game that is played by this client.
 	 * 
 	 * @return the game.
 	 */
@@ -373,7 +383,7 @@ public class Client extends Thread {
 	}
 
 	/**
-	 * Get the view that is used.
+	 * Gets the view that is used.
 	 * 
 	 * @return the view
 	 */
@@ -398,7 +408,7 @@ public class Client extends Thread {
 	}
 
 	/**
-	 * close the socket connection.
+	 * closes the socket connection.
 	 */
 	private void shutdown() {
 		view.print("Closing socket connection...");
@@ -412,15 +422,15 @@ public class Client extends Thread {
 	}
 
 	/**
-	 * returns the client name.
+	 * returns the clients name.
 	 */
 	public String getClientName() {
 		return clientName;
 	}
 
 	/**
-	 * Reads from the input the server gives.
-	 * 
+	 * receives a string from the server.
+	 *
 	 * @return input from server
 	 */
 	private String readString() {
@@ -433,8 +443,10 @@ public class Client extends Thread {
 	}
 
 	/**
+	 * Sends the place command.
 	 * Sends to the server the stones that the clientplayer placed and where
 	 * those stones were placed.
+	 * In the format specified in the protocol.
 	 * 
 	 * @param stones
 	 */
@@ -449,8 +461,10 @@ public class Client extends Thread {
 	}
 
 	/**
+	 * Sends the trade command.
 	 * Sends to the server the stones the clientplayer traded.
-	 * 
+	 * In the format specified in the protocol.
+	 *
 	 * @param stones
 	 */
 	public void trade(List<Stone> stones) {
@@ -463,6 +477,7 @@ public class Client extends Thread {
 	}
 
 	/**
+	 * Sends the join command.
 	 * Sends to the server that the clientplayer wants to join a game
 	 * with the specified amount of players.
 	 * 
@@ -474,27 +489,6 @@ public class Client extends Thread {
 	}
 
 	/**
-	 * The chat send function of the protocol, not used because we hadn't time to
-	 * make the chat function.
-	 * 
-	 * @param msg
-	 */
-	public void chat(String msg) {
-		sendMessage(Protocol.CHAT + Protocol.SPLIT + msg);
-	}
-
-	/**
-	 * The chat to specified player send function of the protocol, not used 
-	 * because we hadn't time to make the chat function.
-	 * 
-	 * @param msg
-	 * @param player
-	 */
-	public void chatPM(String msg, Player player) {
-		sendMessage(Protocol.CHATPM + Protocol.SPLIT + player.getName() + Protocol.SPLIT + msg);
-	}
-
-	/**
 	 * Asks the server which players are online.
 	 */
 	public void askPlayers() {
@@ -503,7 +497,7 @@ public class Client extends Thread {
 
 	/**
 	 * If the server gives input that is not according to the protocol the
-	 * client shuts down and the view prints that the server is broken.
+	 * client shuts down and the view prints a message indicating that the server is broken.
 	 */
 	private void serverBroken() {
 		System.out.println("Server is broken. OKDOEI!");

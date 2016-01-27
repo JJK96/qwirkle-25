@@ -16,10 +16,21 @@ public class LittleBetterStrategy implements Strategy {
 
 	private int time;
 
+	/**
+	 * Constructor.
+	 * Sets the time the strategy has to make a move.
+	 * @param time
+     */
 	public LittleBetterStrategy(int time) {
 		this.time = time;
 	}
 
+	/**
+	 * Makes the move that is returned by getMove().
+	 * If the stonelist returned by getMove is empty as much stones as possible are traded.
+	 * @param game
+	 * @param stones
+     */
 	@Override
 	public void determineMove(ClientGame game, List<Stone> stones) {
 		List<Stone> stonesplaced = getMove(game.getBoard(), stones);
@@ -45,6 +56,17 @@ public class LittleBetterStrategy implements Strategy {
 		}
 	}
 
+	/**
+	 * Gets the move the strategy wants to make.
+	 *
+	 * It does so by creating a deepcopy of the board and trying a lot of random moves until the time is over
+	 * then it chooses the best one and returns that.
+	 *
+	 * @param board
+	 * @param stones
+     * @return a list of stones that are to be placed on the board.
+	 * 			or an empty list if the strategy can not place any stones (indicating that it wants to swap).
+     */
 	public List<Stone> getMove(Board board, List<Stone> stones) {
 		List<Stone> move = new ArrayList<>();
 		int movePoints = 0;
@@ -86,6 +108,16 @@ public class LittleBetterStrategy implements Strategy {
 		return move;
 	}
 
+	/**
+	 * Chooses a stone to play on the specified place.
+	 * It places this stone on the given board.
+	 * and returns it.
+	 *
+	 * @param b
+	 * @param place
+	 * @param stones
+     * @return
+     */
 	private Stone placeStone(Board b, PossibleMove place, List<Stone> stones) {
 		List<Stone> acceptableStones = Player.adaptStones(stones, place);
 		int choice = (int) Math.floor(Math.random() * acceptableStones.size());
@@ -94,6 +126,12 @@ public class LittleBetterStrategy implements Strategy {
 		return s;
 	}
 
+	/**
+	 * Returns a string with the stone this strategy would place on the given board with the given stones.
+	 * @param board
+	 * @param stones
+     * @return
+     */
 	public String getHint(Board board, List<Stone> stones) {
 		String res = "I suggest you ";
 		List<Stone> stonesplaced = getMove(board, stones);

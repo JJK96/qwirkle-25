@@ -16,7 +16,9 @@ public class ClientGame {
 
 	/**
 	 * Creates a game with the names of the players.
-	 * 
+	 *
+	 * initializes the board, the bag and creates the player objects.
+	 *
 	 * @param names
 	 */
 	public ClientGame(String[] names, Client client) {
@@ -46,7 +48,7 @@ public class ClientGame {
 
 	/**
 	 * Get all the PossibleMoves.
-	 * 
+	 *
 	 * @return map of PossibleMoves
 	 */
 	public Map<Position, PossibleMove> getPossibleMoves() {
@@ -89,7 +91,7 @@ public class ClientGame {
 	}
 
 	/**
-	 * Get the board which is currently used.
+	 * Gets the board which is currently used.
 	 * 
 	 * @return board
 	 */
@@ -98,7 +100,7 @@ public class ClientGame {
 	}
 
 	/**
-	 * Get the players that play this game.
+	 * Gets the players that play this game.
 	 * 
 	 * @return the players
 	 */
@@ -118,7 +120,7 @@ public class ClientGame {
 	}
 
 	/**
-	 * Get the player whose turn it is.
+	 * Gets the player whose turn it is.
 	 * 
 	 * @return currentplayer
 	 */
@@ -144,7 +146,7 @@ public class ClientGame {
 
 	/**
 	 * Makes the moves on the board that come from the server when another client has
-	 * made his moves. The board is always updated because of this.
+	 * made his move.
 	 * 
 	 * @param positions
 	 * @param stones
@@ -203,7 +205,7 @@ public class ClientGame {
 	}
 
 	/**
-	 * Adds the points to the currentplayer.
+	 * Adds the points to the currentPlayer.
 	 * 
 	 * @param s
 	 */

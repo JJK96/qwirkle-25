@@ -32,7 +32,7 @@ public class Player extends Observable {
 	}
 
 	/**
-	 * Get the game the player plays.
+	 * Gets the game the player plays.
 	 * 
 	 * @return game
 	 */
@@ -41,7 +41,7 @@ public class Player extends Observable {
 	}
 
 	/**
-	 * Get the name of the player.
+	 * Gets the name of the player.
 	 * 
 	 * @return name
 	 */
@@ -50,7 +50,7 @@ public class Player extends Observable {
 	}
 
 	/**
-	 * Get the stones the player has.
+	 * Gets the stones the player has.
 	 * 
 	 * @return stones
 	 */
@@ -59,8 +59,8 @@ public class Player extends Observable {
 	}
 
 	/**
-	 * Makes a string representation of the stones the player has. Before every
-	 * stone is a number added so choosing is easy for the view.
+	 * Creates a string representation of the given stones. Before every
+	 * stone is a number added so choosing is easy using the view.
 	 * 
 	 * @return String representation of the stones with a number for every
 	 *         stone.
@@ -83,8 +83,8 @@ public class Player extends Observable {
 	}
 
 	/**
-	 * Take stones out of the bag after the player has made his move.
-	 * 
+	 * Adds the given stones to the stones of the player.
+	 *
 	 * @param
 	 */
 	public void takeStones(List<Stone> stonesToTake) {
@@ -114,7 +114,7 @@ public class Player extends Observable {
 	}
 
 	/**
-	 * Add the points the player earned by his last move to his points.
+	 * Add the given points to the players points.
 	 * 
 	 * @param
 	 */
@@ -123,7 +123,7 @@ public class Player extends Observable {
 	}
 
 	/**
-	 * Get the points of the player.
+	 * Gets the points of the player.
 	 * 
 	 * @return points
 	 */
@@ -132,9 +132,9 @@ public class Player extends Observable {
 	}
 	
 	/**
-	 * Adapts the possiblemoves on the board to return only the possiblemoves 
-	 * where the player can place 1 of his stones.
-	 * 
+	 * Returns an adapted list of possiblemoves containing only moves on which the player can actually
+	 * play given his stones. And the stones that are placed already.
+	 *
 	 * @param pmlist
 	 * @param stonesOfPlayer
 	 * @param stonesplaced
@@ -168,6 +168,12 @@ public class Player extends Observable {
 		return game.getMoveCount() != 1 && stonesplaced == 0 && !traded;
 	}
 
+	/**
+	 * Determines if the player can end his turn.
+	 * @param stonesplaced
+	 * @return 	true if the player is allowed to end his turn
+	 * 			false if the player may not end his turn at this point in the game.
+     */
 	public boolean canEnd(int stonesplaced) {
 		return game.getMoveCount() != 1 && stonesplaced != 0;
 	}
@@ -178,7 +184,8 @@ public class Player extends Observable {
 	 * 
 	 * @param p
 	 * @param stonesOfPlayer
-	 * @return true if the player has such a stone, otherwise false.
+	 * @return 	true if the player has such a stone.
+	 * 			false otherwise.
 	 */
 	public static boolean hasStones(PossibleMove p, List<Stone> stonesOfPlayer) {
         for (Stone s : stonesOfPlayer) {
@@ -190,7 +197,7 @@ public class Player extends Observable {
 	}
 
 	/**
-	 * Determines which stones the player can lay on the specified possible move.
+	 * Determines which stones the player can place on the specified possible move.
 	 * 
 	 * @param stonelist
 	 * @param place

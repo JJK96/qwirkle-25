@@ -43,6 +43,11 @@ public class ServerGame extends Thread {
 		init();
 	}
 
+	/**
+	 * Initializes the game.
+	 * Creates a new board.
+	 * Creates a new bag with all stones.
+	 */
 	private void init() {
 		board = new Board();
 		bag = new LinkedList<Stone>();
@@ -55,6 +60,13 @@ public class ServerGame extends Thread {
 		}
 	}
 
+	/**
+	 * Gives turns to the correct players according to the rules of the game.
+	 *
+	 * The first turn goes to the player who can make the best move as determined by LittleBetterStrategy.
+	 * Then the next player is the next in the list that can make a move.
+	 * If no player can make a move or there is a winner the game is ended and the players are properly notified.
+	 */
 	@Override
 	public void run() {
 		lock.lock();
@@ -91,6 +103,13 @@ public class ServerGame extends Thread {
 		end();
 	}
 
+	/**
+	 * Determines which player should move first.
+	 *
+	 * The player which can make the best move according to the LittleBetterStrategy cam move first.
+	 *
+	 * @return the player that can make the best move.
+     */
 	private int determineFirstPlayer() {
 		List<Stone> firstMove = new ArrayList<Stone>();
 		LittleBetterStrategy strat = new LittleBetterStrategy(0);
@@ -108,6 +127,9 @@ public class ServerGame extends Thread {
 		return beginner;
 	}
 
+	/**
+	 * Give all players their initial six stones.
+	 */
 	private void giveInitialStones() {
 		for (ServerPlayer p : players) {
 			List<Stone> stones = new ArrayList<Stone>();
@@ -118,6 +140,11 @@ public class ServerGame extends Thread {
 		}
 	}
 
+	/**
+	 * Adds a player to this game.
+	 * @param player
+	 * @return the number of players that are still to join before the game can be started.
+     */
 	public int addPlayer(ServerPlayer player) {
 		if (playernum < size) {
 			players[playernum] = player;
@@ -128,11 +155,19 @@ public class ServerGame extends Thread {
 		return size - playernum;
 	}
 
+	/**
+	 * Handles the leaving of a player.
+	 * Just ends the game.
+	 * @param player
+     */
 	public void removePlayer(ServerPlayer player) {
 		this.interrupt();
 		running = false;
 	}
 
+	/**
+	 * Ends the game and removes it from the server.
+	 */
 	private void end() {
 		for (ServerPlayer p : players) {
 			p.setGame(null);
@@ -140,30 +175,55 @@ public class ServerGame extends Thread {
 		server.removeGame(this);
 	}
 
+	/**
+	 * @return whether or not the game has a winner.
+     */
 	public Boolean hasWinner() {
 		return winner != null;
 	}
 
+	/**
+	 * Gets the current player.
+	 * @return the player that currently has the turn.
+     */
 	public ServerPlayer getCurrentPlayer() {
 		return currentPlayer;
 	}
 
+	/**
+	 * Gets the number of players the game has.
+	 * @return the size of the game.
+     */
 	public int getSize() {
 		return size;
 	}
 
+	/**
+	 * Gets the number of players currently online.
+	 * @return the number of players.
+     */
 	public int getPlayernum() {
 		return playernum;
 	}
 
+	/**
+	 * @return whether or not the game is running.
+     */
 	public boolean isRunning() {
 		return running;
 	}
 
+	/**
+	 * Sends all players in the game the turn command to indicate the specified player can make his move.
+	 */
 	private void sendTurn() {
 		broadcast(Protocol.TURN + Protocol.SPLIT + currentPlayer.getThisName());
 	}
 
+	/**
+	 * Removes a stone from the bag.
+	 * @return the stone taken.
+     */
 	//@ requires !bag.isEmpty();
 	private Stone takeStone() {
 		Stone s = bag.get((int) Math.floor(Math.random() * bag.size()));
@@ -171,6 +231,10 @@ public class ServerGame extends Thread {
 		return s;
 	}
 
+	/**
+	 * Gets the names of the players in the game.
+	 * @return a string with the names of all players in the game.
+     */
 	public String getPlayerNames() {
 		String playernames = "";
 		for (ServerPlayer p : players) {
@@ -179,6 +243,9 @@ public class ServerGame extends Thread {
 		return playernames;
 	}
 
+	/**
+	 * Sends the endgame command to the players in this game.
+	 */
 	private void endgame() {
 		broadcast(Protocol.ENDGAME);
 	}
@@ -189,6 +256,13 @@ public class ServerGame extends Thread {
 		}
 	}
 
+	/**
+	 * Sends the placed command to the players in the game.
+	 *
+	 * @param stones
+	 * @param positions
+	 * @param points
+     */
 	private void placed(List<Stone> stones, List<Position> positions, int points) {
 		String message = Protocol.PLACED + Protocol.SPLIT + currentPlayer.getThisName()
 						+ Protocol.SPLIT;
@@ -200,12 +274,26 @@ public class ServerGame extends Thread {
 		broadcast(message);
 	}
 
+	/**
+	 * Sends the traded command to the players in the game.
+	 * @param stones
+     */
 	private void traded(List<Stone> stones) {
 		String message = Protocol.TRADED + Protocol.SPLIT + currentPlayer.getThisName() 
 						+ Protocol.SPLIT + stones.size();
 		broadcast(message);
 	}
 
+	/**
+	 * Places the specified stones on the given positions.
+	 * Throws InvalidMoveException if the move was incorrect.
+	 *
+	 * If the player who made the move has no stones and the bag is empty the game has a winner.
+	 *
+	 * @param stones
+	 * @param positions
+	 * @throws InvalidMoveException
+     */
 	//@ requires stones.size() == positions.size();
 	public void placeStones(List<Stone> stones, List<Position> positions) 
 			throws InvalidMoveException {
@@ -239,6 +327,10 @@ public class ServerGame extends Thread {
 		}
 	}
 
+	/**
+	 * Determines which player has the most points and has thus won this game.
+	 * @return
+     */
 	public ServerPlayer getWinner() {
 		ServerPlayer newWinner = players[0];
 		for (ServerPlayer p : players) {
@@ -249,10 +341,22 @@ public class ServerGame extends Thread {
 		return newWinner;
 	}
 
+	/**
+	 * Checks if the current player has all stones that are to be placed or swapped.
+	 * @param stonelist
+	 * @return 	true if the player has all specified stones.
+	 * 			false if the player does not have all specified stones.
+     */
 	public boolean gotAllStones(List<Stone> stonelist) {
 		return currentPlayer.getStones().containsAll(stonelist);
 	}
 
+	/**
+	 * Trades the specified stones.
+	 * If the player tries to trade more stones than there are available in the bag an InvalidMoveException is thrown.
+	 * @param stones
+	 * @throws InvalidMoveException
+     */
 	public void trade(List<Stone> stones) throws InvalidMoveException {
 		if (gotAllStones(stones) && bag.size() >= stones.size() && !board.getStones().isEmpty()) {
 			lock.lock();
@@ -267,6 +371,12 @@ public class ServerGame extends Thread {
 		}
 	}
 
+	/**
+	 * Takes the given number of stones from the bag.
+	 *
+	 * @param stoneNum
+	 * @return the stones taken from the bag.
+     */
 	private List<Stone> takeSomeStones(int stoneNum) {
 		int stoneNumber = stoneNum;
 		if (stoneNum > bag.size()) {

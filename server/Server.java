@@ -21,9 +21,9 @@ public class Server {
 	private List<ServerGame> games;
 
 	/**
+	 * Constructs a Server object with the given port.
 	 *
-	 * @param port
-	 *            should be a number between 0 and 65535
+	 * @param port should be a number between 0 and 65535
 	 */
 	public Server(int port) {
 		this.port = port;
@@ -31,6 +31,10 @@ public class Server {
 		games = new ArrayList<ServerGame>();
 	}
 
+	/**
+	 * Asks which port the server should run on and then starts the server on the given port.
+	 * @param args
+     */
 	public static void main(String[] args) {
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		boolean valid = false;
@@ -58,6 +62,12 @@ public class Server {
 		server.run();
 	}
 
+	/**
+	 * Handles new clients that want to connect to the server.
+	 * It first checks if the client has entered a correct name.
+	 * If this is the case the server allows the client to join.
+	 * If not, the server sends an error and disconnects the client.
+	 */
 	public void run() {
 		System.out.println("Server is running :)");
 		try {
@@ -88,6 +98,12 @@ public class Server {
 		}
 	}
 
+	/**
+	 * Checks if there is no user with the given name.
+	 * @param name
+	 * @return	true if there is no such user.
+	 * 			false if there is a user with this name.
+     */
 	private boolean isUniqueName(String name) {
 		boolean nameunique = true;
 		for (ServerPlayer p : players) {
@@ -98,12 +114,21 @@ public class Server {
 		return nameunique;
 	}
 
+	/**
+	 * Adds the given player to the player list.
+	 * @param player
+     */
 	private void addPlayer(ServerPlayer player) {
 		synchronized (players) {
 			players.add(player);
 		}
 	}
 
+	/**
+	 * Removes the given player from the server and the game it is in.
+	 * And notifies all other players of this event.
+	 * @param player
+     */
 	public void removePlayer(ServerPlayer player) {
 		synchronized (players) {
 			players.remove(player);
@@ -114,12 +139,20 @@ public class Server {
 		}
 	}
 
+	/**
+	 * Removes the specified game.
+	 * @param game
+     */
 	public synchronized void removeGame(ServerGame game) {
 		synchronized (games) {
 			games.remove(game);
 		}
 	}
 
+	/**
+	 * Sends the specified message to all players currently online.
+	 * @param msg
+     */
 	public void broadcast(String msg) {
 		synchronized (players) {
 			for (ServerPlayer p : players) {
@@ -157,6 +190,15 @@ public class Server {
 		}
 	}
 
+	/**
+	 * Handles the request from a client to join a game with the given number of players.
+	 * Checks if there is a game with the specified size that is still waiting for players to join.
+	 * If that is the case the player joins this game.
+	 * If it is not, a new game is made with the given size.
+	 * If the game is full it is started.
+	 * @param player
+	 * @param size
+     */
 	public void joinGame(ServerPlayer player, int size) {
 		synchronized (games) {
 			ServerGame game = null;
@@ -176,21 +218,37 @@ public class Server {
 		}
 	}
 
+	/**
+	 * Adds the specified game to the list of games.
+	 * @param game
+     */
 	private void addGame(ServerGame game) {
 		synchronized (games) {
 			games.add(game);
 		}
 	}
 
+	/**
+	 * Starts the specified game and notifies all players.
+	 * @param game
+     */
 	private synchronized void startGame(ServerGame game) {
 		broadcast(Protocol.START + Protocol.SPLIT + game.getPlayerNames());
 		game.start();
 	}
 
+	/**
+	 * Gets a list of all players that are currently online.
+	 * @return a list contianing all players online.
+     */
 	public List<ServerPlayer> getPlayers() {
 		return players;
 	}
 
+	/**
+	 * Gets a list of all games.
+	 * @return a list containing all games on this server.
+     */
 	public List<ServerGame> getGames() {
 		return games;
 	}

@@ -72,6 +72,7 @@ public class Stone extends Space {
 
 	/**
 	 * Tostring for a stone without the [].
+	 * This is used for sending the stone using the protocol.
 	 * 
 	 * @return a stone like: 3,1
 	 */
@@ -80,7 +81,7 @@ public class Stone extends Space {
 	}
 
 	/**
-	 * Override equals of stone.
+	 * Override equals of stone to only look at the shape and color.
 	 * 
 	 * @param obj
 	 * @return 

@@ -31,8 +31,8 @@ public class Space {
 	}
 
 	/**
-	 * Sets the column of a list of stones.
-	 * 
+	 * Sets the column of this space to the given stonelist.
+	 *
 	 * @param column
 	 */
 	public void setColumn(List<Stone> column) {
@@ -40,8 +40,8 @@ public class Space {
 	}
 
 	/**
-	 * Adds a column to every stone of the specified list.
-	 * 
+	 * Adds all stones in the stoneList to the column of this space.
+	 *
 	 * @param stoneList
 	 */
 	public void addColumn(List<Stone> stoneList) {
@@ -51,8 +51,8 @@ public class Space {
 	}
 
 	/**
-	 * Adds a column to the stone.
-	 * 
+	 * Adds a stone to the column.
+	 *
 	 * @param s
 	 */
 	public void addColumn(Stone s) {
@@ -60,8 +60,8 @@ public class Space {
 	}
 
 	/**
-	 * Adds a row to every stone in the specified list.
-	 * 
+	 * Adds every stone in the given stoneList to the row.
+	 *
 	 * @param stoneList
 	 */
 	public void addRow(List<Stone> stoneList) {
@@ -71,8 +71,7 @@ public class Space {
 	}
 
 	/**
-	 * Adds a row to the stone.
-	 * 
+	 * Adds the stone to the row.
 	 * @param s
 	 */
 	public void addRow(Stone s) {
@@ -92,11 +91,18 @@ public class Space {
 		return row;
 	}
 
+	/**
+	 * Gets the position of this space.
+	 * @return the position.
+     */
 	public Position getPosition() {
 		return position;
 	}
 
-	// @ requires position.length == 2;
+	/**
+	 * Sets the position to the given position.
+	 * @param position
+     */
 	public void setPosition(Position position) {
 		this.position = position;
 	}

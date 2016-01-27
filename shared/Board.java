@@ -18,7 +18,7 @@ public class Board {
 	}
 
 	/**
-	 * Resets the board to the state at the begin of the game.
+	 * Resets the board to the state at the beginning of the game.
 	 */
 	public void reset() {
 		stones = new HashMap<Position, Stone>();
@@ -47,7 +47,7 @@ public class Board {
 	}
 
 	/**
-	 * Get a copy of the board.
+	 * Get a deep copy of the board.
 	 * 
 	 * @return a copy of the board
 	 */
@@ -100,9 +100,8 @@ public class Board {
 	}
 
 	/**
-	 * Make a move at the spefified position with the spefified stone if that is
-	 * valid.
-	 * 
+	 * places the gien stone at the given place.
+	 *
 	 * @param x
 	 * @param y
 	 * @param stone
@@ -114,6 +113,11 @@ public class Board {
 		}
 	}
 
+	/**
+	 * places the given stone at the given position.
+	 * @param p
+	 * @param stone
+     */
 	//@ requires isValidMove(p, stone);
 	public void makeMove(Position p, Stone stone) {
 		makeMove(stone, possibleMoves.get(p));
@@ -220,7 +224,8 @@ public class Board {
 	 * checks if the positions in the row have no gaps between them
 	 * that are not filled by the board.
 	 * @param
-	 * @return
+	 * @return true if the stones are in the same row/column and have no gaps between them that are not filled
+	 * by the board.
      */
 	//@ requires allStonesOneRow(positions);
 	public boolean connectedRow(List<Position> positions) {
@@ -305,6 +310,10 @@ public class Board {
 
 	/**
 	 * Adds a possiblemove on the specified position.
+	 *
+	 * It gets the rows and columns from all stones around.
+	 * Next it is checked if the possibleMove can be placed upon.
+	 * If this is the case the possibleMove is added to the list.
 	 * 
 	 * @param pos
 	 */
@@ -376,6 +385,11 @@ public class Board {
 		return toString(new ArrayList<PossibleMove>());
 	}
 
+	/**
+	 * Creates a string containing the board and the specified possibleMoves.
+	 * @param pmlist
+	 * @return a string containing the boarrd and the possibleMoves.
+     */
 	public String toString(List<PossibleMove> pmlist) {
 		int width = 5;
         int[] boundaries = getBoundaries();
@@ -415,6 +429,13 @@ public class Board {
 		}
 		return res;
 	}
+
+	/**
+	 * Calculates how many points the given move is worth.
+	 * @param stonelist
+	 * @param positionlist
+     * @return the points.
+     */
 	//@ requires \forall int i=0; i<stonelist.size(); stonelist.get(i).isOnBoard();
 	public int calculatePoints(List<Stone> stonelist, List<Position> positionlist) {
 		int points = 0;

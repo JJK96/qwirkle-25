@@ -42,11 +42,11 @@ public class View implements Observer {
 	}
 
 	/**
-	 * Asks the person who sets up the client if he wants to play himself or
+	 * Asks the user if he wants to play himself or
 	 * want a computerplayer to play.
 	 * 
-	 * @return true if he wants a computerplayer, false if he wants to play as
-	 *         humanplayer himself.
+	 * @return 	true if he wants a computerplayer,
+	 * 			false if he wants to play as humanplayer himself.
 	 */
 	public boolean askHumanOrComputerPlayer() {
 		String prompt = Protocol.BORDER + "Do you want to play as human or shall "
@@ -85,7 +85,11 @@ public class View implements Observer {
 			}
 		}
 	}
-	
+
+	/**
+	 * Asks the user how much time the AI should have to make his move.
+	 * @return
+     */
 	public int getPlayTimeFromInput() {
 		String prompt = Protocol.BORDER + "How much time shall the computerplayer have to"
 						+ " decide his move?\n1 = a tenth of a second, so 10 is 1 second."
@@ -103,6 +107,8 @@ public class View implements Observer {
 
 	/**
 	 * Asks the person with how many players he wants to start a game.
+	 *
+	 * (You can also play alone but this is not supported by all servers and is intended as an easter egg)
 	 * 
 	 * @return the amount of players he wants to have in his game: 2, 3 or 4
 	 */
@@ -121,7 +127,7 @@ public class View implements Observer {
 	}
 
 	/**
-	 * Asks the person who sets up the client how the client should be named.
+	 * Asks the user how the client should be named.
 	 * 
 	 * @return the name the person types.
 	 */
@@ -133,6 +139,8 @@ public class View implements Observer {
 	/**
 	 * Prints the prompt and waits for the user to give input, then decides if
 	 * it is a swap or a place and calls those methods respectively.
+	 *
+	 * It keeps asking the user for input as long as the user can make a move and has not ended his turn.
 	 * 
 	 * @param player
 	 */
@@ -215,6 +223,8 @@ public class View implements Observer {
 	/**
 	 * Checks if the given input is in the range of -1 till the amount of stones
 	 * the player has.
+	 *
+	 * (This functionality can be taken over by the getChoice method but we didn't get to that yet.)
 	 * 
 	 * @param prompt
 	 * @return A valid integer
@@ -231,10 +241,10 @@ public class View implements Observer {
 	}
 
 	/**
-	 * Asks the humanplayer how many stones he wants to swap, the humanplayer
+	 * Asks the user which stones he wants to swap, the user
 	 * has to repeatedly give input and if he gives -1 the turn ends and the
-	 * stones selected will be send to the server to be swapped. The first input
-	 * cant be -1.
+	 * stones selected will be send to the server to be traded. The first input
+	 * can not be -1.
 	 */
 	private void swapStones() {
 		List<Stone> stones = new ArrayList<Stone>();
@@ -268,10 +278,10 @@ public class View implements Observer {
 	}
 
 	/**
-	 * Asks the humanplayer how many stones he wants to place, the humanplayer
-	 * has to repeatedly give input and if he gives -1 the turn ends and the
-	 * stones selected will be send to the server to be placed. The first input 
-	 * cant be -1.
+	 * Asks the user which stone he wants to place on the given position.
+	 * The selected stone will then be placed and removed from the hand of the player.
+	 *
+	 * @return The stone to be placed.
 	 */
 	private Stone placeStone(Board b, PossibleMove place, Player p) {
 		List<Stone> acceptableStones = Player.adaptStones(p.getStones(), place);

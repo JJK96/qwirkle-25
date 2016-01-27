@@ -7,6 +7,8 @@ import shared.Stone.Shape;
 
 /**
  * Created by jjk on 1/14/16.
+ *
+ * used to store all information about the protocol so that that is all in the same place.
  */
 public class Protocol {
 	public static final String REGISTER = "hello";

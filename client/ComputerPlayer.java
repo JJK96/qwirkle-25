@@ -5,7 +5,7 @@ public class ComputerPlayer extends Player {
 	private Strategy strategy;
 
 	/**
-	 * Creates a computerplayer.
+	 * Creates a computerplayer with specified name and strategy.
 	 * 
 	 * @param name
 	 * @param game
@@ -18,7 +18,7 @@ public class ComputerPlayer extends Player {
 	}
 
 	/**
-	 * Makes a move for the computerplayer via the strategy.
+	 * Lets the computerPlayer make a move.
 	 */
 	@Override
 	public void makeMove() {
