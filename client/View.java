@@ -108,7 +108,8 @@ public class View implements Observer {
 	/**
 	 * Asks the person with how many players he wants to start a game.
 	 *
-	 * (You can also play alone but this is not supported by all servers and is intended as an easter egg)
+	 * (You can also play alone but this is not supported by all 
+	 * servers and is intended as an easter egg)
 	 * 
 	 * @return the amount of players he wants to have in his game: 2, 3 or 4
 	 */
@@ -140,20 +141,22 @@ public class View implements Observer {
 	 * Prints the prompt and waits for the user to give input, then decides if
 	 * it is a swap or a place and calls those methods respectively.
 	 *
-	 * It keeps asking the user for input as long as the user can make a move and has not ended his turn.
+	 * It keeps asking the user for input as long as the user 
+	 * can make a move and has not ended his turn.
 	 * 
 	 * @param player
 	 */
 	public void determineMove(HumanPlayer player) {
 		Board b = player.getGame().getBoard().deepCopy();
 		List<Stone> stones = player.getStones();
-		List<Stone> stonesplaced  = new ArrayList<>();
+		List<Stone> stonesplaced  = new ArrayList<Stone>();
 		boolean moved = false;
 		if (player.getGame().getMoveCount() == 1) {
 			new LittleBetterStrategy(1).determineMove(player.getGame(), stones);
 			return;
 		}
-		List<PossibleMove> possibleMoves = new ArrayList<>(b.getPossibleMoves().values());
+		List<PossibleMove> possibleMoves = 
+						new ArrayList<PossibleMove>(b.getPossibleMoves().values());
 		possibleMoves = Player.adaptPossibleMoves(possibleMoves, stones, stonesplaced, b);
 		while (!moved && !possibleMoves.isEmpty() || player.canTrade(stonesplaced.size(), moved)) {
 			String message = b.toString(possibleMoves) + "\n"
@@ -193,7 +196,7 @@ public class View implements Observer {
 				}
 			}
 			stones = player.getStones();
-			possibleMoves = new ArrayList<>(b.getPossibleMoves().values());
+			possibleMoves = new ArrayList<PossibleMove>(b.getPossibleMoves().values());
 			possibleMoves = Player.adaptPossibleMoves(possibleMoves, stones, stonesplaced, b);
 		}
 		System.out.println("Stonesplaced" + stonesplaced);

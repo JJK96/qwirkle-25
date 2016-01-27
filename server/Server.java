@@ -241,7 +241,7 @@ public class Server {
 	 * Gets a list of all players that are currently online.
 	 * @return a list contianing all players online.
      */
-	public List<ServerPlayer> getPlayers() {
+	public /*@ pure */ List<ServerPlayer> getPlayers() {
 		return players;
 	}
 
@@ -249,7 +249,7 @@ public class Server {
 	 * Gets a list of all games.
 	 * @return a list containing all games on this server.
      */
-	public List<ServerGame> getGames() {
+	public /*@ pure */ List<ServerGame> getGames() {
 		return games;
 	}
 }

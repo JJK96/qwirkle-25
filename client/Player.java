@@ -132,7 +132,8 @@ public class Player extends Observable {
 	}
 	
 	/**
-	 * Returns an adapted list of possiblemoves containing only moves on which the player can actually
+	 * Returns an adapted list of possiblemoves containing 
+	 * only moves on which the player can actually
 	 * play given his stones. And the stones that are placed already.
 	 *
 	 * @param pmlist
@@ -142,11 +143,11 @@ public class Player extends Observable {
 	 */
 	public static List<PossibleMove> adaptPossibleMoves(List<PossibleMove> pmlist,
 					List<Stone> stonesOfPlayer, List<Stone> stonesplaced, Board b) {
-		List<PossibleMove> newpmlist = new ArrayList<>();
+		List<PossibleMove> newpmlist = new ArrayList<PossibleMove>();
 		for (PossibleMove p : pmlist) {
 			boolean oneRow = true;
 			if (!stonesplaced.isEmpty()) {
-				List<Space> spacelist = new ArrayList<>();
+				List<Space> spacelist = new ArrayList<Space>();
 				spacelist.addAll(stonesplaced);
 				spacelist.add(p);
 				oneRow = b.allOneRow(spacelist);
@@ -204,7 +205,7 @@ public class Player extends Observable {
 	 * @return All stones that can be laid on the specified possible move
 	 */
 	public static List<Stone> adaptStones(List<Stone> stonelist, PossibleMove place) {
-		List<Stone> acceptableStones = new ArrayList<>();
+		List<Stone> acceptableStones = new ArrayList<Stone>();
 		for (Stone s : stonelist) {
 			if (place.acceptable(s)) {
 				acceptableStones.add(s);

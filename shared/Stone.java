@@ -40,7 +40,7 @@ public class Stone extends Space {
 	 * 
 	 * @return shape
 	 */
-	public Shape getShape() {
+	public /*@ pure */ Shape getShape() {
 		return shape;
 	}
 
@@ -49,7 +49,7 @@ public class Stone extends Space {
 	 * 
 	 * @return color
 	 */
-	public Color getColor() {
+	public /*@ pure */ Color getColor() {
 		return color;
 	}
 

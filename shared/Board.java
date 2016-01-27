@@ -33,8 +33,8 @@ public class Board {
 	 * 
 	 * @return a map of possiblemoves
 	 */
-	//@ ensures \result == possibleMoves;
-	public /*@ pure */ Map<Position, PossibleMove> getPossibleMoves() {
+	// @ ensures \result == getPossibleMoves();
+	public /* @ pure */ Map<Position, PossibleMove> getPossibleMoves() {
 		return possibleMoves;
 	}
 
@@ -43,8 +43,8 @@ public class Board {
 	 * 
 	 * @return map of stones and their positions
 	 */
-	//@ ensures \result == stones;
-	public /*@ pure */ Map<Position, Stone> getStones() {
+	// @ ensures \result == getStones();
+	public /* @ pure */ Map<Position, Stone> getStones() {
 		return this.stones;
 	}
 
@@ -53,14 +53,18 @@ public class Board {
 	 * 
 	 * @return a copy of the board
 	 */
-	//@ ensures \result.getStones().containsAll(backup);
-	public /*@ pure */ Board deepCopy() {
+	// @ ensures \result.getStones().containsAll(getBackup());
+	public /* @ pure */ Board deepCopy() {
 		Board b = new Board();
 		for (Stone s : backup) {
 			Stone newS = new Stone(s.getShape(), s.getColor());
 			b.makeMove(s.getPosition(), newS);
 		}
 		return b;
+	}
+
+	public /* @ pure */ List<Stone> getBackup() {
+		return backup;
 	}
 
 	/**
@@ -72,7 +76,7 @@ public class Board {
 	 * @param stone
 	 * @return true if the move is valid, otherwise false
 	 */
-	public /*@ pure */ boolean isValidMove(int x, int y, Stone stone) {
+	public /* @ pure */ boolean isValidMove(int x, int y, Stone stone) {
 		Position p = new Position(x, y);
 		return isValidMove(p, stone);
 	}
@@ -85,7 +89,7 @@ public class Board {
 	 * @param stone
 	 * @return
 	 */
-	public /*@ pure */ boolean isValidMove(Position p, Stone stone) {
+	public /* @ pure */ boolean isValidMove(Position p, Stone stone) {
 		PossibleMove pm = possibleMoves.get(p);
 		return isValidMove(pm, stone);
 	}
@@ -98,7 +102,7 @@ public class Board {
 	 * @param stone
 	 * @return
 	 */
-	public /*@ pure */ boolean isValidMove(PossibleMove p, Stone stone) {
+	public /* @ pure */ boolean isValidMove(PossibleMove p, Stone stone) {
 		return p != null && p.acceptable(stone);
 	}
 
@@ -109,7 +113,7 @@ public class Board {
 	 * @param y
 	 * @param stone
 	 */
-	//@ requires isValidMove(x,y,stone);
+	// @ requires isValidMove(x,y,stone);
 	public void makeMove(int x, int y, Stone stone) {
 		if (isValidMove(x, y, stone)) {
 			makeMove(stone, possibleMoves.get(new Position(x, y)));
@@ -118,26 +122,29 @@ public class Board {
 
 	/**
 	 * places the given stone at the given position.
+	 * 
 	 * @param p
 	 * @param stone
-     */
-	//@ requires isValidMove(p, stone);
+	 */
+	// @ requires isValidMove(p, stone);
 	public void makeMove(Position p, Stone stone) {
 		makeMove(stone, possibleMoves.get(p));
 	}
 
 	/**
-	 * makes the given moves on the board, if an invalid move is found, 
-	 * the board should be replaced by it's deepcopy.
+	 * makes the given moves on the board, if an invalid move is found, the
+	 * board should be replaced by it's deepcopy.
 	 * 
 	 * @param positions
 	 * @param
 	 * @throws InvalidMoveException
-     */
-	/*@ requires stones.size() == positions.size();
-		ensures stones.containsAll(stoneList) || (\forall int i; i<stoneList.size(); !backup.contains(stoneList.get(i)));
 	 */
-	public void makeMoves(List<Position> positions, List<Stone> stonesList)
+	/*
+	 * @ requires stones.size() == positions.size(); ensures
+	 * stones.containsAll(stoneList) || (\forall int i; i<stoneList.size();
+	 * !backup.contains(stoneList.get(i)));
+	 */
+	public void makeMoves(List<Position> positions, List<Stone> stonesList) 
 			throws InvalidMoveException {
 		if (allStonesOneRow(positions)) {
 			int movesmade = 0;
@@ -168,11 +175,11 @@ public class Board {
 	 * checks if the given positions belong to the same column.
 	 * 
 	 * @param positions
-	 * @return true if the stones have the same x value and
-	 * there are no gaps between the stones that are not filled by stones that
-	 * are already on the board.
-     */
-	public /*@ pure */ boolean sameColumn(List<Position> positions) {
+	 * @return true if the stones have the same x value and there are no gaps
+	 *         between the stones that are not filled by stones that are already
+	 *         on the board.
+	 */
+	public /* @ pure */ boolean sameColumn(List<Position> positions) {
 		boolean allX = true;
 		int x = positions.get(0).getX();
 		for (Position p : positions) {
@@ -187,11 +194,11 @@ public class Board {
 	 * checks if the given positions belong to the same row.
 	 * 
 	 * @param positions
-	 * @return true if the stones have the same y value and
-	 * there are no gaps between the stones that are not filled by stones that
-	 * are already on the board.
+	 * @return true if the stones have the same y value and there are no gaps
+	 *         between the stones that are not filled by stones that are already
+	 *         on the board.
 	 */
-	public /*@ pure */ boolean sameRow(List<Position> positions) {
+	public /* @ pure */ boolean sameRow(List<Position> positions) {
 		boolean allY = true;
 		int y = positions.get(0).getY();
 		for (Position p : positions) {
@@ -203,22 +210,23 @@ public class Board {
 	}
 
 	/**
-	 * checks if the positions are either in the same column
-	 * or the same row.
+	 * checks if the positions are either in the same column or the same row.
+	 * 
 	 * @param positions
 	 * @return true if sameRow() or sameColumn() is true
-     */
-	public /*@ pure */ boolean allStonesOneRow(List<Position> positions) {
+	 */
+	public /* @ pure */ boolean allStonesOneRow(List<Position> positions) {
 		return sameRow(positions) || sameColumn(positions);
 	}
 
 	/**
 	 * checks if the spaces are in the same row or column.
+	 * 
 	 * @param spaces
 	 * @return true if allStonesOneRow is true;
-     */
-	public /*@ pure */ boolean allOneRow(List<Space> spaces) {
-		List<Position> positionList = new ArrayList<>();
+	 */
+	public /* @ pure */ boolean allOneRow(List<Space> spaces) {
+		List<Position> positionList = new ArrayList<Position>();
 		for (Space s : spaces) {
 			positionList.add(s.getPosition());
 		}
@@ -226,20 +234,24 @@ public class Board {
 	}
 
 	/**
-	 * checks if the positions in the row have no gaps between them
-	 * that are not filled by the board.
+	 * checks if the positions in the row have no gaps between them that are not
+	 * filled by the board.
+	 * 
 	 * @param
-	 * @return true if the stones are in the same row/column and have no gaps between them that are not filled
-	 * by the board.
-     */
-	//@ requires (\forall int i; i<positions.size();positions.get(i).getY() == positions.get(0).get(i).getY());
-	public /*@ pure */ boolean connectedRow(List<Position> positions) {
+	 * @return true if the stones are in the same row/column and have no gaps
+	 *         between them that are not filled by the board.
+	 */
+	/*
+	 * @ requires (\forall int i; i<positions.size(); positions.get(i).getY() ==
+	 * positions.get(0).get(i).getY());
+	 */
+	public /* @ pure */ boolean connectedRow(List<Position> positions) {
 		int y = positions.get(0).getY();
 		int low = positions.get(0).getX();
 		int high = low;
-		for (Position p: positions) {
+		for (Position p : positions) {
 			int x = p.getX();
-			if (x < low) { 
+			if (x < low) {
 				low = x;
 			}
 			if (x > high) {
@@ -256,17 +268,21 @@ public class Board {
 	}
 
 	/**
-	 * checks if the positions in the column have no gaps between them that
-	 * are not filled by the board.
+	 * checks if the positions in the column have no gaps between them that are
+	 * not filled by the board.
+	 * 
 	 * @param positions
 	 * @return
-     */
-	//@ requires (\forall int i; i<positions.size();positions.get(i).getX() == positions.get(0).get(i).getX());
-	public /*@ pure */ boolean connectedColumn(List<Position> positions) {
+	 */
+	/*
+	 * @ requires (\forall int i; i<positions.size();positions.get(i).getX() ==
+	 * positions.get(0).get(i).getX());
+	 */
+	public /* @ pure */ boolean connectedColumn(List<Position> positions) {
 		int x = positions.get(0).getX();
 		int low = positions.get(0).getY();
 		int high = low;
-		for (Position p: positions) {
+		for (Position p : positions) {
 			int y = p.getY();
 			if (y < low) {
 				low = y;
@@ -283,22 +299,23 @@ public class Board {
 		}
 		return true;
 	}
+
 	/**
 	 * Places the stone on the position of the possiblemove on the board.
 	 *
 	 * @param stone
 	 * @param place
 	 */
-	//@ requires possibleMoves.contains(place) && place.acceptable(stone));
+	// @ requires possibleMoves.contains(place) && place.acceptable(stone));
 	public void makeMove(Stone stone, PossibleMove place) {
 		Stone stoneToMove = stone;
 		stoneToMove = place.fill(stoneToMove);
 		stones.put(stoneToMove.getPosition(), stoneToMove);
 		possibleMoves.remove(place.getPosition());
-		List<Position> toAdd = new ArrayList<>();
+		List<Position> toAdd = new ArrayList<Position>();
 		for (Position p : possibleMoves.keySet()) {
-			if (p.getX() == stoneToMove.getPosition().getX() ||
-							p.getY() == stoneToMove.getPosition().getY()) {
+			if (p.getX() == stoneToMove.getPosition().getX() 
+							|| p.getY() == stoneToMove.getPosition().getY()) {
 				toAdd.add(p);
 			}
 		}
@@ -316,9 +333,9 @@ public class Board {
 	/**
 	 * Adds a possiblemove on the specified position.
 	 *
-	 * It gets the rows and columns from all stones around.
-	 * Next it is checked if the possibleMove can be placed upon.
-	 * If this is the case the possibleMove is added to the list.
+	 * It gets the rows and columns from all stones around. Next it is checked
+	 * if the possibleMove can be placed upon. If this is the case the
+	 * possibleMove is added to the list.
 	 * 
 	 * @param pos
 	 */
@@ -359,7 +376,7 @@ public class Board {
 	 * 
 	 * @return Biggest and Smallest X and Y
 	 */
-	private/*@ pure */  int[] getBoundaries() {
+	private/* @ pure */ int[] getBoundaries() {
 		int smallestX = 0;
 		int biggestX = 0;
 		int smallestY = 0;
@@ -386,18 +403,19 @@ public class Board {
 	 * the TUI. The board is first in the string, then an enter, then the
 	 * possiblemoves numbered from 0.
 	 */
-	public /*@ pure */ String toString() {
+	public /* @ pure */ String toString() {
 		return toString(new ArrayList<PossibleMove>());
 	}
 
 	/**
 	 * Creates a string containing the board and the specified possibleMoves.
+	 * 
 	 * @param pmlist
 	 * @return a string containing the boarrd and the possibleMoves.
-     */
-	public /*@ pure */ String toString(List<PossibleMove> pmlist) {
+	 */
+	public /* @ pure */ String toString(List<PossibleMove> pmlist) {
 		int width = 5;
-        int[] boundaries = getBoundaries();
+		int[] boundaries = getBoundaries();
 		boundaries[0] -= 1;
 		boundaries[1] -= 1;
 		boundaries[2] += 1;
@@ -437,12 +455,14 @@ public class Board {
 
 	/**
 	 * Calculates how many points the given move is worth.
+	 * 
 	 * @param stonelist
 	 * @param positionlist
-     * @return the points.
-     */
-	//@ requires (\forall int i=0; i<stonelist.size(); stonelist.get(i).isOnBoard());
-	public /*@ pure */ int calculatePoints(List<Stone> stonelist, List<Position> positionlist) {
+	 * @return the points.
+	 */
+	// @ requires (\forall int i=0; i<stonelist.size();
+	// stonelist.get(i).isOnBoard());
+	public /* @ pure */ int calculatePoints(List<Stone> stonelist, List<Position> positionlist) {
 		int points = 0;
 		if (sameRow(positionlist)) {
 			int rowsize = stonelist.get(0).getRow().size();

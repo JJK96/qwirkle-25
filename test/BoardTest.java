@@ -29,7 +29,7 @@ public class BoardTest {
 		b.makeMove(new Position(1, 0), new Stone(Stone.Shape.d, Stone.Color.B));
 		b.makeMove(new Position(2, 0), new Stone(Stone.Shape.o, Stone.Color.B));
 		b.makeMove(new Position(3, 0), new Stone(Stone.Shape.s, Stone.Color.B));
-		stonelist = new ArrayList<>();
+		stonelist = new ArrayList<Stone>();
 		for (Stone.Color c : Stone.Color.values()) {
 			for (Stone.Shape s : Stone.Shape.values()) {
 				for (int i = 0; i < 3; i++) {
@@ -80,7 +80,7 @@ public class BoardTest {
 
 	@Test
 	public void testIsValidMove2() throws Exception {
-		List<PossibleMove> pmlist = new ArrayList<>(b.getPossibleMoves().values());
+		List<PossibleMove> pmlist = new ArrayList<PossibleMove>(b.getPossibleMoves().values());
 		for (PossibleMove p : pmlist) {
 			for (Stone s : stonelist) {
 				if (p.acceptable(s)) {
@@ -112,8 +112,8 @@ public class BoardTest {
 
 	@Test
 	public void testMakeMoves() throws Exception {
-		List<Position> positions = new ArrayList<>();
-		List<Stone> stones = new ArrayList<>();
+		List<Position> positions = new ArrayList<Position>();
+		List<Stone> stones = new ArrayList<Stone>();
 		stones.add(testStone);
 		positions.add(new Position(0, 0));
 		try {
@@ -122,12 +122,12 @@ public class BoardTest {
 			assertFalse(b.deepCopy().getStones().containsValue(testStone));
 			setUp();
 		}
-		positions = new ArrayList<>();
+		positions = new ArrayList<Position>();
 		positions.add(new Position(1, 1));
 		b.makeMoves(positions, stones);
 		assertTrue(b.getStones().get(new Position(1, 1)).equals(testStone));
-		stones = new ArrayList<>();
-		positions = new ArrayList<>();
+		stones = new ArrayList<Stone>();
+		positions = new ArrayList<Position>();
 		stones.add(testStone2);
 		positions.add(new Position(5, 0));
 		stones.add(testStone1);
@@ -141,7 +141,7 @@ public class BoardTest {
 
 	@Test
 	public void testSameColumn() throws Exception {
-		List<Position> positions = new ArrayList<>();
+		List<Position> positions = new ArrayList<Position>();
 		positions.add(new Position(0, 0));
 		assertTrue(b.sameColumn(positions));
 		positions.add(new Position(0, 1));
@@ -150,11 +150,11 @@ public class BoardTest {
 		assertTrue(b.sameColumn(positions));
 		positions.add(new Position(1, -1));
 		assertFalse(b.sameColumn(positions));
-		positions = new ArrayList<>();
+		positions = new ArrayList<Position>();
 		positions.add(new Position(0, 0));
 		positions.add(new Position(1, 0));
 		assertFalse(b.sameColumn(positions));
-		positions = new ArrayList<>();
+		positions = new ArrayList<Position>();
 		positions.add(new Position(3, -1));
 		positions.add(new Position(3, 1));
 		assertTrue(b.sameColumn(positions));
@@ -162,7 +162,7 @@ public class BoardTest {
 
 	@Test
 	public void testSameRow() throws Exception {
-		List<Position> positions = new ArrayList<>();
+		List<Position> positions = new ArrayList<Position>();
 		positions.add(new Position(0, 0));
 		assertTrue(b.sameRow(positions));
 		positions.add(new Position(1, 0));
@@ -171,11 +171,11 @@ public class BoardTest {
 		assertTrue(b.sameRow(positions));
 		positions.add(new Position(-1, 1));
 		assertFalse(b.sameRow(positions));
-		positions = new ArrayList<>();
+		positions = new ArrayList<Position>();
 		positions.add(new Position(0, 0));
 		positions.add(new Position(0, 1));
 		assertFalse(b.sameRow(positions));
-		positions = new ArrayList<>();
+		positions = new ArrayList<Position>();
 		positions.add(new Position(-1, 3));
 		positions.add(new Position(1, 3));
 		assertTrue(b.sameRow(positions));
@@ -183,7 +183,7 @@ public class BoardTest {
 
 	@Test
 	public void testAllStonesOneRow() throws Exception {
-		List<Position> positions = new ArrayList<>();
+		List<Position> positions = new ArrayList<Position>();
 		positions.add(new Position(0, 0));
 		assertTrue(b.allStonesOneRow(positions));
 		positions.add(new Position(1, 0));
@@ -192,15 +192,15 @@ public class BoardTest {
 		assertTrue(b.allStonesOneRow(positions));
 		positions.add(new Position(-1, 1));
 		assertFalse(b.allStonesOneRow(positions));
-		positions = new ArrayList<>();
+		positions = new ArrayList<Position>();
 		positions.add(new Position(0, 0));
 		positions.add(new Position(0, 1));
 		assertTrue(b.allStonesOneRow(positions));
-		positions = new ArrayList<>();
+		positions = new ArrayList<Position>();
 		positions.add(new Position(3, -1));
 		positions.add(new Position(3, 1));
 		assertTrue(b.allStonesOneRow(positions));
-		positions = new ArrayList<>();
+		positions = new ArrayList<Position>();
 		positions.add(new Position(-1, 3));
 		positions.add(new Position(1, 3));
 		assertTrue(b.allStonesOneRow(positions));
@@ -229,15 +229,15 @@ public class BoardTest {
 
 	@Test
 	public void testCalculatePoints() throws Exception {
-		List<Position> positions = new ArrayList<>();
-		List<Stone> stones = new ArrayList<>();
+		List<Position> positions = new ArrayList<Position>();
+		List<Stone> stones = new ArrayList<Stone>();
 		setUp();
 		b.makeMove(1, 1, testStone);
 		positions.add(testStone.getPosition());
 		stones.add(testStone);
 		assertTrue(b.calculatePoints(stones, positions) == 4);
-		positions = new ArrayList<>();
-		stones = new ArrayList<>();
+		positions = new ArrayList<Position>();
+		stones = new ArrayList<Stone>();
 		Board board = new Board();
 		positions.add(new Position(0, 0));
 		stones.add(new Stone(Stone.Shape.c, Stone.Color.B));
@@ -257,8 +257,8 @@ public class BoardTest {
 		board.makeMoves(positions, stones);
 		assertTrue(board.calculatePoints(stones, positions) == 12);
 		board = new Board();
-		positions = new ArrayList<>();
-		stones = new ArrayList<>();
+		positions = new ArrayList<Position>();
+		stones = new ArrayList<Stone>();
 		positions.add(new Position(0, 0));
 		stones.add(new Stone(Stone.Shape.c, Stone.Color.B));
 		positions.add(new Position(1, 0));

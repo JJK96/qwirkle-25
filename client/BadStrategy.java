@@ -53,12 +53,12 @@ public class BadStrategy implements Strategy {
 					System.out.println("adapted possible moves: " + adaptedPossibleMoves);
 					System.out.println("stones: " + stones);
 					game.getClient().trade(stonesPlaced);
-					List<Stone> toRemove = new ArrayList<>();
+					List<Stone> toRemove = new ArrayList<Stone>();
 					toRemove.addAll(stonesPlaced);
 					game.getCurrentPlayer().removeStones(toRemove);
 				} else {
 					game.getClient().trade(stones);
-					List<Stone> toRemove = new ArrayList<>();
+					List<Stone> toRemove = new ArrayList<Stone>();
 					toRemove.addAll(stones);
 					game.getCurrentPlayer().removeStones(toRemove);
 				}

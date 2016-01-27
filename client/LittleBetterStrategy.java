@@ -37,7 +37,7 @@ public class LittleBetterStrategy implements Strategy {
 		if (stonesplaced.isEmpty()) {
 			List<Stone> toTrade;
 			if (game.getBag() < stones.size()) {
-				toTrade = new ArrayList<>();
+				toTrade = new ArrayList<Stone>();
 				for (int i = 0; i < game.getBag(); i++) {
 					toTrade.add(stones.get(i));
 				}
@@ -45,12 +45,12 @@ public class LittleBetterStrategy implements Strategy {
 				toTrade = stones;
 			}
 			game.getClient().trade(toTrade);
-			List<Stone> toRemove = new ArrayList<>();
+			List<Stone> toRemove = new ArrayList<Stone>();
 			toRemove.addAll(toTrade);
 			game.getCurrentPlayer().removeStones(toRemove);
 		} else {
 			game.getClient().place(stonesplaced);
-			List<Stone> toRemove = new ArrayList<>();
+			List<Stone> toRemove = new ArrayList<Stone>();
 			toRemove.addAll(stonesplaced);
 			game.getCurrentPlayer().removeStones(toRemove);
 		}
@@ -59,39 +59,42 @@ public class LittleBetterStrategy implements Strategy {
 	/**
 	 * Gets the move the strategy wants to make.
 	 *
-	 * It does so by creating a deepcopy of the board and trying a lot of random moves until the time is over
+	 * It does so by creating a deepcopy of the board and trying a 
+	 * lot of random moves until the time is over
 	 * then it chooses the best one and returns that.
 	 *
 	 * @param board
 	 * @param stones
      * @return a list of stones that are to be placed on the board.
-	 * 			or an empty list if the strategy can not place any stones (indicating that it wants to swap).
+	 * 			or an empty list if the strategy can not place any 
+	 * 			stones (indicating that it wants to swap).
      */
 	public List<Stone> getMove(Board board, List<Stone> stones) {
-		List<Stone> move = new ArrayList<>();
+		List<Stone> move = new ArrayList<Stone>();
 		int movePoints = 0;
 		long start = System.currentTimeMillis();
 		long end = start + time * 100;
 		while (System.currentTimeMillis() < end) {
-			List<Stone> stonesBackup = new ArrayList<>();
+			List<Stone> stonesBackup = new ArrayList<Stone>();
 			for (Stone s : stones) {
 				Stone newStone = new Stone(s.getShape(), s.getColor());
 				stonesBackup.add(newStone);
 			}
 			Board b = board.deepCopy();
-			List<PossibleMove> possibleMoves = new ArrayList<>(b.getPossibleMoves().values());
-			List<Stone> stonesplaced = new ArrayList<>();
+			List<PossibleMove> possibleMoves = 
+							new ArrayList<PossibleMove>(b.getPossibleMoves().values());
+			List<Stone> stonesplaced = new ArrayList<Stone>();
 			possibleMoves = Player.adaptPossibleMoves(possibleMoves, stonesBackup, stonesplaced, b);
 			while (!possibleMoves.isEmpty()) {
 				int choice = (int) Math.floor(Math.random() * possibleMoves.size());
 				Stone placed = placeStone(b, possibleMoves.get(choice), stonesBackup);
 				stonesplaced.add(placed);
 				stonesBackup.remove(placed);
-				possibleMoves = new ArrayList<>(b.getPossibleMoves().values());
+				possibleMoves = new ArrayList<PossibleMove>(b.getPossibleMoves().values());
 				possibleMoves = Player.adaptPossibleMoves(
 						possibleMoves, stonesBackup, stonesplaced, b);
 			}
-			List<Position> positions = new ArrayList<>();
+			List<Position> positions = new ArrayList<Position>();
 			for (int i = 0; i < stonesplaced.size(); i++) {
 				positions.add(stonesplaced.get(i).getPosition());
 			}
@@ -127,7 +130,8 @@ public class LittleBetterStrategy implements Strategy {
 	}
 
 	/**
-	 * Returns a string with the stone this strategy would place on the given board with the given stones.
+	 * Returns a string with the stone this strategy would 
+	 * place on the given board with the given stones.
 	 * @param board
 	 * @param stones
      * @return

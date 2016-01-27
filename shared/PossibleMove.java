@@ -26,7 +26,8 @@ public class PossibleMove extends Space {
 	/**
 	 * edits the stone that is placed at this location so that it has the
 	 * correct row and column.
-	 * And updates the stones that are in the same row or column as the new stone with the correct rows and columns.
+	 * And updates the stones that are in the same row or column as the new 
+	 * stone with the correct rows and columns.
 	 *
 	 * @param stone
 	 * @return ??

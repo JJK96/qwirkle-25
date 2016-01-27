@@ -104,7 +104,7 @@ public class ClientGame {
 	 * 
 	 * @return the players
 	 */
-	public Player[] getPlayers() {
+	/*@pure*/public Player[] getPlayers() {
 		return players;
 	}
 

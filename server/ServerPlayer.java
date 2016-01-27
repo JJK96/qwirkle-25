@@ -13,17 +13,17 @@ import shared.Protocol;
  */
 public class ServerPlayer extends Thread {
 
-	//@ invariant in != null;
+	// @ private invariant in != null;
 	private BufferedReader in;
-	//@ invariant out != null;
+	// @ private invariant out != null;
 	private BufferedWriter out;
-	//@ invariant server.getPlayers().contains(this) ==> name != null;
+	// @ private invariant server.getPlayers().contains(this) ==> name != null;
 	private String name;
-	//@ invariant points >= 0;
+	// @ private invariant points >= 0;
 	private int points;
 	private List<Stone> stones;
 	private ServerGame game;
-	//@ invariant options.equals("");
+	// @ private invariant options.equals("");
 	private String options;
 	private Server server;
 
@@ -37,9 +37,9 @@ public class ServerPlayer extends Thread {
 
 	}
 
-	/*@
-		requires pointsToAdd >= 0;
-		ensures getPoints() == \old (getPoints()) + pointsToAdd;
+	/*
+	 * @ requires pointsToAdd >= 0; ensures getPoints() == \old (getPoints()) +
+	 * pointsToAdd;
 	 */
 	public void addpoints(int pointsToAdd) {
 		this.points += pointsToAdd;
@@ -79,7 +79,7 @@ public class ServerPlayer extends Thread {
 		}
 	}
 
-	//@ requires inGame() && board != null;
+	// @ requires inGame() && board != null;
 	public boolean canPlay(Board board) {
 		for (Stone s : stones) {
 			for (PossibleMove p : board.getPossibleMoves().values()) {
@@ -110,7 +110,7 @@ public class ServerPlayer extends Thread {
 		}
 	}
 
-	//@ requires inGame();
+	// @ requires inGame();
 	private void trade(String[] inputArray) {
 		if (inputArray.length >= 2) {
 			try {
@@ -126,7 +126,7 @@ public class ServerPlayer extends Thread {
 		}
 	}
 
-	//@ requires inGame();
+	// @ requires inGame();
 	private void place(String[] inputArray) {
 		if (inputArray.length >= 3 && inputArray.length % 2 == 1) {
 			List<Stone> stonesToPlace = new ArrayList<Stone>();
@@ -145,9 +145,9 @@ public class ServerPlayer extends Thread {
 		}
 	}
 
-	/*@
-		requires getStones().containsAll(stoneList);
-		ensures (\forall int i; i<stoneList.size(); !getStones().contains(stoneList.get(i)));
+	/*
+	 * @ requires getStones().containsAll(stoneList); ensures (\forall int i;
+	 * i<stoneList.size(); !getStones().contains(stoneList.get(i)));
 	 */
 	public void removeStones(List<Stone> stoneList) {
 		for (Stone s : stoneList) {
@@ -155,7 +155,7 @@ public class ServerPlayer extends Thread {
 		}
 	}
 
-	//@ ensures getStones().containsAll(stonesToGive);
+	// @ ensures getStones().containsAll(stonesToGive);
 	public void giveStones(List<Stone> stonesToGive) {
 		this.stones.addAll(stonesToGive);
 		String stoneString = "";
@@ -186,19 +186,19 @@ public class ServerPlayer extends Thread {
 		sendMessage(Protocol.ERROR + Protocol.SPLIT + code.ordinal());
 	}
 
-	public /*@ pure */ String getThisName() {
+	public /* @ pure */ String getThisName() {
 		return name;
 	}
 
-	public /*@ pure */ int getPoints() {
+	public /* @ pure */ int getPoints() {
 		return points;
 	}
 
-	public /*@ pure */ List<Stone> getStones() {
+	public /* @ pure */ List<Stone> getStones() {
 		return stones;
 	}
 
-	public/*@ pure */ ServerGame getGame() {
+	public/* @ pure */ ServerGame getGame() {
 		return game;
 	}
 
@@ -206,7 +206,7 @@ public class ServerPlayer extends Thread {
 		this.game = game;
 	}
 
-	public /*@ pure */ String getOptions() {
+	public /* @ pure */ String getOptions() {
 		return options;
 	}
 
@@ -214,7 +214,7 @@ public class ServerPlayer extends Thread {
 		sendMessage(Protocol.PLAYERS + Protocol.SPLIT + server.getPlayers(getThisName()));
 	}
 
-	public /*@ pure */ boolean inGame() {
+	public /* @ pure */ boolean inGame() {
 		return getGame() != null;
 	}
 
@@ -227,8 +227,9 @@ public class ServerPlayer extends Thread {
 		}
 		server.removePlayer(this);
 	}
+
 	public void reset() {
 		this.points = 0;
-		this.stones = new ArrayList<>();
+		this.stones = new ArrayList<Stone>();
 	}
 }
