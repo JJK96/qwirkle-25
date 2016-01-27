@@ -112,7 +112,7 @@ public class Client extends Thread {
 		}
 		if (!registerSuccesfull) {
 			view.print("username taken");
-			sock=null;
+			sock = null;
 		}
 	}
 
@@ -185,7 +185,8 @@ public class Client extends Thread {
 						System.out.println("stones: " + game.getCurrentPlayer().getStones());
 						System.out.println("Move: " + lastMove);
 						for (PossibleMove p : game.getBoard().getPossibleMoves().values()) {
-							System.out.println("Possible Move: Position: " + p.getPosition() + " Column: " + p.getColumn() + " Row: " + p.getRow());
+							System.out.println("Possible Move: Position: " + p.getPosition() 
+											+ " Column: " + p.getColumn() + " Row: " + p.getRow());
 						}
 					} else if (inputArray[1].equals("2")) {
 						view.print("Niet unieke naam of onjuiste naam: 2");
@@ -206,8 +207,8 @@ public class Client extends Thread {
 				} else if (inputArray[0].equals(Protocol.JOINLOBBY)) {
 					if (inputArray.length >= 2) {
 						String message = Protocol.DELIMITER
-								+ "Player " + inputArray[1] + " joined the room"
-								+ Protocol.DELIMITER;
+										+ "Player " + inputArray[1] + " joined the room"
+										+ Protocol.DELIMITER;
 						view.print(message);
 					}
 				} else if (inputArray[0].equals(Protocol.START)) {
@@ -242,7 +243,8 @@ public class Client extends Thread {
 							throw new InvalidCommandException();
 						}
 					} else if (inputArray[0].equals(Protocol.TRADED)) {
-						view.print("Speler " + inputArray[1] + " traded " + inputArray[2] + " stones.");
+						view.print("Speler " + inputArray[1] + " traded " 
+										+ inputArray[2] + " stones.");
 					} else if (inputArray[0].equals(Protocol.TURN)) {
 						if (inputArray.length == 2) {
 							turn(inputArray);
@@ -287,14 +289,12 @@ public class Client extends Thread {
 	 * if he wants a human or computerplayer and so on, if not yes then the client shuts down.
 	 */
 	public void playagain() {
-		//String playagain = view.readString("Do you want to play another game? y/n: ");
-		join(2);
-		/*
+		String playagain = view.readString("Do you want to play another game? y/n: ");
 		if (playagain.equals("y")) {
 			startGame();
 		} else {
 			shutdown();
-		}*/
+		}
 
 	}
 
