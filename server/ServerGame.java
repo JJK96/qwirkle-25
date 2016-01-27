@@ -19,7 +19,7 @@ public class ServerGame extends Thread {
 	private int playernum;
 	private boolean running;
 	private Board board;
-	public List<Stone> bag;
+	private List<Stone> bag;
 	private Server server;
 	private ServerPlayer currentPlayer;
 	private Lock lock;
@@ -279,4 +279,11 @@ public class ServerGame extends Thread {
 		return stonelist;
 	}
 
+	public Board getBoard() {
+		return board;
+	}
+
+	public List<Stone> getBag() {
+		return bag;
+	}
 }

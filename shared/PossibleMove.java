@@ -50,7 +50,7 @@ public class PossibleMove extends Space {
 	/**
 	 * Updates all the possibilities for this possibleMove.
 	 * 
-	 * @return ??
+	 * @return 0 if there are no possibilities left, or 1 if there are.
 	 */
 	public int updatePossibilities() {
 		if (getColumn().size() >= 6 || getRow().size() >= 6) {
