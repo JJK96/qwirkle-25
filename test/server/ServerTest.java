@@ -1,11 +1,11 @@
-package server;
+package test.server;
 
 import client.LittleBetterStrategy;
-import com.sun.org.glassfish.external.arc.Taxonomy;
-import org.junit.After;
+import server.Server;
+import server.ServerGame;
+
 import org.junit.Before;
 import org.junit.Test;
-import shared.Protocol;
 import shared.Stone;
 
 import java.io.*;
@@ -19,7 +19,7 @@ import static org.junit.Assert.*;
 /**
  * Created by jjk on 1/27/16.
  */
-public class ServerTest{
+public class ServerTest {
     BufferedWriter toServer;
     BufferedReader fromServer;
     Server s;
@@ -40,7 +40,7 @@ public class ServerTest{
             t1.start();
         }
         times++;
-       try {
+        try {
             InetAddress hostname = InetAddress.getByName("localhost");
             sock =  new Socket(hostname, 5000);
             toServer = new BufferedWriter(new OutputStreamWriter(sock.getOutputStream()));
@@ -62,15 +62,16 @@ public class ServerTest{
         assertEquals(readMessage(), "start jjk ");
         String stones = readMessage();
         String[] stonelist = stones.split(" ");
-        assertTrue (stones.startsWith("newstones"));
-        assertTrue (stonelist.length == 7);
+        assertTrue(stones.startsWith("newstones"));
+        assertTrue(stonelist.length == 7);
         assertEquals(readMessage(), "turn jjk");
         ServerGame game = s.getGames().get(0);
-        List<Stone> move = new LittleBetterStrategy(1).getMove(game.getBoard().deepCopy(), game.getCurrentPlayer().getStones());
+        List<Stone> move = new LittleBetterStrategy(1).getMove(
+        				game.getBoard().deepCopy(), game.getCurrentPlayer().getStones());
         String message = "place ";
         String stoneString = "";
-        for (Stone s : move) {
-            stoneString += s.toUsableString() + " " + s.getPosition().toUsableString() + " ";
+        for (Stone sto : move) {
+            stoneString += sto.toUsableString() + " " + sto.getPosition().toUsableString() + " ";
         }
         message += stoneString;
         sendMessage(message);
