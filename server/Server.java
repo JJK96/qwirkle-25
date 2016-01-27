@@ -88,7 +88,7 @@ public class Server {
 		}
 	}
 
-	public boolean isUniqueName(String name) {
+	private boolean isUniqueName(String name) {
 		boolean nameunique = true;
 		for (ServerPlayer p : players) {
 			if (p.getThisName().equals(name)) {
@@ -98,7 +98,7 @@ public class Server {
 		return nameunique;
 	}
 
-	public void addPlayer(ServerPlayer player) {
+	private void addPlayer(ServerPlayer player) {
 		synchronized (players) {
 			players.add(player);
 		}
@@ -132,7 +132,7 @@ public class Server {
 	 * 
 	 * @param player
 	 */
-	public void joinLobby(ServerPlayer player) {
+	private void joinLobby(ServerPlayer player) {
 		broadcast(Protocol.JOINLOBBY + Protocol.SPLIT + player.getThisName() 
 						+ Protocol.SPLIT + player.getOptions());
 	}
@@ -175,13 +175,13 @@ public class Server {
 		}
 	}
 
-	public void addGame(ServerGame game) {
+	private void addGame(ServerGame game) {
 		synchronized (games) {
 			games.add(game);
 		}
 	}
 
-	public synchronized void startGame(ServerGame game) {
+	private synchronized void startGame(ServerGame game) {
 		broadcast(Protocol.START + Protocol.SPLIT + game.getPlayerNames());
 		game.start();
 	}

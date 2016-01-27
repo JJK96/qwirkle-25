@@ -43,7 +43,7 @@ public class ServerGame extends Thread {
 		init();
 	}
 
-	public void init() {
+	private void init() {
 		board = new Board();
 		bag = new LinkedList<Stone>();
 		for (Stone.Color c : Stone.Color.values()) {
@@ -91,7 +91,7 @@ public class ServerGame extends Thread {
 		end();
 	}
 
-	public int determineFirstPlayer() {
+	private int determineFirstPlayer() {
 		List<Stone> firstMove = new ArrayList<Stone>();
 		LittleBetterStrategy strat = new LittleBetterStrategy(0);
 		int beginner = 0;
@@ -108,7 +108,7 @@ public class ServerGame extends Thread {
 		return beginner;
 	}
 
-	public void giveInitialStones() {
+	private void giveInitialStones() {
 		for (ServerPlayer p : players) {
 			List<Stone> stones = new ArrayList<Stone>();
 			for (int i = 0; i < MAXSTONES; i++) {
@@ -133,7 +133,7 @@ public class ServerGame extends Thread {
 		running = false;
 	}
 
-	public void end() {
+	private void end() {
 		for (ServerPlayer p : players) {
 			p.setGame(null);
 		}
@@ -179,17 +179,17 @@ public class ServerGame extends Thread {
 		return playernames;
 	}
 
-	public void endgame() {
+	private void endgame() {
 		broadcast(Protocol.ENDGAME);
 	}
 
-	public void broadcast(String msg) {
+	private void broadcast(String msg) {
 		for (ServerPlayer p : players) {
 			p.sendMessage(msg);
 		}
 	}
 
-	public void placed(List<Stone> stones, List<Position> positions, int points) {
+	private void placed(List<Stone> stones, List<Position> positions, int points) {
 		String message = Protocol.PLACED + Protocol.SPLIT + currentPlayer.getThisName()
 						+ Protocol.SPLIT;
 		message += points + Protocol.SPLIT;
@@ -200,7 +200,7 @@ public class ServerGame extends Thread {
 		broadcast(message);
 	}
 
-	public void traded(List<Stone> stones) {
+	private void traded(List<Stone> stones) {
 		String message = Protocol.TRADED + Protocol.SPLIT + currentPlayer.getThisName() 
 						+ Protocol.SPLIT + stones.size();
 		broadcast(message);
@@ -267,7 +267,7 @@ public class ServerGame extends Thread {
 		}
 	}
 
-	public List<Stone> takeSomeStones(int stoneNum) {
+	private List<Stone> takeSomeStones(int stoneNum) {
 		int stoneNumber = stoneNum;
 		if (stoneNum > bag.size()) {
 			stoneNumber = bag.size();

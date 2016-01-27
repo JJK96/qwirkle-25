@@ -77,7 +77,7 @@ public class LittleBetterStrategy implements Strategy {
 		return move;
 	}
 
-	public Stone placeStone(Board b, PossibleMove place, List<Stone> stones) {
+	private Stone placeStone(Board b, PossibleMove place, List<Stone> stones) {
 		List<Stone> acceptableStones = Player.adaptStones(stones, place);
 		int choice = (int) Math.floor(Math.random() * acceptableStones.size());
 		Stone s = acceptableStones.get(choice);

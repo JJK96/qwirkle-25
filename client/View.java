@@ -112,7 +112,7 @@ public class View implements Observer {
 		int aantal = 0;
 		while (true) {
 			aantal = readInt(prompt);
-			if (aantal >= 2 && aantal <= 4) {
+			if (aantal >= 1 && aantal <= 4) {
 				return aantal;
 			} else {
 				System.out.println("invalid number.");
@@ -291,7 +291,7 @@ public class View implements Observer {
 	 * @param prompt
 	 * @return the number the player typed.
 	 */
-	public int readInt(String prompt) {
+	private int readInt(String prompt) {
 		int value = 0;
 		boolean intRead = false;
 		@SuppressWarnings("resource")
