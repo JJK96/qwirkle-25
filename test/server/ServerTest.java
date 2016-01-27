@@ -1,12 +1,18 @@
 package test.server;
 
+import client.LittleBetterStrategy;
+import server.Server;
+import server.ServerGame;
+
 import org.junit.Before;
 import org.junit.Test;
-import server.*;
+import shared.Protocol;
+import shared.Stone;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -16,13 +22,14 @@ import static org.junit.Assert.*;
 public class ServerTest{
     BufferedWriter toServer;
     BufferedReader fromServer;
+    Server s;
     @Before
     public void setUp() {
         Thread t1 = new Thread(new Runnable() {
 
             @Override
             public void run() {
-                Server s = new Server(5000);
+                s = new Server(5000);
                 s.run();
             }
         });
@@ -42,18 +49,27 @@ public class ServerTest{
     @Test
     public void correctTest() {
         sendMessage("hello jjk");
-        assert readMessage().equals("hello_from_the_other_side jjk");
-        assert readMessage().equals("players");
-        assert readMessage().equals("joinlobby jjk");
+        assertEquals(readMessage(), "hello_from_the_other_side ");
+        assertEquals(readMessage(), "players ");
+        assertEquals(readMessage(), "joinlobby jjk ");
         sendMessage("join 1");
-        assert readMessage().equals("start jjk");
+        assertEquals(readMessage(), "start jjk ");
         String stones = readMessage();
         String[] stonelist = stones.split(" ");
-        assert stones.startsWith("newstones");
-        assert stonelist.length == 7;
-        assert readMessage().equals("turn jjk");
-        sendMessage("place " + stonelist[1]);
-
+        assertTrue (stones.startsWith("newstones"));
+        assertTrue (stonelist.length == 7);
+        assertEquals(readMessage(), "turn jjk");
+        ServerGame game = s.getGames().get(0);
+        List<Stone> move = new LittleBetterStrategy(1).getMove(game.getBoard().deepCopy(), game.getCurrentPlayer().getStones());
+        String message = "place ";
+        String stoneString = "";
+        for (Stone s : move) {
+            stoneString += s.toUsableString() + " " + s.getPosition().toUsableString() + " ";
+        }
+        message += stoneString;
+        sendMessage(message);
+        assertTrue(readMessage().startsWith("newstones"));
+        assertEquals(readMessage(), "placed jjk " + move.size() + " " + stoneString);
     }
 
     private void sendMessage(String msg) {

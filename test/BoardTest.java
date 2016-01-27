@@ -47,15 +47,15 @@ public class BoardTest {
 	@Test
 	public void testReset() throws Exception {
 		b.reset();
-		assert b.getStones().isEmpty();
-		assert b.getPossibleMoves().size() == 1;
+		assertTrue (b.getStones().isEmpty());
+		assertTrue (b.getPossibleMoves().size() == 1);
 	}
 
 	@Test
 	public void testDeepCopy() throws Exception {
 		Board deepcopy = b.deepCopy();
-		assert b.getStones().toString().equals(deepcopy.getStones().toString());
-		assert b.getPossibleMoves().toString().equals(deepcopy.getPossibleMoves().toString());
+		assertTrue (b.getStones().toString().equals(deepcopy.getStones().toString()));
+		assertTrue (b.getPossibleMoves().toString().equals(deepcopy.getPossibleMoves().toString()));
 	}
 
 	@Test
@@ -63,9 +63,9 @@ public class BoardTest {
 		Stone s1 = new Stone(Stone.Shape.c, Stone.Color.R);
 		assertFalse(b.isValidMove(0, 0, s1));
 		assertFalse(b.isValidMove(4, 0, s1));
-		assert b.isValidMove(0, -1, s1);
+		assertTrue (b.isValidMove(0, -1, s1));
 		assertFalse(b.isValidMove(1, 1, s1));
-		assert b.isValidMove(1, 1, testStone);
+		assertTrue (b.isValidMove(1, 1, testStone));
 	}
 
 	@Test
@@ -73,9 +73,9 @@ public class BoardTest {
 		Stone s1 = new Stone(Stone.Shape.c, Stone.Color.R);
 		assertFalse(b.isValidMove(new Position(0, 0), s1));
 		assertFalse(b.isValidMove(new Position(4, 0), s1));
-		assertTrue(b.isValidMove(new Position(0, -1), s1));
+		assertTrue((b.isValidMove(new Position(0, -1), s1)));
 		assertFalse(b.isValidMove(new Position(1, 1), s1));
-		assertTrue(b.isValidMove(new Position(1, 1), testStone));
+		assertTrue((b.isValidMove(new Position(1, 1), testStone)));
 	}
 
 	@Test
@@ -97,17 +97,17 @@ public class BoardTest {
 		b.makeMove(0, -1, testStone);
 		assertFalse(b.getStones().containsValue(testStone));
 		b.makeMove(1, 1, testStone);
-		assert b.getStones().containsValue(testStone);
-		assert b.getPossibleMoves().containsKey(new Position(1, 2));
-		assert b.getPossibleMoves().containsKey(new Position(2, 1));
-		assert b.getPossibleMoves().values().size() == 14;
+		assertTrue (b.getStones().containsValue(testStone));
+		assertTrue (b.getPossibleMoves().containsKey(new Position(1, 2)));
+		assertTrue (b.getPossibleMoves().containsKey(new Position(2, 1)));
+		assertTrue (b.getPossibleMoves().values().size() == 14);
 	}
 
 	@Test
 	public void testMakeMove1() throws Exception {
 		b.makeMove(new Position(1, 1), testStone);
-		assert b.getStones().containsValue(testStone);
-		assert b.getPossibleMoves().containsKey(new Position(1, 2));
+		assertTrue (b.getStones().containsValue(testStone));
+		assertTrue (b.getPossibleMoves().containsKey(new Position(1, 2)));
 	}
 
 	@Test
@@ -125,7 +125,7 @@ public class BoardTest {
 		positions = new ArrayList<>();
 		positions.add(new Position(1, 1));
 		b.makeMoves(positions, stones);
-		assert b.getStones().get(new Position(1, 1)).equals(testStone);
+		assertTrue (b.getStones().get(new Position(1, 1)).equals(testStone));
 		stones = new ArrayList<>();
 		positions = new ArrayList<>();
 		stones.add(testStone2);
@@ -133,8 +133,8 @@ public class BoardTest {
 		stones.add(testStone1);
 		positions.add(new Position(4, 0));
 		b.makeMoves(positions, stones);
-		assert b.getStones().get(new Position(4, 0)).equals(testStone1);
-		assert b.getStones().get(new Position(5, 0)).equals(testStone2);
+		assertTrue (b.getStones().get(new Position(4, 0)).equals(testStone1));
+		assertTrue (b.getStones().get(new Position(5, 0)).equals(testStone2));
 		positions.add(new Position(5, 1));
 		stones.add(new Stone(Stone.Shape.x, Stone.Color.R));
 	}
@@ -143,11 +143,11 @@ public class BoardTest {
 	public void testSameColumn() throws Exception {
 		List<Position> positions = new ArrayList<>();
 		positions.add(new Position(0, 0));
-		assert b.sameColumn(positions);
+		assertTrue (b.sameColumn(positions));
 		positions.add(new Position(0, 1));
-		assert b.sameColumn(positions);
+		assertTrue (b.sameColumn(positions));
 		positions.add(new Position(0, -1));
-		assert b.sameColumn(positions);
+		assertTrue (b.sameColumn(positions));
 		positions.add(new Position(1, -1));
 		assertFalse(b.sameColumn(positions));
 		positions = new ArrayList<>();
@@ -157,18 +157,18 @@ public class BoardTest {
 		positions = new ArrayList<>();
 		positions.add(new Position(3, -1));
 		positions.add(new Position(3, 1));
-		assert b.sameColumn(positions);
+		assertTrue (b.sameColumn(positions));
 	}
 
 	@Test
 	public void testSameRow() throws Exception {
 		List<Position> positions = new ArrayList<>();
 		positions.add(new Position(0, 0));
-		assert b.sameRow(positions);
+		assertTrue (b.sameRow(positions));
 		positions.add(new Position(1, 0));
-		assert b.sameRow(positions);
+		assertTrue (b.sameRow(positions));
 		positions.add(new Position(-1, 0));
-		assert b.sameRow(positions);
+		assertTrue (b.sameRow(positions));
 		positions.add(new Position(-1, 1));
 		assertFalse(b.sameRow(positions));
 		positions = new ArrayList<>();
@@ -178,53 +178,53 @@ public class BoardTest {
 		positions = new ArrayList<>();
 		positions.add(new Position(-1, 3));
 		positions.add(new Position(1, 3));
-		assert b.sameRow(positions);
+		assertTrue (b.sameRow(positions));
 	}
 
 	@Test
 	public void testAllStonesOneRow() throws Exception {
 		List<Position> positions = new ArrayList<>();
 		positions.add(new Position(0, 0));
-		assert b.allStonesOneRow(positions);
+		assertTrue (b.allStonesOneRow(positions));
 		positions.add(new Position(1, 0));
-		assert b.allStonesOneRow(positions);
+		assertTrue (b.allStonesOneRow(positions));
 		positions.add(new Position(-1, 0));
-		assert b.allStonesOneRow(positions);
+		assertTrue (b.allStonesOneRow(positions));
 		positions.add(new Position(-1, 1));
 		assertFalse(b.allStonesOneRow(positions));
 		positions = new ArrayList<>();
 		positions.add(new Position(0, 0));
 		positions.add(new Position(0, 1));
-		assert b.allStonesOneRow(positions);
+		assertTrue (b.allStonesOneRow(positions));
 		positions = new ArrayList<>();
 		positions.add(new Position(3, -1));
 		positions.add(new Position(3, 1));
-		assert b.allStonesOneRow(positions);
+		assertTrue (b.allStonesOneRow(positions));
 		positions = new ArrayList<>();
 		positions.add(new Position(-1, 3));
 		positions.add(new Position(1, 3));
-		assert b.allStonesOneRow(positions);
+		assertTrue (b.allStonesOneRow(positions));
 	}
 
 	@Test
 	public void testMakeMove2() throws Exception {
 		b.makeMove(testStone, b.getPossibleMoves().get(new Position(1, 1)));
-		assertTrue(b.getStones().containsValue(testStone));
-		assertTrue(b.getPossibleMoves().containsKey(new Position(1, 2)));
+		assertTrue((b.getStones().containsValue(testStone)));
+		assertTrue((b.getPossibleMoves().containsKey(new Position(1, 2))));
 	}
 
 	@Test
 	public void testAddPossibleMove() throws Exception {
 		Position pos1 = new Position(10, 10);
 		b.addPossibleMove(pos1);
-		assert b.getPossibleMoves().containsKey(pos1);
-		assert b.getPossibleMoves().get(pos1).getColumn().isEmpty();
-		assert b.getPossibleMoves().get(pos1).getRow().isEmpty();
+		assertTrue (b.getPossibleMoves().containsKey(pos1));
+		assertTrue (b.getPossibleMoves().get(pos1).getColumn().isEmpty());
+		assertTrue (b.getPossibleMoves().get(pos1).getRow().isEmpty());
 		Position pos2 = new Position(0, 4);
 		b.addPossibleMove(pos2);
-		assert b.getPossibleMoves().containsKey(pos1);
-		assert b.getPossibleMoves().get(pos2).getColumn().size() == 4;
-		assert b.getPossibleMoves().get(pos1).getRow().isEmpty();
+		assertTrue (b.getPossibleMoves().containsKey(pos1));
+		assertTrue (b.getPossibleMoves().get(pos2).getColumn().size() == 4);
+		assertTrue (b.getPossibleMoves().get(pos1).getRow().isEmpty());
 	}
 
 	@Test
@@ -235,7 +235,7 @@ public class BoardTest {
 		b.makeMove(1, 1, testStone);
 		positions.add(testStone.getPosition());
 		stones.add(testStone);
-		assert b.calculatePoints(stones, positions) == 4;
+		assertTrue (b.calculatePoints(stones, positions) == 4);
 		positions = new ArrayList<>();
 		stones = new ArrayList<>();
 		Board board = new Board();
@@ -249,13 +249,13 @@ public class BoardTest {
 		stones.add(new Stone(Stone.Shape.c, Stone.Color.P));
 		board.makeMoves(positions, stones);
 		board = new Board();
-		assert board.calculatePoints(stones, positions) == 4;
+		assertTrue (board.calculatePoints(stones, positions) == 4);
 		positions.add(new Position(0, 4));
 		positions.add(new Position(0, 5));
 		stones.add(new Stone(Stone.Shape.c, Stone.Color.Y));
 		stones.add(new Stone(Stone.Shape.c, Stone.Color.R));
 		board.makeMoves(positions, stones);
-		assert board.calculatePoints(stones, positions) == 12;
+		assertTrue (board.calculatePoints(stones, positions) == 12);
 		board = new Board();
 		positions = new ArrayList<>();
 		stones = new ArrayList<>();
@@ -269,12 +269,12 @@ public class BoardTest {
 		stones.add(new Stone(Stone.Shape.c, Stone.Color.P));
 		board.makeMoves(positions, stones);
 		board = new Board();
-		assert board.calculatePoints(stones, positions) == 4;
+		assertTrue (board.calculatePoints(stones, positions) == 4);
 		positions.add(new Position(4, 0));
 		positions.add(new Position(5, 0));
 		stones.add(new Stone(Stone.Shape.c, Stone.Color.Y));
 		stones.add(new Stone(Stone.Shape.c, Stone.Color.R));
 		board.makeMoves(positions, stones);
-		assert board.calculatePoints(stones, positions) == 12;
+		assertTrue (board.calculatePoints(stones, positions) == 12);
 	}
 }
