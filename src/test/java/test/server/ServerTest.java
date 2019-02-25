@@ -1,18 +1,21 @@
 package test.server;
 
 import client.LittleBetterStrategy;
-import server.Server;
-import server.ServerGame;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import server.Server;
+import server.ServerGame;
 import shared.Stone;
 
 import java.io.*;
+import java.net.ConnectException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.List;
+import java.util.Random;
 
 import static org.junit.Assert.*;
 
@@ -25,29 +28,33 @@ public class ServerTest {
     Server s;
     Thread t1;
     Socket sock;
-    int times = 0;
     @Before
     public void setUp() {
-        if (times == 0) {
-            t1 = new Thread(new Runnable() {
+        Random rand = new Random();
+        int port = rand.nextInt(65535-1024)+1024;
+        t1 = new Thread(() -> {
+            s = new Server(port);
+            s.run();
+        });
+        t1.start();
 
-                @Override
-                public void run() {
-                    s = new Server(5000);
-                    s.run();
-                }
-            });
-            t1.start();
-        }
-        times++;
         try {
             InetAddress hostname = InetAddress.getByName("localhost");
-            sock =  new Socket(hostname, 5000);
+            while(true) {
+                try {
+                    sock = new Socket(hostname, port);
+                    break;
+                } catch (ConnectException e) {
+
+                }
+            }
             toServer = new BufferedWriter(new OutputStreamWriter(sock.getOutputStream()));
             fromServer = new BufferedReader(new InputStreamReader(sock.getInputStream()));
         } catch (UnknownHostException e) {
             e.printStackTrace();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -100,4 +107,12 @@ public class ServerTest {
         return message;
     }
 
+    @After
+    public void stopServer() {
+        try {
+            t1.stop();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
